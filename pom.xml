@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>uk.co.elionline</groupId>
+	<artifactId>emerge</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+
+	<name>Emerge</name>
+
+	<url>http://elionline.co.uk/emerge</url>
+
+	<build>
+		<defaultGoal>package</defaultGoal>
+	</build>
+
+	<modules>
+		<module>emerge-parent</module>
+		<module>emerge-rendering</module>
+		<module>emerge-contexts</module>
+		<module>emerge-physics</module>
+		<module>emerge-entities</module>
+		<module>emerge-entities-input</module>
+		<module>emerge-entities-physics</module>
+		<module>emerge-entities-rendering</module>
+		<module>emerge-input</module>
+		<module>emerge-utilities</module>
+		<module>emerge-mathematics</module>
+		<module>emerge-system</module>
+		<module>emerge-swing</module>
+	</modules>
+</project>
