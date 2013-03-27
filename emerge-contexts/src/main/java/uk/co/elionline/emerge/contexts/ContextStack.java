@@ -4,7 +4,7 @@ import java.util.Stack;
 
 import uk.co.elionline.emerge.input.BasicInputController;
 import uk.co.elionline.emerge.mathematics.MovingAverage;
-import uk.co.elionline.emerge.rendering.Renderer;
+import uk.co.elionline.emerge.rendering.Renderer2D;
 
 /**
  * an object to manage Context objects on a stack
@@ -14,7 +14,7 @@ import uk.co.elionline.emerge.rendering.Renderer;
  */
 public class ContextStack {
 	private final Stack<Context> contextStack;
-	private final Renderer renderer;
+	private final Renderer2D renderer;
 	private final BasicInputController inputController;
 	private final RenderingRunner renderingRunner;
 	private long logicCycleStartTime;
@@ -28,7 +28,7 @@ public class ContextStack {
 	// earlier by each cycle
 	private static final double bufferStartTimeCreep = 0.01;
 
-	public ContextStack(Renderer renderer, BasicInputController inputController) {
+	public ContextStack(Renderer2D renderer, BasicInputController inputController) {
 		this.renderer = renderer;
 		this.inputController = inputController;
 
@@ -201,7 +201,7 @@ public class ContextStack {
 		return System.nanoTime() - lastBufferEndTime;
 	}
 
-	public Renderer getRenderer() {
+	public Renderer2D getRenderer() {
 		return renderer;
 	}
 

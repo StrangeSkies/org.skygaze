@@ -7,10 +7,10 @@ import uk.co.elionline.emerge.utilities.IdentityComparator;
 
 
 public class Scene {
-  private final Renderer renderer;
+  private final Renderer2D renderer;
   private final Set<SceneNode<?>> renderables;
 
-  public Scene(Renderer renderer) {
+  public Scene(Renderer2D renderer) {
     this.renderer = renderer;
 
     renderables = new TreeSet<>(new IdentityComparator<>());

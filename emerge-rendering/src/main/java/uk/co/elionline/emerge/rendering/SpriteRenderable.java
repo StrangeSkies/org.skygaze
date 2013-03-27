@@ -26,7 +26,7 @@ public class SpriteRenderable extends Renderable {
 	}
 
 	@Override
-	public void renderTo(Renderer renderer) {
+	public void renderTo(Renderer2D renderer) {
 		super.renderTo(renderer);
 
 		renderer.render(getSprite());

@@ -25,7 +25,7 @@ public abstract class Renderable {
 	 * @param delta
 	 *          the time (from 0 to 1) of this render since the last frame
 	 */
-	public void renderTo(Renderer renderer) {
+	public void renderTo(Renderer2D renderer) {
 		renderer.setTransformation2(getTransformation());
 	}
 

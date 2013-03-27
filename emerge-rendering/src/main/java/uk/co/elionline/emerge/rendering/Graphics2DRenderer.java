@@ -8,7 +8,7 @@ import java.awt.geom.AffineTransform;
 import uk.co.elionline.emerge.mathematics.geometry.matrices.Matrix.Order;
 import uk.co.elionline.emerge.mathematics.geometry.matrices.MatrixH2;
 
-public abstract class Graphics2DRenderer implements Renderer {
+public abstract class Graphics2DRenderer implements Renderer2D {
 	private Graphics2D graphics;
 
 	// private Camera2 camera;

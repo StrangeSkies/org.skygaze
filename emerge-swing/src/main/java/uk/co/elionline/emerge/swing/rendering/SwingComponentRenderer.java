@@ -12,9 +12,9 @@ import java.awt.image.BufferedImage;
 import org.osgi.service.component.annotations.Component;
 
 import uk.co.elionline.emerge.rendering.Graphics2DRenderer;
-import uk.co.elionline.emerge.rendering.Renderer;
+import uk.co.elionline.emerge.rendering.Renderer2D;
 
-@Component(service = Renderer.class)
+@Component(service = Renderer2D.class)
 public class SwingComponentRenderer extends Graphics2DRenderer {
 	private final Canvas canvas;
 

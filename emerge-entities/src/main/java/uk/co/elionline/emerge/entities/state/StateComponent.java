@@ -17,14 +17,15 @@ public class StateComponent<D> implements Named, Described, Factory<D> {
 	private final String name;
 	private final String description;
 
-	private final Factory<D> dataFactory;
+	private final Factory<? extends D> dataFactory;
 
 	private final Set<StateComponent<?>> readDependencies;
 	private final Set<StateComponent<?>> writeDependencies;
 
 	private final Map<String, StateComponentProperty<D, ?>> properties;
 
-	public StateComponent(String name, String description, Factory<D> dataFactory) {
+	public StateComponent(String name, String description,
+			Factory<? extends D> dataFactory) {
 		this.name = name;
 		this.description = description;
 
@@ -36,7 +37,8 @@ public class StateComponent<D> implements Named, Described, Factory<D> {
 		this.properties = new HashMap<>();
 	}
 
-	public StateComponent(String name, String description, Factory<D> factory,
+	public StateComponent(String name, String description,
+			Factory<? extends D> factory,
 			Collection<? extends StateComponent<?>> readDependencies) {
 		this(name, description, factory);
 
@@ -48,12 +50,13 @@ public class StateComponent<D> implements Named, Described, Factory<D> {
 		}
 	}
 
-	public StateComponent(String name, String description, Factory<D> factory,
-			StateComponent<?>... readDependencies) {
+	public StateComponent(String name, String description,
+			Factory<? extends D> factory, StateComponent<?>... readDependencies) {
 		this(name, description, factory, Arrays.asList(readDependencies));
 	}
 
-	public StateComponent(String name, String description, Factory<D> factory,
+	public StateComponent(String name, String description,
+			Factory<? extends D> factory,
 			Collection<? extends StateComponent<?>> readDependencies,
 			Collection<? extends StateComponent<?>> writeDependencies) {
 		this(name, description, factory, readDependencies);
@@ -66,7 +69,8 @@ public class StateComponent<D> implements Named, Described, Factory<D> {
 		}
 	}
 
-	public StateComponent(String name, String description, Factory<D> factory,
+	public StateComponent(String name, String description,
+			Factory<? extends D> factory,
 			Collection<? extends StateComponent<?>> readDependencies,
 			Collection<? extends StateComponent<?>> writeDependencies,
 			Collection<? extends StateComponentProperty<D, ?>> properties) {
@@ -134,7 +138,7 @@ public class StateComponent<D> implements Named, Described, Factory<D> {
 		private String name;
 		private String description;
 
-		private Factory<D> dataFactory;
+		private Factory<? extends D> dataFactory;
 
 		private Collection<? extends StateComponent<?>> readDependencies;
 		private Collection<? extends StateComponent<?>> writeDependencies;
@@ -151,7 +155,7 @@ public class StateComponent<D> implements Named, Described, Factory<D> {
 			properties = new HashSet<>();
 		}
 
-		public Builder<D> dataFactory(Factory<D> dataFactory) {
+		public Builder<D> dataFactory(Factory<? extends D> dataFactory) {
 			this.dataFactory = dataFactory;
 
 			return this;

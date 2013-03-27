@@ -228,7 +228,7 @@ public class SceneNode<R extends Renderable> {
 		}
 	}
 
-	public void render(Renderer renderer, double delta) {
+	public void render(Renderer2D renderer, double delta) {
 		getDelta().setValue(delta);
 		getBufferedRenderable().renderTo(renderer);
 	}

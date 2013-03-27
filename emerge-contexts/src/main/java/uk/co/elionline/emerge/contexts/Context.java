@@ -1,7 +1,7 @@
 package uk.co.elionline.emerge.contexts;
 
 import uk.co.elionline.emerge.input.BasicInputController;
-import uk.co.elionline.emerge.rendering.Renderer;
+import uk.co.elionline.emerge.rendering.Renderer2D;
 
 /**
  * this class describes an interface in the sense of a view which the user
@@ -87,7 +87,7 @@ public abstract class Context {
 		return contextStack.getInputController();
 	}
 
-	protected final Renderer getRenderer() {
+	protected final Renderer2D getRenderer() {
 		return contextStack.getRenderer();
 	}
 

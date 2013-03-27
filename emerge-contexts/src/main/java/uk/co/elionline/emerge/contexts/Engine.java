@@ -3,7 +3,7 @@ package uk.co.elionline.emerge.contexts;
 import javax.swing.JFrame;
 
 import uk.co.elionline.emerge.input.BasicInputController;
-import uk.co.elionline.emerge.rendering.Renderer;
+import uk.co.elionline.emerge.rendering.Renderer2D;
 import uk.co.elionline.emerge.swing.input.SwingInputController;
 import uk.co.elionline.emerge.swing.rendering.SwingComponentRenderer;
 
@@ -11,7 +11,7 @@ public class Engine {
 	private ContextStack contextStack;
 	private BasicInputController inputController;
 	private JFrame frame;
-	private Renderer renderer;
+	private Renderer2D renderer;
 
 	// private Renderer render;
 
