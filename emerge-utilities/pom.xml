@@ -5,17 +5,17 @@
 
 	<parent>
 		<groupId>uk.co.elionline</groupId>
-		<artifactId>emerge-parent</artifactId>
+		<artifactId>gears-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../emerge-parent</relativePath>
+		<relativePath>../gears-parent</relativePath>
 	</parent>
 
-	<artifactId>emerge-utilities</artifactId>
+	<artifactId>gears-utilities</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>Emerge Utilities</name>
+	<name>Gears Utilities</name>
 
-	<url>http://elionline.co.uk/emerge/utilities</url>
+	<url>http://elionline.co.uk/gears/utilities</url>
 
 	<description>General utilities</description>
 

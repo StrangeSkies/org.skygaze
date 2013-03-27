@@ -5,17 +5,17 @@
 
 	<parent>
 		<groupId>uk.co.elionline</groupId>
-		<artifactId>emerge-parent</artifactId>
+		<artifactId>gears-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../emerge-parent</relativePath>
+		<relativePath>../gears-parent</relativePath>
 	</parent>
 
-	<artifactId>emerge-rendering</artifactId>
+	<artifactId>gears-rendering</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>Emerge Rendering</name>
+	<name>Gears Rendering</name>
 
-	<url>http://elionline.co.uk/emerge/rendering</url>
+	<url>http://elionline.co.uk/gears/rendering</url>
 
 	<description>Rendering system</description>
 
@@ -27,11 +27,11 @@
 		</dependency>
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
-			<artifactId>emerge-utilities</artifactId>
+			<artifactId>gears-utilities</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
-			<artifactId>emerge-mathematics</artifactId>
+			<artifactId>gears-mathematics</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -41,13 +41,13 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<excludedGroups>uk.co.elionline.emerge.utilities.test.IntegrationTest</excludedGroups>
+					<excludedGroups>uk.co.elionline.gears.utilities.test.IntegrationTest</excludedGroups>
 				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
-					<groups>uk.co.elionline.emerge.utilities.test.IntegrationTest</groups>
+					<groups>uk.co.elionline.gears.utilities.test.IntegrationTest</groups>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -4,31 +4,31 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>uk.co.elionline</groupId>
-	<artifactId>emerge</artifactId>
+	<artifactId>gears</artifactId>
 	<version>1.0</version>
 	<packaging>pom</packaging>
 
-	<name>Emerge</name>
+	<name>Gears</name>
 
-	<url>http://elionline.co.uk/emerge</url>
+	<url>http://elionline.co.uk/gears</url>
 
 	<build>
 		<defaultGoal>package</defaultGoal>
 	</build>
 
 	<modules>
-		<module>emerge-parent</module>
-		<module>emerge-rendering</module>
-		<module>emerge-contexts</module>
-		<module>emerge-physics</module>
-		<module>emerge-entities</module>
-		<module>emerge-entities-input</module>
-		<module>emerge-entities-physics</module>
-		<module>emerge-entities-rendering</module>
-		<module>emerge-input</module>
-		<module>emerge-utilities</module>
-		<module>emerge-mathematics</module>
-		<module>emerge-system</module>
-		<module>emerge-swing</module>
+		<module>gears-parent</module>
+		<module>gears-rendering</module>
+		<module>gears-contexts</module>
+		<module>gears-physics</module>
+		<module>gears-entities</module>
+		<module>gears-entities-input</module>
+		<module>gears-entities-physics</module>
+		<module>gears-entities-rendering</module>
+		<module>gears-input</module>
+		<module>gears-utilities</module>
+		<module>gears-mathematics</module>
+		<module>gears-system</module>
+		<module>gears-swing</module>
 	</modules>
 </project>
