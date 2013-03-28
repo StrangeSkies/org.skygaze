@@ -192,16 +192,9 @@
 							<Service-Component>*</Service-Component>
 						</instructions>
 					</configuration>
-					<executions>
-						<execution>
-							<id>bundle</id>
-							<goals>
-								<goal>manifest</goal>
-							</goals>
-							<phase>prepare-package</phase>
-							<inherited>true</inherited>
-						</execution>
-					</executions>
+					<!-- <executions> <execution> <id>bundle</id> <goals> <goal>manifest</goal> 
+						</goals> <phase>prepare-package</phase> <inherited>true</inherited> </execution> 
+						</executions> -->
 				</plugin>
 
 				<plugin>
