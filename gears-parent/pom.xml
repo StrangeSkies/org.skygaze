@@ -203,7 +203,7 @@
 							<addMavenDescriptor>true</addMavenDescriptor>
 						</archive>
 						<instructions>
-							<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+							<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 							<Service-Component>*</Service-Component>
 							<_dsannotations>*</_dsannotations>
 						</instructions>
