@@ -3,14 +3,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>uk.co.elionline</groupId>
+	<parent>
+		<groupId>uk.co.elionline</groupId>
+		<artifactId>gears-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>gears-parent</relativePath>
+	</parent>
+
 	<artifactId>gears</artifactId>
-	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>Gears</name>
 
-	<url>http://elionline.co.uk/gears</url>
+	<url>${project.organization.url}gears</url>
 
 	<build>
 		<defaultGoal>package</defaultGoal>

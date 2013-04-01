@@ -10,7 +10,7 @@
 
 	<name>Gears Parent</name>
 
-	<url>http://elionline.co.uk/gears</url>
+	<url>${project.organization.url}gears</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -151,7 +151,8 @@
 						</includes>
 						<parallel>methods</parallel>
 						<threadCount>10</threadCount>
-						<excludedGroups>uk.co.elionline.gears.utilities.test.IntegrationTest</excludedGroups>
+						<excludedGroups>uk.co.elionline.gears.utilities.test.IntegrationTest
+						</excludedGroups>
 					</configuration>
 				</plugin>
 
@@ -167,7 +168,8 @@
 						</dependency>
 					</dependencies>
 					<configuration>
-						<groups>uk.co.elionline.gears.utilities.test.IntegrationTest</groups>
+						<groups>uk.co.elionline.gears.utilities.test.IntegrationTest
+						</groups>
 					</configuration>
 					<executions>
 						<execution>
@@ -215,7 +217,8 @@
 					<artifactId>maven-scr-plugin</artifactId>
 					<version>1.10.0</version>
 					<configuration>
-						<outputDirectory>${project.build.directory}/classes</outputDirectory>
+						<outputDirectory>${project.build.directory}/classes
+						</outputDirectory>
 					</configuration>
 					<dependencies>
 						<dependency>
@@ -246,7 +249,8 @@
 					<version>2.4</version>
 					<configuration>
 						<archive>
-							<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+							<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF
+							</manifestFile>
 						</archive>
 					</configuration>
 				</plugin>

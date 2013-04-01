@@ -15,7 +15,7 @@
 
 	<name>Gears Contexts</name>
 
-	<url>http://elionline.co.uk/gears/contexts</url>
+	<url>${project.organization.url}gears/contexts</url>
 
 	<description>Context stack for managing program state</description>
 
@@ -25,22 +25,27 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-utilities</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-mathematics</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-rendering</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-input</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-swing</artifactId>
@@ -52,23 +57,26 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<excludedGroups>uk.co.elionline.gears.utilities.test.IntegrationTest</excludedGroups>
-				</configuration>
 			</plugin>
+
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<configuration>
-					<groups>uk.co.elionline.gears.utilities.test.IntegrationTest</groups>
-				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-scr-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

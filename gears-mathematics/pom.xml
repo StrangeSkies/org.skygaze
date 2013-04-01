@@ -15,7 +15,7 @@
 
 	<name>Gears Mathematics</name>
 
-	<url>http://elionline.co.uk/gears/mathematics</url>
+	<url>${project.organization.url}gears/mathematics</url>
 
 	<description>Mathematical computation library</description>
 
@@ -30,29 +30,31 @@
 			<artifactId>gears-utilities</artifactId>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<excludedGroups>uk.co.elionline.gears.utilities.test.IntegrationTest</excludedGroups>
-				</configuration>
 			</plugin>
+
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<configuration>
-					<groups>uk.co.elionline.gears.utilities.test.IntegrationTest</groups>
-				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-scr-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

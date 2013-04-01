@@ -15,7 +15,7 @@
 
 	<name>Gears Entities</name>
 
-	<url>http://elionline.co.uk/gears/entities</url>
+	<url>${project.organization.url}gears/entities</url>
 
 	<description>Entity component system</description>
 
