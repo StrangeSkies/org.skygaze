@@ -29,21 +29,25 @@
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-utilities</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-entities</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-mathematics</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-rendering</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

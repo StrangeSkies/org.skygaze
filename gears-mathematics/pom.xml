@@ -25,9 +25,11 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
 			<artifactId>gears-utilities</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
