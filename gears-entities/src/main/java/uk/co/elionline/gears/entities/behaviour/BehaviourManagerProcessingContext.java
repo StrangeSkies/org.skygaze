@@ -7,7 +7,7 @@ import java.util.UUID;
 import uk.co.elionline.gears.entities.processing.EntityProcessor;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
-public interface LockedBehaviourManager {
+public interface BehaviourManagerProcessingContext {
 
 	public boolean attach(UUID entity, BehaviourComponent behaviourComponent);
 

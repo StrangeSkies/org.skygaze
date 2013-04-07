@@ -7,7 +7,7 @@ import java.util.UUID;
 import uk.co.elionline.gears.entities.state.data.StateComponentData;
 import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLockRelease;
 
-public interface LockedStateManager {
+public interface StateManagerProcessingContext {
 	public <D> D attach(UUID entity, StateComponent<D> stateComponent);
 
 	public void attachAll(UUID entity,

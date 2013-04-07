@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.LockedEntityManager;
+import uk.co.elionline.gears.entities.EntityManagerProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.utilities.Described;
 import uk.co.elionline.gears.utilities.Factory;
@@ -175,7 +175,7 @@ public class BehaviourComponent implements Named, Described {
 	}
 
 	public final void process(Set<? extends UUID> entities,
-			LockedEntityManager context) {
+			EntityManagerProcessingContext context) {
 		process.process(entities, context);
 	}
 

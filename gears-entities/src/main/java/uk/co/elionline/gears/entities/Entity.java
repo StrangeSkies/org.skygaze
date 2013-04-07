@@ -3,15 +3,15 @@ package uk.co.elionline.gears.entities;
 import java.util.UUID;
 
 public class Entity {
-	private final LockedEntityManager manager;
+	private final EntityManagerProcessingContext manager;
 	private final UUID identifier;
 
-	public Entity(LockedEntityManager manager, UUID identifier) {
+	public Entity(EntityManagerProcessingContext manager, UUID identifier) {
 		this.manager = manager;
 		this.identifier = identifier;
 	}
 
-	public LockedEntityManager getManager() {
+	public EntityManagerProcessingContext getManager() {
 		return manager;
 	}
 

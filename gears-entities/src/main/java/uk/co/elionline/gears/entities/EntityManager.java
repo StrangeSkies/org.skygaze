@@ -12,7 +12,7 @@ import uk.co.elionline.gears.entities.state.StateManager;
  * @author Elias N Vasylenko
  * 
  */
-public interface EntityManager extends LockedEntityManager {
+public interface EntityManager extends EntityManagerProcessingContext {
 	@Override
 	public StateManager getStateManager();
 

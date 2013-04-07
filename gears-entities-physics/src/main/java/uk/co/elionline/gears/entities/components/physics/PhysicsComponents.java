@@ -3,7 +3,7 @@ package uk.co.elionline.gears.entities.components.physics;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.LockedEntityManager;
+import uk.co.elionline.gears.entities.EntityManagerProcessingContext;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
 import uk.co.elionline.gears.entities.state.StateComponent;
@@ -36,7 +36,7 @@ public class PhysicsComponents {
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							LockedEntityManager entityManager) {
+							EntityManagerProcessingContext entityManager) {
 						for (UUID entity : entities) {
 							PhysicsBody physicsBodyData = entityManager.getStateManager()
 									.getData(entity, getPhysicsBodyState());
