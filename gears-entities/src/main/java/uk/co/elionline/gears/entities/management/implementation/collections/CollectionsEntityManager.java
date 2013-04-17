@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entities.implementations.collections;
+package uk.co.elionline.gears.entities.management.implementation.collections;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,10 +7,10 @@ import java.util.UUID;
 import org.osgi.service.component.annotations.Component;
 
 import uk.co.elionline.gears.entities.Entity;
-import uk.co.elionline.gears.entities.EntityManager;
-import uk.co.elionline.gears.entities.behaviour.BehaviourManager;
-import uk.co.elionline.gears.entities.implementations.AbstractEntityManager;
-import uk.co.elionline.gears.entities.state.StateManager;
+import uk.co.elionline.gears.entities.management.EntityBehaviourManager;
+import uk.co.elionline.gears.entities.management.EntityManager;
+import uk.co.elionline.gears.entities.management.EntityStateManager;
+import uk.co.elionline.gears.entities.management.implementation.AbstractEntityManager;
 
 /**
  * 
@@ -25,8 +25,8 @@ public class CollectionsEntityManager extends AbstractEntityManager {
 		this(new CollectionsStateManager(), new CollectionsBehaviourManager());
 	}
 
-	public CollectionsEntityManager(StateManager stateManager,
-			BehaviourManager behaviourManager) {
+	public CollectionsEntityManager(EntityStateManager stateManager,
+			EntityBehaviourManager behaviourManager) {
 		super(stateManager, behaviourManager);
 
 		entities = new HashSet<>();

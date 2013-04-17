@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import uk.co.elionline.gears.entities.EntityManager;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entities.management.EntityManager;
 
 public abstract class BehaviourScheduler {
 	private final Set<BehaviourComponent> behaviours;

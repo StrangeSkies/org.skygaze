@@ -1,12 +1,12 @@
-package uk.co.elionline.gears.entities.implementations;
+package uk.co.elionline.gears.entities.management.implementation;
 
 import java.util.Collection;
 import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.behaviour.BehaviourManager;
+import uk.co.elionline.gears.entities.management.EntityBehaviourManager;
 
-public abstract class AbstractBehaviourManager implements BehaviourManager {
+public abstract class AbstractBehaviourManager implements EntityBehaviourManager {
 	@Override
 	public final boolean attachAll(UUID entity,
 			Collection<BehaviourComponent> behaviourComponents) {

@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import uk.co.elionline.gears.entities.state.data.StateComponentProperty;
 import uk.co.elionline.gears.utilities.Described;
 import uk.co.elionline.gears.utilities.Factory;
 import uk.co.elionline.gears.utilities.Named;
@@ -128,89 +127,5 @@ public class StateComponent<D> implements Named, Described, Factory<D> {
 	@Override
 	public final boolean equals(Object obj) {
 		return super.equals(obj);
-	}
-
-	public static <D> Builder<D> builder() {
-		return new Builder<D>();
-	}
-
-	public static class Builder<D> implements Factory<StateComponent<D>> {
-		private String name;
-		private String description;
-
-		private Factory<? extends D> dataFactory;
-
-		private Collection<? extends StateComponent<?>> readDependencies;
-		private Collection<? extends StateComponent<?>> writeDependencies;
-
-		private Collection<? extends StateComponentProperty<D, ?>> properties;
-
-		protected Builder() {
-			name = "";
-			description = "";
-
-			readDependencies = new HashSet<>();
-			writeDependencies = new HashSet<>();
-
-			properties = new HashSet<>();
-		}
-
-		public Builder<D> dataFactory(Factory<? extends D> dataFactory) {
-			this.dataFactory = dataFactory;
-
-			return this;
-		}
-
-		public Builder<D> name(String name) {
-			this.name = name;
-
-			return this;
-		}
-
-		public Builder<D> description(String description) {
-			this.description = description;
-
-			return this;
-		}
-
-		public Builder<D> readDependencies(
-				Collection<? extends StateComponent<?>> readDependencies) {
-			this.readDependencies = readDependencies;
-
-			return this;
-		}
-
-		public Builder<D> readDependencies(StateComponent<?>... readDependencies) {
-			return readDependencies(Arrays.asList(readDependencies));
-		}
-
-		public Builder<D> writeDependencies(
-				Collection<? extends StateComponent<?>> writeDependencies) {
-			this.writeDependencies = writeDependencies;
-
-			return this;
-		}
-
-		public Builder<D> writeDependencies(StateComponent<?>... writeDependencies) {
-			return writeDependencies(Arrays.asList(writeDependencies));
-		}
-
-		public Builder<D> properties(
-				Collection<? extends StateComponentProperty<D, ?>> properties) {
-			this.properties = properties;
-
-			return this;
-		}
-
-		public Builder<D> properties(
-				@SuppressWarnings("unchecked") StateComponentProperty<D, ?>... properties) {
-			return properties(Arrays.asList(properties));
-		}
-
-		@Override
-		public StateComponent<D> create() {
-			return new StateComponent<>(name, description, dataFactory,
-					readDependencies, writeDependencies, properties);
-		}
 	}
 }

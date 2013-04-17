@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entities.state.data;
+package uk.co.elionline.gears.entities.state;
 
 import uk.co.elionline.gears.mathematics.functions.Function;
 import uk.co.elionline.gears.utilities.Property;

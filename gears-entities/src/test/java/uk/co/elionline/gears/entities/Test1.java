@@ -3,14 +3,18 @@ package uk.co.elionline.gears.entities;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.EntityManager;
-import uk.co.elionline.gears.entities.EntityManagerProcessingContext;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilder;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.implementations.collections.CollectionsEntityManager;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContextEntityManager;
+import uk.co.elionline.gears.entities.behaviour.implementation.BehaviourComponentBuilderImplementation;
+import uk.co.elionline.gears.entities.management.EntityManager;
+import uk.co.elionline.gears.entities.management.implementation.collections.CollectionsEntityManager;
 import uk.co.elionline.gears.entities.processing.PeriodicProcessor;
 import uk.co.elionline.gears.entities.processing.scheduling.LinearScheduler;
 import uk.co.elionline.gears.entities.state.StateComponent;
+import uk.co.elionline.gears.entities.state.StateComponentBuilder;
+import uk.co.elionline.gears.entities.state.implementation.StateComponentBuilderImplementation;
 import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
 import uk.co.elionline.gears.utilities.CopyFactory;
@@ -27,30 +31,38 @@ public class Test1 {
 		return entityManager;
 	}
 
+	public <D> StateComponentBuilder<D> getStateComponentBuilder() {
+		return new StateComponentBuilderImplementation<D>();
+	}
+
+	public <D> BehaviourComponentBuilder getBehaviourComponentBuilder() {
+		return new BehaviourComponentBuilderImplementation();
+	}
+
 	private void run() {
 		PeriodicProcessor processor = new PeriodicProcessor(new LinearScheduler());
 		processor.setPeriodFrequency(5);
 		getEntityManager().getBehaviourManager().setDefaultProcessor(processor);
 
-		final StateComponent<Vector2<DoubleValue>> position = StateComponent
-				.<Vector2<DoubleValue>> builder().name("Position")
+		final StateComponent<Vector2<DoubleValue>> position = this
+				.<Vector2<DoubleValue>> getStateComponentBuilder().name("Position")
 				.description("Position of entity")
 				.dataFactory(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
 				.create();
 
-		final StateComponent<Vector2<DoubleValue>> velocity = StateComponent
-				.<Vector2<DoubleValue>> builder().name("Velocity")
+		final StateComponent<Vector2<DoubleValue>> velocity = this
+				.<Vector2<DoubleValue>> getStateComponentBuilder().name("Velocity")
 				.description("Velocity of entity").readDependencies(position)
 				.dataFactory(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
 				.create();
 
-		final BehaviourComponent movement = BehaviourComponent.builder()
+		final BehaviourComponent movement = getBehaviourComponentBuilder()
 				.name("Movement").description("Moves entity by velocity")
 				.readDependencies(velocity).writeDependencies(position)
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							EntityManagerProcessingContext context) {
+							BehaviourProcessingContextEntityManager context) {
 						for (UUID entity : entities) {
 							context.getStateManager().getData(entity, position)
 									.add(context.getStateManager().getData(entity, velocity));

@@ -1,6 +1,6 @@
 package uk.co.elionline.gears.entities.processing;
 
-import uk.co.elionline.gears.entities.EntityManager;
+import uk.co.elionline.gears.entities.management.EntityManager;
 import uk.co.elionline.gears.entities.processing.scheduling.BehaviourScheduler;
 
 public class PeriodicProcessor extends CyclicProcessor {

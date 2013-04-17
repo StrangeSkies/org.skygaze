@@ -3,11 +3,11 @@ package uk.co.elionline.gears.entities;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.EntityManager;
-import uk.co.elionline.gears.entities.EntityManagerProcessingContext;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.implementations.collections.CollectionsEntityManager;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContextEntityManager;
+import uk.co.elionline.gears.entities.management.EntityManager;
+import uk.co.elionline.gears.entities.management.implementation.collections.CollectionsEntityManager;
 import uk.co.elionline.gears.entities.processing.PeriodicProcessor;
 import uk.co.elionline.gears.entities.processing.scheduling.LinearScheduler;
 import uk.co.elionline.gears.entities.state.StateComponent;
@@ -50,7 +50,7 @@ public class Test2 {
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							EntityManagerProcessingContext context) {
+							BehaviourProcessingContextEntityManager context) {
 						for (UUID entity : entities) {
 							context.getStateManager().getData(entity, position)
 									.add(context.getStateManager().getData(entity, velocity));
@@ -64,7 +64,7 @@ public class Test2 {
 				.readDependencies(position).process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							EntityManagerProcessingContext context) {
+							BehaviourProcessingContextEntityManager context) {
 						for (UUID entity : entities) {
 							System.out.println(context.getStateManager()
 									.getData(entity, position).toString());

@@ -1,23 +1,22 @@
-package uk.co.elionline.gears.entities;
+package uk.co.elionline.gears.entities.management;
 
 import java.util.Collection;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.behaviour.BehaviourManager;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContextEntityManager;
 import uk.co.elionline.gears.entities.processing.EntityProcessor;
-import uk.co.elionline.gears.entities.state.StateManager;
 
 /**
  * 
  * @author Elias N Vasylenko
  * 
  */
-public interface EntityManager extends EntityManagerProcessingContext {
+public interface EntityManager extends BehaviourProcessingContextEntityManager {
 	@Override
-	public StateManager getStateManager();
+	public EntityStateManager getStateManager();
 
 	@Override
-	public BehaviourManager getBehaviourManager();
+	public EntityBehaviourManager getBehaviourManager();
 
 	public boolean startProcessing();
 

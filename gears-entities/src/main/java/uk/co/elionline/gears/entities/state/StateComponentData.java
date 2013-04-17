@@ -1,8 +1,7 @@
-package uk.co.elionline.gears.entities.state.data;
+package uk.co.elionline.gears.entities.state;
 
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.utilities.Property;
 
 public class StateComponentData<D> implements /* @ReadOnly */Property<D, D> {

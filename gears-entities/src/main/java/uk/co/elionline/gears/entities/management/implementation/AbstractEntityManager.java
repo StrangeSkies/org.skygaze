@@ -1,16 +1,16 @@
-package uk.co.elionline.gears.entities.implementations;
+package uk.co.elionline.gears.entities.management.implementation;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.EntityManager;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.behaviour.BehaviourManager;
+import uk.co.elionline.gears.entities.management.EntityBehaviourManager;
+import uk.co.elionline.gears.entities.management.EntityManager;
+import uk.co.elionline.gears.entities.management.EntityStateManager;
 import uk.co.elionline.gears.entities.processing.EntityProcessor;
 import uk.co.elionline.gears.entities.state.StateComponent;
-import uk.co.elionline.gears.entities.state.StateManager;
 import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLock;
 
 /**
@@ -19,26 +19,26 @@ import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLock;
  * 
  */
 public abstract class AbstractEntityManager implements EntityManager {
-	private final StateManager stateManager;
-	private final BehaviourManager behaviourManager;
+	private final EntityStateManager stateManager;
+	private final EntityBehaviourManager behaviourManager;
 
 	private final Set<EntityProcessor> processors;
 	private boolean wasLockingEnabled;
 
-	public AbstractEntityManager(StateManager stateManager,
-			BehaviourManager behaviourManager) {
+	public AbstractEntityManager(EntityStateManager stateManager,
+			EntityBehaviourManager behaviourManager) {
 		this.stateManager = stateManager;
 		this.behaviourManager = behaviourManager;
 		processors = new HashSet<>();
 	}
 
 	@Override
-	public StateManager getStateManager() {
+	public EntityStateManager getStateManager() {
 		return stateManager;
 	}
 
 	@Override
-	public BehaviourManager getBehaviourManager() {
+	public EntityBehaviourManager getBehaviourManager() {
 		return behaviourManager;
 	}
 

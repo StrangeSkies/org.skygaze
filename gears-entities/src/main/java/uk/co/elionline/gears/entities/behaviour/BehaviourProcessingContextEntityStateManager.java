@@ -1,13 +1,14 @@
-package uk.co.elionline.gears.entities.state;
+package uk.co.elionline.gears.entities.behaviour;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.state.data.StateComponentData;
+import uk.co.elionline.gears.entities.state.StateComponent;
+import uk.co.elionline.gears.entities.state.StateComponentData;
 import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLockRelease;
 
-public interface StateManagerProcessingContext {
+public interface BehaviourProcessingContextEntityStateManager {
 	public <D> D attach(UUID entity, StateComponent<D> stateComponent);
 
 	public void attachAll(UUID entity,

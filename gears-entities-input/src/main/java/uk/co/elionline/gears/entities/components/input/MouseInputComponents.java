@@ -3,9 +3,10 @@ package uk.co.elionline.gears.entities.components.input;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.EntityManagerProcessingContext;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContextEntityManager;
+import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.input.MouseInputController;
 import uk.co.elionline.gears.input.MouseMovementAdapter;
@@ -37,7 +38,7 @@ public class MouseInputComponents {
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							EntityManagerProcessingContext entityManager) {
+							BehaviourProcessingContextEntityManager entityManager) {
 						for (UUID entity : entities) {
 							CursorStateData cursorStateData = entityManager.getStateManager()
 									.getData(entity, getCursorState());

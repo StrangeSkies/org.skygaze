@@ -1,16 +1,15 @@
-package uk.co.elionline.gears.entities;
+package uk.co.elionline.gears.entities.behaviour;
 
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.behaviour.BehaviourManagerProcessingContext;
-import uk.co.elionline.gears.entities.state.StateManagerProcessingContext;
+import uk.co.elionline.gears.entities.Entity;
 import uk.co.elionline.gears.utilities.Factory;
 
-public interface EntityManagerProcessingContext extends Factory<UUID> {
-	public StateManagerProcessingContext getStateManager();
+public interface BehaviourProcessingContextEntityManager extends Factory<UUID> {
+	public BehaviourProcessingContextEntityStateManager getStateManager();
 
-	public BehaviourManagerProcessingContext getBehaviourManager();
+	public BehaviourProcessingContextEntityBehaviourManager getBehaviourManager();
 
 	/**
 	 * This should get the Entity with the appropriate UUID, if it is under the

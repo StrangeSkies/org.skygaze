@@ -1,20 +1,16 @@
-package uk.co.elionline.gears.entities.implementations.collections;
+package uk.co.elionline.gears.entities.management.implementation.collections;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.osgi.service.component.annotations.Component;
-
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.behaviour.BehaviourManager;
-import uk.co.elionline.gears.entities.implementations.AbstractBehaviourManager;
+import uk.co.elionline.gears.entities.management.implementation.AbstractBehaviourManager;
 import uk.co.elionline.gears.entities.processing.EntityProcessor;
 import uk.co.elionline.gears.utilities.collections.HashSetMultiMap;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
-@Component(service = BehaviourManager.class)
 public class CollectionsBehaviourManager extends AbstractBehaviourManager {
 	private final SetMultiMap<BehaviourComponent, UUID> entityBehaviours;
 	private final Set<BehaviourComponent> universalBehaviours;

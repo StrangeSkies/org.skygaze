@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entities.implementations.collections;
+package uk.co.elionline.gears.entities.management.implementation.collections;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,15 +7,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.osgi.service.component.annotations.Component;
-
-import uk.co.elionline.gears.entities.implementations.AbstractStateManager;
+import uk.co.elionline.gears.entities.management.implementation.AbstractStateManager;
 import uk.co.elionline.gears.entities.state.StateComponent;
-import uk.co.elionline.gears.entities.state.StateManager;
 import uk.co.elionline.gears.utilities.flowcontrol.HashingStripedReadWriteLock;
 import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLock;
 
-@Component(service = StateManager.class)
 public class CollectionsStateManager extends AbstractStateManager {
 	private final Map<StateComponent<?>, Map<UUID, Object>> entityStateData;
 

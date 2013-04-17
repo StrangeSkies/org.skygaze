@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.EntityManager;
+import uk.co.elionline.gears.entities.management.EntityManager;
 
 public class EntityAssemblageCollection {
 	private final List<EntityAssemblage> entityAssemblages;
