@@ -6,15 +6,15 @@ import java.util.UUID;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilder;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContextEntityManager;
-import uk.co.elionline.gears.entities.behaviour.implementation.BehaviourComponentBuilderImplementation;
+import uk.co.elionline.gears.entities.behaviour.impl.BehaviourComponentBuilderImplementation;
+import uk.co.elionline.gears.entities.management.EntityManagerProcessingContext;
 import uk.co.elionline.gears.entities.management.EntityManager;
-import uk.co.elionline.gears.entities.management.implementation.collections.CollectionsEntityManager;
+import uk.co.elionline.gears.entities.management.impl.collections.CollectionsEntityManager;
 import uk.co.elionline.gears.entities.processing.PeriodicProcessor;
 import uk.co.elionline.gears.entities.processing.scheduling.LinearScheduler;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentBuilder;
-import uk.co.elionline.gears.entities.state.implementation.StateComponentBuilderImplementation;
+import uk.co.elionline.gears.entities.state.impl.StateComponentBuilderImplementation;
 import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
 import uk.co.elionline.gears.utilities.CopyFactory;
@@ -62,7 +62,7 @@ public class Test1 {
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							BehaviourProcessingContextEntityManager context) {
+							EntityManagerProcessingContext context) {
 						for (UUID entity : entities) {
 							context.getStateManager().getData(entity, position)
 									.add(context.getStateManager().getData(entity, velocity));

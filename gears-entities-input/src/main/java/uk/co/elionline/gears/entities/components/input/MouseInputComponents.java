@@ -5,8 +5,7 @@ import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContextEntityManager;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entities.management.EntityManagerProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.input.MouseInputController;
 import uk.co.elionline.gears.input.MouseMovementAdapter;
@@ -38,7 +37,7 @@ public class MouseInputComponents {
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							BehaviourProcessingContextEntityManager entityManager) {
+							EntityManagerProcessingContext entityManager) {
 						for (UUID entity : entities) {
 							CursorStateData cursorStateData = entityManager.getStateManager()
 									.getData(entity, getCursorState());

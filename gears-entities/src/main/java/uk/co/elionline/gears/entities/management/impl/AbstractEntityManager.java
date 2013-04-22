@@ -1,13 +1,17 @@
-package uk.co.elionline.gears.entities.management.implementation;
+package uk.co.elionline.gears.entities.management.impl;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.management.EntityBehaviourManager;
 import uk.co.elionline.gears.entities.management.EntityManager;
+import uk.co.elionline.gears.entities.management.EntityManagerListener;
 import uk.co.elionline.gears.entities.management.EntityStateManager;
 import uk.co.elionline.gears.entities.processing.EntityProcessor;
 import uk.co.elionline.gears.entities.state.StateComponent;
@@ -25,11 +29,14 @@ public abstract class AbstractEntityManager implements EntityManager {
 	private final Set<EntityProcessor> processors;
 	private boolean wasLockingEnabled;
 
+	private final Set<EntityManagerListener> entityManagerListeners;
+
 	public AbstractEntityManager(EntityStateManager stateManager,
 			EntityBehaviourManager behaviourManager) {
 		this.stateManager = stateManager;
 		this.behaviourManager = behaviourManager;
 		processors = new HashSet<>();
+		entityManagerListeners = new HashSet<>();
 	}
 
 	@Override
@@ -174,5 +181,18 @@ public abstract class AbstractEntityManager implements EntityManager {
 		locks.obtainLocks(readKeys, writeKeys);
 		behaviour.process(getWithBehaviourAndState(behaviour), this);
 		locks.releaseLocks(readKeys, writeKeys);
+	}
+
+	@Override
+	@Reference(service = EntityManagerListener.class, cardinality = ReferenceCardinality.MULTIPLE)
+	public void addEntityManagerListener(
+			EntityManagerListener entityManagerListener) {
+		entityManagerListeners.add(entityManagerListener);
+	}
+
+	@Override
+	public void removeEntityManagerListener(
+			EntityManagerListener entityManagerListener) {
+		entityManagerListeners.remove(entityManagerListener);
 	}
 }

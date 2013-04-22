@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContextEntityManager;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entities.management.EntityManagerProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.physics.PhysicsBody;
 import uk.co.elionline.gears.physics.PhysicsSpace;
@@ -37,7 +37,7 @@ public class PhysicsComponents {
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							BehaviourProcessingContextEntityManager entityManager) {
+							EntityManagerProcessingContext entityManager) {
 						for (UUID entity : entities) {
 							PhysicsBody physicsBodyData = entityManager.getStateManager()
 									.getData(entity, getPhysicsBodyState());

@@ -64,7 +64,8 @@ public class StateComponent<D> implements Named, Described, Factory<D> {
 
 		// Add all indirect write dependencies
 		for (StateComponent<?> writeDependency : writeDependencies) {
-			this.writeDependencies.addAll(writeDependency.getWriteDependencies());
+			this.writeDependencies.addAll(writeDependency
+					.getWriteDependencies());
 		}
 	}
 

@@ -1,13 +1,14 @@
-package uk.co.elionline.gears.entities.behaviour;
+package uk.co.elionline.gears.entities.management;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
+import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.processing.EntityProcessor;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
-public interface BehaviourProcessingContextEntityBehaviourManager {
+public interface EntityBehaviourManagerProcessingContext {
 
 	public boolean attach(UUID entity, BehaviourComponent behaviourComponent);
 

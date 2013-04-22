@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entities.management.implementation.collections;
+package uk.co.elionline.gears.entities.management.impl.collections;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -6,12 +6,12 @@ import java.util.Set;
 import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.management.implementation.AbstractBehaviourManager;
+import uk.co.elionline.gears.entities.management.impl.AbstractEntityBehaviourManager;
 import uk.co.elionline.gears.entities.processing.EntityProcessor;
 import uk.co.elionline.gears.utilities.collections.HashSetMultiMap;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
-public class CollectionsBehaviourManager extends AbstractBehaviourManager {
+public class CollectionsEntityBehaviourManager extends AbstractEntityBehaviourManager {
 	private final SetMultiMap<BehaviourComponent, UUID> entityBehaviours;
 	private final Set<BehaviourComponent> universalBehaviours;
 
@@ -21,7 +21,7 @@ public class CollectionsBehaviourManager extends AbstractBehaviourManager {
 	private EntityProcessor defaultBehaviourProcessor;
 	private final SetMultiMap<EntityProcessor, BehaviourComponent> processorBehaviourAssociations;
 
-	public CollectionsBehaviourManager() {
+	public CollectionsEntityBehaviourManager() {
 		entityBehaviours = new HashSetMultiMap<>();
 		universalBehaviours = new HashSet<>();
 

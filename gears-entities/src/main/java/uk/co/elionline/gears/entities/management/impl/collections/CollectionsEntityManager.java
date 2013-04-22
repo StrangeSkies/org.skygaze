@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entities.management.implementation.collections;
+package uk.co.elionline.gears.entities.management.impl.collections;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +10,7 @@ import uk.co.elionline.gears.entities.Entity;
 import uk.co.elionline.gears.entities.management.EntityBehaviourManager;
 import uk.co.elionline.gears.entities.management.EntityManager;
 import uk.co.elionline.gears.entities.management.EntityStateManager;
-import uk.co.elionline.gears.entities.management.implementation.AbstractEntityManager;
+import uk.co.elionline.gears.entities.management.impl.AbstractEntityManager;
 
 /**
  * 
@@ -22,7 +22,7 @@ public class CollectionsEntityManager extends AbstractEntityManager {
 	private final Set<UUID> entities;
 
 	public CollectionsEntityManager() {
-		this(new CollectionsStateManager(), new CollectionsBehaviourManager());
+		this(new CollectionsEntityStateManager(), new CollectionsEntityBehaviourManager());
 	}
 
 	public CollectionsEntityManager(EntityStateManager stateManager,

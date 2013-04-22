@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entities.management.implementation;
+package uk.co.elionline.gears.entities.management.impl;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import uk.co.elionline.gears.entities.management.EntityStateManager;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentData;
 
-public abstract class AbstractStateManager implements EntityStateManager {
+public abstract class AbstractEntityStateManager implements EntityStateManager {
 	@Override
 	public final <D> D attach(UUID entity, StateComponent<D> stateComponent) {
 		if (has(entity, stateComponent)) {

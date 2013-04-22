@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entities.management.implementation.collections;
+package uk.co.elionline.gears.entities.management.impl.collections;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,18 +7,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.management.implementation.AbstractStateManager;
+import uk.co.elionline.gears.entities.management.impl.AbstractEntityStateManager;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.utilities.flowcontrol.HashingStripedReadWriteLock;
 import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLock;
 
-public class CollectionsStateManager extends AbstractStateManager {
+public class CollectionsEntityStateManager extends AbstractEntityStateManager {
 	private final Map<StateComponent<?>, Map<UUID, Object>> entityStateData;
 
 	private final HashingStripedReadWriteLock<StateComponent<?>> locks;
 	private boolean lockingEnabled;
 
-	public CollectionsStateManager() {
+	public CollectionsEntityStateManager() {
 		entityStateData = new HashMap<>();
 
 		locks = new HashingStripedReadWriteLock<>();

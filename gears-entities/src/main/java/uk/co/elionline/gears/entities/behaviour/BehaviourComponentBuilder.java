@@ -5,8 +5,10 @@ import java.util.Collection;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.utilities.Factory;
 
-public interface BehaviourComponentBuilder extends Factory<BehaviourComponent> {
-	public BehaviourComponentBuilder process(BehaviourComponentProcess process);
+public interface BehaviourComponentBuilder extends
+		Factory<BehaviourComponent> {
+	public BehaviourComponentBuilder process(
+			BehaviourComponentProcess process);
 
 	public BehaviourComponentBuilder name(String name);
 

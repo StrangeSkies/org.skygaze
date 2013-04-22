@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entities.state.implementation;
+package uk.co.elionline.gears.entities.state.impl;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -2,18 +2,18 @@ package uk.co.elionline.gears.entities;
 
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContextEntityManager;
+import uk.co.elionline.gears.entities.management.EntityManagerProcessingContext;
 
 public class Entity {
-	private final BehaviourProcessingContextEntityManager manager;
+	private final EntityManagerProcessingContext manager;
 	private final UUID identifier;
 
-	public Entity(BehaviourProcessingContextEntityManager manager, UUID identifier) {
+	public Entity(EntityManagerProcessingContext manager, UUID identifier) {
 		this.manager = manager;
 		this.identifier = identifier;
 	}
 
-	public BehaviourProcessingContextEntityManager getManager() {
+	public EntityManagerProcessingContext getManager() {
 		return manager;
 	}
 
