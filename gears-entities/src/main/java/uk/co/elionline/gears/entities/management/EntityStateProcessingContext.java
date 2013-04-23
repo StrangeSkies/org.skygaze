@@ -8,7 +8,7 @@ import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentData;
 import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLockRelease;
 
-public interface EntityStateManagerProcessingContext {
+public interface EntityStateProcessingContext {
 	public <D> D attach(UUID entity, StateComponent<D> stateComponent);
 
 	public void attachAll(UUID entity,

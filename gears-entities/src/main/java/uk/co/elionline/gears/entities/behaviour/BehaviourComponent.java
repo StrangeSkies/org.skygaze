@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import uk.co.elionline.gears.entities.management.EntityManagerProcessingContext;
+import uk.co.elionline.gears.entities.management.EntityProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.utilities.Described;
 import uk.co.elionline.gears.utilities.Named;
@@ -181,7 +181,7 @@ public class BehaviourComponent implements Named, Described {
 	}
 
 	public final void process(Set<? extends UUID> entities,
-			EntityManagerProcessingContext context) {
+			EntityProcessingContext context) {
 		process.process(entities, context);
 	}
 

@@ -7,7 +7,7 @@ import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilder;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
 import uk.co.elionline.gears.entities.behaviour.impl.BehaviourComponentBuilderImplementation;
-import uk.co.elionline.gears.entities.management.EntityManagerProcessingContext;
+import uk.co.elionline.gears.entities.management.EntityProcessingContext;
 import uk.co.elionline.gears.entities.management.EntityManager;
 import uk.co.elionline.gears.entities.management.impl.collections.CollectionsEntityManager;
 import uk.co.elionline.gears.entities.processing.PeriodicProcessor;
@@ -62,7 +62,7 @@ public class Test1 {
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							EntityManagerProcessingContext context) {
+							EntityProcessingContext context) {
 						for (UUID entity : entities) {
 							context.getStateManager().getData(entity, position)
 									.add(context.getStateManager().getData(entity, velocity));

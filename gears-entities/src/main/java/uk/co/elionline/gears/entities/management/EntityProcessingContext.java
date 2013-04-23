@@ -6,10 +6,10 @@ import java.util.UUID;
 import uk.co.elionline.gears.entities.Entity;
 import uk.co.elionline.gears.utilities.Factory;
 
-public interface EntityManagerProcessingContext extends Factory<UUID> {
-	public EntityStateManagerProcessingContext getStateManager();
+public interface EntityProcessingContext extends Factory<UUID> {
+	public EntityStateProcessingContext getStateManager();
 
-	public EntityBehaviourManagerProcessingContext getBehaviourManager();
+	public EntityBehaviourProcessingContext getBehaviourManager();
 
 	/**
 	 * This should get the Entity with the appropriate UUID, if it is under the

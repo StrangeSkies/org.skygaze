@@ -6,7 +6,7 @@ import java.util.UUID;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.management.EntityManagerProcessingContext;
+import uk.co.elionline.gears.entities.management.EntityProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.rendering.Renderer2D;
 import uk.co.elionline.gears.utilities.DefaultContructorFactory;
@@ -30,7 +30,7 @@ public class RenderingComponents {
 				.process(new BehaviourComponentProcess() {
 					@Override
 					public void process(Set<? extends UUID> entities,
-							EntityManagerProcessingContext context) {
+							EntityProcessingContext context) {
 						for (UUID entity : entities) {
 							RenderableState2DData data = context.getStateManager().getData(
 									entity, getRenderableState2D());

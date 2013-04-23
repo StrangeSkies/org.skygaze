@@ -10,7 +10,7 @@ import uk.co.elionline.gears.entities.processing.EntityProcessor;
  * @author Elias N Vasylenko
  * 
  */
-public interface EntityManager extends EntityManagerProcessingContext {
+public interface EntityManager extends EntityProcessingContext {
 	@Override
 	public EntityStateManager getStateManager();
 
@@ -23,10 +23,4 @@ public interface EntityManager extends EntityManagerProcessingContext {
 
 	public void processBehaviour(BehaviourComponent behaviour)
 			throws InterruptedException;
-
-	public void addEntityManagerListener(
-			EntityManagerListener entityManagerListener);
-
-	public void removeEntityManagerListener(
-			EntityManagerListener entityManagerListener);
 }

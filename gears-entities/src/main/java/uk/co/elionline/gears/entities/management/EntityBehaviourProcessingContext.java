@@ -8,7 +8,7 @@ import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.processing.EntityProcessor;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
-public interface EntityBehaviourManagerProcessingContext {
+public interface EntityBehaviourProcessingContext {
 
 	public boolean attach(UUID entity, BehaviourComponent behaviourComponent);
 
