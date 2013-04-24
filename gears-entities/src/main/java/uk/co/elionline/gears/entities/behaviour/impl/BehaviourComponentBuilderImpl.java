@@ -9,7 +9,7 @@ import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilder;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
 import uk.co.elionline.gears.entities.state.StateComponent;
 
-public class BehaviourComponentBuilderImplementation implements
+public class BehaviourComponentBuilderImpl implements
 		BehaviourComponentBuilder {
 	private String name;
 	private String description;
@@ -25,7 +25,7 @@ public class BehaviourComponentBuilderImplementation implements
 	private Collection<? extends StateComponent<?>> indirectReadDependencies;
 	private Collection<? extends StateComponent<?>> indirectWriteDependencies;
 
-	public BehaviourComponentBuilderImplementation() {
+	public BehaviourComponentBuilderImpl() {
 		name = "";
 		description = "";
 
@@ -40,8 +40,7 @@ public class BehaviourComponentBuilderImplementation implements
 	}
 
 	@Override
-	public BehaviourComponentBuilderImplementation process(
-			BehaviourComponentProcess process) {
+	public BehaviourComponentBuilder process(BehaviourComponentProcess process) {
 		this.process = process;
 
 		return this;
@@ -147,7 +146,7 @@ public class BehaviourComponentBuilderImplementation implements
 
 	@Override
 	public BehaviourComponent create() {
-		return new BehaviourComponent(name, description, process,
+		return new BehaviourComponentImpl(name, description, process,
 				behaviourDependencies, behaviourDependents, readDependencies,
 				writeDependencies, indirectReadDependencies,
 				indirectWriteDependencies);

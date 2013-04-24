@@ -9,8 +9,7 @@ import uk.co.elionline.gears.entities.state.StateComponentBuilder;
 import uk.co.elionline.gears.entities.state.StateComponentProperty;
 import uk.co.elionline.gears.utilities.Factory;
 
-public class StateComponentBuilderImplementation<D> implements
-		StateComponentBuilder<D> {
+public class StateComponentBuilderImpl<D> implements StateComponentBuilder<D> {
 	private String name;
 	private String description;
 
@@ -21,7 +20,7 @@ public class StateComponentBuilderImplementation<D> implements
 
 	private Collection<? extends StateComponentProperty<D, ?>> properties;
 
-	public StateComponentBuilderImplementation() {
+	public StateComponentBuilderImpl() {
 		name = "";
 		description = "";
 
@@ -96,7 +95,7 @@ public class StateComponentBuilderImplementation<D> implements
 
 	@Override
 	public StateComponent<D> create() {
-		return new StateComponent<>(name, description, dataFactory,
+		return new StateComponentImpl<>(name, description, dataFactory,
 				readDependencies, writeDependencies, properties);
 	}
 }

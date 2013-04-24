@@ -129,7 +129,7 @@ public abstract class AbstractEntityManager implements EntityManager {
 			wasLockingEnabled = getStateManager().isLockingEnabled();
 			getStateManager().setLockingEnabled(true);
 
-			this.processors.addAll(processors);
+			boolean addedProcesses = this.processors.addAll(processors);
 
 			for (final EntityProcessor processor : this.processors) {
 				new Thread(new Runnable() {
@@ -140,7 +140,7 @@ public abstract class AbstractEntityManager implements EntityManager {
 				}).start();
 			}
 
-			return !this.processors.isEmpty();
+			return addedProcesses;
 		}
 	}
 

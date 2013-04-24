@@ -5,26 +5,33 @@ import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilder;
+import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilderFactory;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.behaviour.impl.BehaviourComponentBuilderImplementation;
-import uk.co.elionline.gears.entities.management.EntityProcessingContext;
+import uk.co.elionline.gears.entities.behaviour.impl.BehaviourComponentBuilderFactoryImpl;
 import uk.co.elionline.gears.entities.management.EntityManager;
+import uk.co.elionline.gears.entities.management.EntityProcessingContext;
 import uk.co.elionline.gears.entities.management.impl.collections.CollectionsEntityManager;
 import uk.co.elionline.gears.entities.processing.PeriodicProcessor;
 import uk.co.elionline.gears.entities.processing.scheduling.LinearScheduler;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentBuilder;
-import uk.co.elionline.gears.entities.state.impl.StateComponentBuilderImplementation;
+import uk.co.elionline.gears.entities.state.StateComponentBuilderFactory;
+import uk.co.elionline.gears.entities.state.impl.StateComponentBuilderFactoryImpl;
 import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
 import uk.co.elionline.gears.utilities.CopyFactory;
 
 public class Test1 {
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
+	private final BehaviourComponentBuilderFactory behaviourComponentBuilderFactory;
+	private final StateComponentBuilderFactory stateComponentBuilderFactory;
 
 	public Test1() {
 		entityManager = new CollectionsEntityManager();
 		entityManager.getStateManager().setLockingEnabled(false);
+
+		behaviourComponentBuilderFactory = new BehaviourComponentBuilderFactoryImpl();
+		stateComponentBuilderFactory = new StateComponentBuilderFactoryImpl();
 	}
 
 	public EntityManager getEntityManager() {
@@ -32,11 +39,11 @@ public class Test1 {
 	}
 
 	public <D> StateComponentBuilder<D> getStateComponentBuilder() {
-		return new StateComponentBuilderImplementation<D>();
+		return stateComponentBuilderFactory.begin();
 	}
 
 	public <D> BehaviourComponentBuilder getBehaviourComponentBuilder() {
-		return new BehaviourComponentBuilderImplementation();
+		return behaviourComponentBuilderFactory.begin();
 	}
 
 	private void run() {

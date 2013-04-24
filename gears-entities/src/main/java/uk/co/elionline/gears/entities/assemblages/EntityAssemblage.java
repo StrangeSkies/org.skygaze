@@ -11,6 +11,7 @@ import java.util.Set;
 
 import uk.co.elionline.gears.entities.Entity;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentData;
 import uk.co.elionline.gears.mathematics.functions.UnaryManipulation;

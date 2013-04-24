@@ -11,7 +11,8 @@ import uk.co.elionline.gears.entities.processing.EntityProcessor;
 import uk.co.elionline.gears.utilities.collections.HashSetMultiMap;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
-public class CollectionsEntityBehaviourManager extends AbstractEntityBehaviourManager {
+public class CollectionsEntityBehaviourManager extends
+		AbstractEntityBehaviourManager {
 	private final SetMultiMap<BehaviourComponent, UUID> entityBehaviours;
 	private final Set<BehaviourComponent> universalBehaviours;
 

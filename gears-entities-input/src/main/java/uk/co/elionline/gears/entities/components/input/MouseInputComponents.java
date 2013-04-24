@@ -4,9 +4,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilderFactory;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
 import uk.co.elionline.gears.entities.management.EntityProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
+import uk.co.elionline.gears.entities.state.StateComponentBuilderFactory;
 import uk.co.elionline.gears.input.MouseInputController;
 import uk.co.elionline.gears.input.MouseMovementAdapter;
 import uk.co.elionline.gears.input.MouseMovementAdapter.MovementType;
@@ -21,18 +23,20 @@ public class MouseInputComponents {
 	private final BehaviourComponent cursorBehaviour;
 
 	public MouseInputComponents(MouseInputController mouseInputController,
-			WindowManagerInputController windowManagerInputController) {
+			WindowManagerInputController windowManagerInputController,
+			BehaviourComponentBuilderFactory behaviourComponentBuilderFactory,
+			StateComponentBuilderFactory stateComponentBuilderFactory) {
 		final MouseMovementAdapter mouseMovementAdapter = new MouseMovementAdapter(
 				mouseInputController, windowManagerInputController);
 		mouseMovementAdapter.setMovementType(MovementType.Relative);
 
-		cursorState = StateComponent.<CursorStateData> builder()
+		cursorState = stateComponentBuilderFactory.<CursorStateData> begin()
 				.name("Cursor State")
 				.description("The state of an entity which behaves like a cursor")
 				.dataFactory(new CopyFactory<>(new CursorStateData())).create();
 
-		cursorBehaviour = BehaviourComponent.builder().name("Cursor Behaviour")
-				.description("The behaviour of a cursor")
+		cursorBehaviour = behaviourComponentBuilderFactory.begin()
+				.name("Cursor Behaviour").description("The behaviour of a cursor")
 				.writeDependencies(cursorState)
 				.process(new BehaviourComponentProcess() {
 					@Override

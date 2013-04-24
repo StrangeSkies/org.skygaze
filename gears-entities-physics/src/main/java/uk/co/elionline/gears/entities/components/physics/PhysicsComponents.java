@@ -4,10 +4,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilderFactory;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.management.EntityProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
+import uk.co.elionline.gears.entities.state.StateComponentBuilderFactory;
 import uk.co.elionline.gears.physics.PhysicsBody;
 import uk.co.elionline.gears.physics.PhysicsSpace;
 import uk.co.elionline.gears.utilities.CopyFactory;
@@ -19,20 +20,22 @@ public class PhysicsComponents {
 
 	private final BehaviourComponent physicsBehaviour;
 
-	public PhysicsComponents(Factory<PhysicsSpace> physicsSpaceFactory) {
-		physicsBodyState = StateComponent.<PhysicsBody> builder()
+	public PhysicsComponents(Factory<PhysicsSpace> physicsSpaceFactory,
+			BehaviourComponentBuilderFactory behaviourComponentBuilderFactory,
+			StateComponentBuilderFactory stateComponentBuilderFactory) {
+		physicsBodyState = stateComponentBuilderFactory.<PhysicsBody> begin()
 				.name("Physics Body State")
 				.description("The state of a body which can physically interact")
 				.dataFactory(new CopyFactory<>(new PhysicsBody())).create();
 
-		physicsSpaceState = StateComponent.<PhysicsSpace> builder()
+		physicsSpaceState = stateComponentBuilderFactory.<PhysicsSpace> begin()
 				.name("Physics Space State")
 				.description("The state of a self contained physics space")
 				.writeDependencies(physicsBodyState).dataFactory(physicsSpaceFactory)
 				.create();
 
-		physicsBehaviour = BehaviourComponent.builder().name("Physics Behaviour")
-				.description("The behaviour of a cursor")
+		physicsBehaviour = behaviourComponentBuilderFactory.begin()
+				.name("Physics Behaviour").description("The behaviour of a cursor")
 				.writeDependencies(physicsBodyState)
 				.process(new BehaviourComponentProcess() {
 					@Override
