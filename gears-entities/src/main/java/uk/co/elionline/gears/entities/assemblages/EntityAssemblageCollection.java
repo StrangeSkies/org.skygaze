@@ -15,11 +15,11 @@ public class EntityAssemblageCollection {
 		entityAssemblages = new ArrayList<>();
 	}
 
-	public void assembleWith(EntityManager entityManager) {
+	public void assembleInto(EntityManager entityManager) {
 		for (EntityAssemblage entityAssemblage : entityAssemblages) {
 			UUID entity = entityManager.create();
 
-			entityAssemblage.assembleOnto(entityManager.get(entity));
+			entityAssemblage.assembleOnto(entity, entityManager);
 		}
 	}
 }

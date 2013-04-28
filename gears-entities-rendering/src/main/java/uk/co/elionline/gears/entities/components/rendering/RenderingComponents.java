@@ -1,12 +1,11 @@
 package uk.co.elionline.gears.entities.components.rendering;
 
-import java.util.Set;
 import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilderFactory;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.management.EntityProcessingContext;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcess;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentBuilderFactory;
 import uk.co.elionline.gears.rendering.Renderer2D;
@@ -30,13 +29,12 @@ public class RenderingComponents {
 
 		renderingBehaviour2D = behaviourComponentBuilderFactory.begin()
 				.name("Rendering").description("Behaviour for rendering entities")
-				.process(new BehaviourComponentProcess() {
+				.process(new BehaviourProcess() {
 					@Override
-					public void process(Set<? extends UUID> entities,
-							EntityProcessingContext context) {
-						for (UUID entity : entities) {
-							RenderableState2DData data = context.getStateManager().getData(
-									entity, getRenderableState2D());
+					public void process(BehaviourProcessingContext processingContext) {
+						for (UUID entity : processingContext.getEntities()) {
+							RenderableState2DData data = processingContext.getEntityManager()
+									.getStateManager().getData(entity, getRenderableState2D());
 							renderer.setTransformation2(data.getTransformation());
 						}
 					}

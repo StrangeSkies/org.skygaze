@@ -1,12 +1,11 @@
 package uk.co.elionline.gears.entities.components.input;
 
-import java.util.Set;
 import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilderFactory;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.management.EntityProcessingContext;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcess;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentBuilderFactory;
 import uk.co.elionline.gears.input.MouseInputController;
@@ -37,13 +36,12 @@ public class MouseInputComponents {
 
 		cursorBehaviour = behaviourComponentBuilderFactory.begin()
 				.name("Cursor Behaviour").description("The behaviour of a cursor")
-				.writeDependencies(cursorState)
-				.process(new BehaviourComponentProcess() {
+				.writeDependencies(cursorState).process(new BehaviourProcess() {
 					@Override
-					public void process(Set<? extends UUID> entities,
-							EntityProcessingContext entityManager) {
-						for (UUID entity : entities) {
-							CursorStateData cursorStateData = entityManager.getStateManager()
+					public void process(BehaviourProcessingContext processingContext) {
+						for (UUID entity : processingContext.getEntities()) {
+							CursorStateData cursorStateData = processingContext
+									.getEntityManager().getStateManager()
 									.getData(entity, getCursorState());
 
 							Vector2<IntValue> nextPosition = mouseMovementAdapter

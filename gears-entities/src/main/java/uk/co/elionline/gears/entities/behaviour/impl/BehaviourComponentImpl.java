@@ -5,17 +5,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.management.EntityProcessingContext;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcess;
 import uk.co.elionline.gears.entities.state.StateComponent;
 
 public class BehaviourComponentImpl implements BehaviourComponent {
 	private final String name;
 	private final String description;
-	private final BehaviourComponentProcess process;
+	private final BehaviourProcess process;
 
 	private final Set<BehaviourComponent> behaviourDependencies;
 	private final Set<BehaviourComponent> behaviourDependents;
@@ -27,7 +25,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	private final Set<StateComponent<?>> indirectWriteDependencies;
 
 	public BehaviourComponentImpl(String name, String description,
-			BehaviourComponentProcess process) {
+			BehaviourProcess process) {
 		this.name = name;
 		this.description = description;
 
@@ -44,7 +42,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	}
 
 	public BehaviourComponentImpl(String name, String description,
-			BehaviourComponentProcess process,
+			BehaviourProcess process,
 			Collection<? extends BehaviourComponent> behaviourDependencies,
 			Collection<? extends BehaviourComponent> behaviourDependents) {
 		this(name, description, process);
@@ -54,8 +52,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 
 		// Add all indirect behaviour dependencies and dependents
 		for (BehaviourComponent dependency : behaviourDependencies) {
-			this.behaviourDependencies
-					.addAll(dependency.getBehaviourDependencies());
+			this.behaviourDependencies.addAll(dependency.getBehaviourDependencies());
 		}
 		for (BehaviourComponent dependent : behaviourDependents) {
 			this.behaviourDependents.addAll(dependent.getBehaviourDependents());
@@ -79,13 +76,12 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	}
 
 	public BehaviourComponentImpl(String name, String description,
-			BehaviourComponentProcess process,
+			BehaviourProcess process,
 			Collection<? extends BehaviourComponent> behaviourDependencies,
 			Collection<? extends BehaviourComponent> behaviourDependents,
 			Collection<? extends StateComponent<?>> readDependencies,
 			Collection<? extends StateComponent<?>> writeDependencies) {
-		this(name, description, process, behaviourDependencies,
-				behaviourDependents);
+		this(name, description, process, behaviourDependencies, behaviourDependents);
 
 		this.readDependencies.addAll(readDependencies);
 		this.writeDependencies.addAll(writeDependencies);
@@ -95,8 +91,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 			indirectReadDependencies.addAll(readDependency.getReadDependencies());
 		}
 		for (StateComponent<?> writeDependency : writeDependencies) {
-			indirectWriteDependencies
-					.addAll(writeDependency.getWriteDependencies());
+			indirectWriteDependencies.addAll(writeDependency.getWriteDependencies());
 		}
 	}
 
@@ -111,24 +106,22 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 *          The implementation of this behaviour
 	 * @param readDependencies
 	 *          States which this behaviour requires an Entity to possess such
-	 *          that they can be read from when this behaviour is applied to
-	 *          them.
+	 *          that they can be read from when this behaviour is applied to them.
 	 * @param writeDependencies
 	 *          States which this behaviour requires an Entity to possess such
 	 *          that they can be written to when this behaviour is applied to
 	 *          them.
 	 * @param behaviourDependencies
-	 *          The set of behaviours which this behaviour should only be
-	 *          executed after the completion of, if they are present in the
-	 *          same execution DAG. (i.e. if they are scheduled to process on
-	 *          the same tick.)
+	 *          The set of behaviours which this behaviour should only be executed
+	 *          after the completion of, if they are present in the same execution
+	 *          DAG. (i.e. if they are scheduled to process on the same tick.)
 	 * @param behaviourDependents
 	 *          The set of behaviours which should not be processed until this
 	 *          behaviour completes, if they are present in the same execution
 	 *          DAG. (i.e. if they are scheduled to process on the same tick.)
 	 */
 	public BehaviourComponentImpl(String name, String description,
-			BehaviourComponentProcess process,
+			BehaviourProcess process,
 			Collection<? extends BehaviourComponent> behaviourDependencies,
 			Collection<? extends BehaviourComponent> behaviourDependents,
 			Collection<? extends StateComponent<?>> readDependencies,
@@ -174,9 +167,8 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	}
 
 	@Override
-	public final void process(Set<? extends UUID> entities,
-			EntityProcessingContext context) {
-		process.process(entities, context);
+	public BehaviourProcess getProcess() {
+		return process;
 	}
 
 	/**
@@ -241,8 +233,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	}
 
 	@Override
-	public final void addBehaviourDependent(
-			BehaviourComponent behaviourDependent) {
+	public final void addBehaviourDependent(BehaviourComponent behaviourDependent) {
 		addBehaviourDependents(behaviourDependent);
 	}
 
@@ -260,8 +251,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 
 		// Add all indirect behaviour dependencies
 		for (BehaviourComponent dependent : behaviourDependents) {
-			newIndirectBehaviourDependents.addAll(dependent
-					.getBehaviourDependents());
+			newIndirectBehaviourDependents.addAll(dependent.getBehaviourDependents());
 		}
 
 		// Throw an exception if we detect a cycle
@@ -337,8 +327,8 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	}
 
 	/**
-	 * Get the set of state components which this behaviour component needs
-	 * write access to for the entities it operates on.
+	 * Get the set of state components which this behaviour component needs write
+	 * access to for the entities it operates on.
 	 * 
 	 * @return
 	 */
@@ -357,8 +347,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 */
 	@Override
 	public final Set<StateComponent<?>> getIndirectStateWriteDependencies() {
-		Set<StateComponent<?>> stateDependencies = new HashSet<>(
-				writeDependencies);
+		Set<StateComponent<?>> stateDependencies = new HashSet<>(writeDependencies);
 		stateDependencies.addAll(indirectWriteDependencies);
 
 		return stateDependencies;

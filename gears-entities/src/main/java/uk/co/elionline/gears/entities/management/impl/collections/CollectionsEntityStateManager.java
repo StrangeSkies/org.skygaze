@@ -9,31 +9,18 @@ import java.util.UUID;
 
 import uk.co.elionline.gears.entities.management.impl.AbstractEntityStateManager;
 import uk.co.elionline.gears.entities.state.StateComponent;
-import uk.co.elionline.gears.utilities.flowcontrol.HashingStripedReadWriteLock;
-import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLock;
 
 public class CollectionsEntityStateManager extends AbstractEntityStateManager {
 	private final Map<StateComponent<?>, Map<UUID, Object>> entityStateData;
 
-	private final HashingStripedReadWriteLock<StateComponent<?>> locks;
-	private boolean lockingEnabled;
-
 	public CollectionsEntityStateManager() {
 		entityStateData = new HashMap<>();
-
-		locks = new HashingStripedReadWriteLock<>();
-		lockingEnabled = false;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <D> D attachAndSet(UUID entity, StateComponent<D> stateComponent,
 			D stateData) {
-		if (isLockingEnabled()
-				&& !locks.isWriteLockHeldByCurrentThread(stateComponent)) {
-			throw new IllegalMonitorStateException();
-		}
-
 		Map<UUID, Object> entityData = entityStateData.get(stateComponent);
 
 		if (entityData == null) {
@@ -48,11 +35,6 @@ public class CollectionsEntityStateManager extends AbstractEntityStateManager {
 
 	@Override
 	public boolean detach(UUID entity, StateComponent<?> stateComponent) {
-		if (isLockingEnabled()
-				&& !locks.isWriteLockHeldByCurrentThread(stateComponent)) {
-			throw new IllegalMonitorStateException();
-		}
-
 		Map<UUID, ?> entities = entityStateData.get(stateComponent);
 
 		boolean removed = entities != null && entities.remove(entity) != null;
@@ -82,10 +64,6 @@ public class CollectionsEntityStateManager extends AbstractEntityStateManager {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <D> D getData(UUID entity, StateComponent<D> stateComponent) {
-		if (isLockingEnabled() && !locks.isLockHeldByCurrentThread(stateComponent)) {
-			throw new IllegalMonitorStateException();
-		}
-
 		return (D) entityStateData.get(stateComponent).get(entity);
 	}
 
@@ -108,20 +86,5 @@ public class CollectionsEntityStateManager extends AbstractEntityStateManager {
 	@Override
 	public Set<StateComponent<?>> getAll() {
 		return entityStateData.keySet();
-	}
-
-	@Override
-	public void setLockingEnabled(boolean enabled) {
-		lockingEnabled = enabled;
-	}
-
-	@Override
-	public boolean isLockingEnabled() {
-		return lockingEnabled;
-	}
-
-	@Override
-	public StripedReadWriteLock<StateComponent<?>> getLocks() {
-		return locks;
 	}
 }

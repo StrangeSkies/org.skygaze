@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.management.impl.AbstractEntityBehaviourManager;
-import uk.co.elionline.gears.entities.processing.EntityProcessor;
+import uk.co.elionline.gears.entities.scheduling.Scheduler;
 import uk.co.elionline.gears.utilities.collections.HashSetMultiMap;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
@@ -19,8 +19,8 @@ public class CollectionsEntityBehaviourManager extends
 	private final SetMultiMap<BehaviourComponent, BehaviourComponent> dependencies;
 	private final SetMultiMap<BehaviourComponent, BehaviourComponent> dependents;
 
-	private EntityProcessor defaultBehaviourProcessor;
-	private final SetMultiMap<EntityProcessor, BehaviourComponent> processorBehaviourAssociations;
+	private Scheduler defaultBehaviourProcessor;
+	private final SetMultiMap<Scheduler, BehaviourComponent> processorBehaviourAssociations;
 
 	public CollectionsEntityBehaviourManager() {
 		entityBehaviours = new HashSetMultiMap<>();
@@ -110,40 +110,40 @@ public class CollectionsEntityBehaviourManager extends
 	}
 
 	@Override
-	public void setDefaultProcessor(EntityProcessor processor) {
-		defaultBehaviourProcessor = processor;
+	public void setDefaultScheduler(Scheduler scheduler) {
+		defaultBehaviourProcessor = scheduler;
 	}
 
 	@Override
-	public void setProcessor(EntityProcessor processor,
+	public void setBehaviourScheduler(Scheduler scheduler,
 			BehaviourComponent behaviourComponent) {
-		setProcessorToDefault(behaviourComponent);
-		processorBehaviourAssociations.add(processor, behaviourComponent);
+		setBehaviourSchedulerToDefault(behaviourComponent);
+		processorBehaviourAssociations.add(scheduler, behaviourComponent);
 	}
 
 	@Override
-	public void setProcessorToDefault(BehaviourComponent behaviourComponent) {
+	public void setBehaviourSchedulerToDefault(
+			BehaviourComponent behaviourComponent) {
 		processorBehaviourAssociations.removeFromAll(behaviourComponent);
 	}
 
 	@Override
-	public Set<BehaviourComponent> getBehavioursForProcessor(
-			EntityProcessor processor) {
+	public Set<BehaviourComponent> getBehavioursForScheduler(Scheduler scheduler) {
 		Set<BehaviourComponent> behaviours;
 
-		if (processor == defaultBehaviourProcessor) {
+		if (scheduler == defaultBehaviourProcessor) {
 			behaviours = getAll();
 			behaviours.removeAll(processorBehaviourAssociations.getAllValues());
 		} else {
-			behaviours = processorBehaviourAssociations.get(processor);
+			behaviours = processorBehaviourAssociations.get(scheduler);
 		}
 
 		return behaviours;
 	}
 
 	@Override
-	public Set<EntityProcessor> getAllProcessors() {
-		Set<EntityProcessor> processors = new HashSet<>(
+	public Set<Scheduler> getAllSchedulers() {
+		Set<Scheduler> processors = new HashSet<>(
 				processorBehaviourAssociations.keySet());
 		if (defaultBehaviourProcessor != null) {
 			processors.add(defaultBehaviourProcessor);

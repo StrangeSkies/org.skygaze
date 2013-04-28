@@ -1,12 +1,11 @@
 package uk.co.elionline.gears.entities.components.physics;
 
-import java.util.Set;
 import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilderFactory;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
-import uk.co.elionline.gears.entities.management.EntityProcessingContext;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcess;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentBuilderFactory;
 import uk.co.elionline.gears.physics.PhysicsBody;
@@ -36,13 +35,11 @@ public class PhysicsComponents {
 
 		physicsBehaviour = behaviourComponentBuilderFactory.begin()
 				.name("Physics Behaviour").description("The behaviour of a cursor")
-				.writeDependencies(physicsBodyState)
-				.process(new BehaviourComponentProcess() {
+				.writeDependencies(physicsBodyState).process(new BehaviourProcess() {
 					@Override
-					public void process(Set<? extends UUID> entities,
-							EntityProcessingContext entityManager) {
-						for (UUID entity : entities) {
-							PhysicsBody physicsBodyData = entityManager.getStateManager()
+					public void process(BehaviourProcessingContext processingContext) {
+						for (UUID entity : processingContext.getEntities()) {
+							processingContext.getEntityManager().getStateManager()
 									.getData(entity, getPhysicsBodyState());
 						}
 					}

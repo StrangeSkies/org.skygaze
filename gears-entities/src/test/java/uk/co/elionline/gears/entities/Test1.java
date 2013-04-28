@@ -1,18 +1,20 @@
 package uk.co.elionline.gears.entities;
 
-import java.util.Set;
 import java.util.UUID;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilder;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilderFactory;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcess;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContext;
 import uk.co.elionline.gears.entities.behaviour.impl.BehaviourComponentBuilderFactoryImpl;
 import uk.co.elionline.gears.entities.management.EntityManager;
-import uk.co.elionline.gears.entities.management.EntityProcessingContext;
+import uk.co.elionline.gears.entities.management.EntityStateManager;
 import uk.co.elionline.gears.entities.management.impl.collections.CollectionsEntityManager;
-import uk.co.elionline.gears.entities.processing.PeriodicProcessor;
-import uk.co.elionline.gears.entities.processing.scheduling.LinearScheduler;
+import uk.co.elionline.gears.entities.processing.Processor;
+import uk.co.elionline.gears.entities.processing.impl.ProcessorImpl;
+import uk.co.elionline.gears.entities.scheduling.PeriodicScheduler;
+import uk.co.elionline.gears.entities.scheduling.terminating.LinearScheduler;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentBuilder;
 import uk.co.elionline.gears.entities.state.StateComponentBuilderFactory;
@@ -28,7 +30,6 @@ public class Test1 {
 
 	public Test1() {
 		entityManager = new CollectionsEntityManager();
-		entityManager.getStateManager().setLockingEnabled(false);
 
 		behaviourComponentBuilderFactory = new BehaviourComponentBuilderFactoryImpl();
 		stateComponentBuilderFactory = new StateComponentBuilderFactoryImpl();
@@ -47,9 +48,9 @@ public class Test1 {
 	}
 
 	private void run() {
-		PeriodicProcessor processor = new PeriodicProcessor(new LinearScheduler());
-		processor.setPeriodFrequency(5);
-		getEntityManager().getBehaviourManager().setDefaultProcessor(processor);
+		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler());
+		scheduler.setPeriodFrequency(5);
+		getEntityManager().getBehaviourManager().setDefaultScheduler(scheduler);
 
 		final StateComponent<Vector2<DoubleValue>> position = this
 				.<Vector2<DoubleValue>> getStateComponentBuilder().name("Position")
@@ -66,13 +67,15 @@ public class Test1 {
 		final BehaviourComponent movement = getBehaviourComponentBuilder()
 				.name("Movement").description("Moves entity by velocity")
 				.readDependencies(velocity).writeDependencies(position)
-				.process(new BehaviourComponentProcess() {
+				.process(new BehaviourProcess() {
 					@Override
-					public void process(Set<? extends UUID> entities,
-							EntityProcessingContext context) {
-						for (UUID entity : entities) {
-							context.getStateManager().getData(entity, position)
-									.add(context.getStateManager().getData(entity, velocity));
+					public void process(BehaviourProcessingContext context) {
+						for (UUID entity : context.getEntities()) {
+							EntityStateManager stateManager = context.getEntityManager()
+									.getStateManager();
+
+							System.out.println(stateManager.getData(entity, position).add(
+									stateManager.getData(entity, velocity)));
 						}
 					}
 				}).create();
@@ -87,7 +90,8 @@ public class Test1 {
 		getEntityManager().getStateManager().attachAndSet(entity2, velocity,
 				new Vector2<>(DoubleValue.factory(), 2, 2));
 
-		getEntityManager().startProcessing();
+		Processor processingContext = new ProcessorImpl();
+		processingContext.startProcessing(getEntityManager());
 		try {
 			synchronized (this) {
 				wait(2000);
@@ -95,7 +99,7 @@ public class Test1 {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		getEntityManager().stopProcessing();
+		processingContext.stopProcessing();
 	}
 
 	public static void main(String... args) {

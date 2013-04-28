@@ -8,7 +8,7 @@ import uk.co.elionline.gears.utilities.Factory;
 public interface BehaviourComponentBuilder extends
 		Factory<BehaviourComponent> {
 	public BehaviourComponentBuilder process(
-			BehaviourComponentProcess process);
+			BehaviourProcess process);
 
 	public BehaviourComponentBuilder name(String name);
 

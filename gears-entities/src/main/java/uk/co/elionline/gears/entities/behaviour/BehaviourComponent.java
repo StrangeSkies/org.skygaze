@@ -2,16 +2,13 @@ package uk.co.elionline.gears.entities.behaviour;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.UUID;
 
-import uk.co.elionline.gears.entities.management.EntityProcessingContext;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.utilities.Described;
 import uk.co.elionline.gears.utilities.Named;
 
 public interface BehaviourComponent extends Named, Described {
-	public void process(Set<? extends UUID> entities,
-			EntityProcessingContext context);
+	public BehaviourProcess getProcess();
 
 	/**
 	 * Get the set of behaviours which this behaviour should only be executed

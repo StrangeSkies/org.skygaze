@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.osgi.service.component.annotations.Component;
 
-import uk.co.elionline.gears.entities.Entity;
 import uk.co.elionline.gears.entities.management.EntityBehaviourManager;
 import uk.co.elionline.gears.entities.management.EntityManager;
 import uk.co.elionline.gears.entities.management.EntityStateManager;
@@ -22,7 +21,8 @@ public class CollectionsEntityManager extends AbstractEntityManager {
 	private final Set<UUID> entities;
 
 	public CollectionsEntityManager() {
-		this(new CollectionsEntityStateManager(), new CollectionsEntityBehaviourManager());
+		this(new CollectionsEntityStateManager(),
+				new CollectionsEntityBehaviourManager());
 	}
 
 	public CollectionsEntityManager(EntityStateManager stateManager,
@@ -35,14 +35,6 @@ public class CollectionsEntityManager extends AbstractEntityManager {
 	@Override
 	protected void add(UUID identifier) {
 		entities.add(identifier);
-	}
-
-	@Override
-	public Entity get(UUID entityIdentifier) {
-		if (!exists(entityIdentifier)) {
-			throw new IllegalArgumentException();
-		}
-		return new Entity(this, entityIdentifier);
 	}
 
 	@Override

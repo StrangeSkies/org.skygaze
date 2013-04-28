@@ -6,7 +6,7 @@ import java.util.Collections;
 
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilder;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponentProcess;
+import uk.co.elionline.gears.entities.behaviour.BehaviourProcess;
 import uk.co.elionline.gears.entities.state.StateComponent;
 
 public class BehaviourComponentBuilderImpl implements
@@ -14,7 +14,7 @@ public class BehaviourComponentBuilderImpl implements
 	private String name;
 	private String description;
 
-	private BehaviourComponentProcess process;
+	private BehaviourProcess process;
 
 	private Collection<? extends BehaviourComponent> behaviourDependencies;
 	private Collection<? extends BehaviourComponent> behaviourDependents;
@@ -40,7 +40,7 @@ public class BehaviourComponentBuilderImpl implements
 	}
 
 	@Override
-	public BehaviourComponentBuilder process(BehaviourComponentProcess process) {
+	public BehaviourComponentBuilder process(BehaviourProcess process) {
 		this.process = process;
 
 		return this;

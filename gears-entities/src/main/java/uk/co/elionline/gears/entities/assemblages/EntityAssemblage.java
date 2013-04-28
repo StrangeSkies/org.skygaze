@@ -8,10 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
-import uk.co.elionline.gears.entities.Entity;
 import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entities.management.EntityManager;
 import uk.co.elionline.gears.entities.state.StateComponent;
 import uk.co.elionline.gears.entities.state.StateComponentData;
 import uk.co.elionline.gears.mathematics.functions.UnaryManipulation;
@@ -168,9 +168,10 @@ public class EntityAssemblage implements Named, Described {
 		return stateComponentData.keySet();
 	}
 
-	public Entity assembleOnto(Entity entity) {
-		// entity.attachAllBehaviours(behaviourComponents);
-		// TODO entity.attachAllStateDataCopies(getStateComponentData());
+	public UUID assembleOnto(UUID entity, EntityManager entityManager) {
+		entityManager.getBehaviourManager().attachAll(entity,
+				getBehaviourComponents());
+		entityManager.getStateManager().attachAll(entity, getStateComponents());
 
 		return entity;
 	}

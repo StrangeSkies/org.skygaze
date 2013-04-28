@@ -24,7 +24,6 @@
 	<modules>
 		<module>gears-parent</module>
 		<module>gears-rendering</module>
-		<module>gears-contexts</module>
 		<module>gears-physics</module>
 		<module>gears-entities</module>
 		<module>gears-entities-input</module>
@@ -33,7 +32,7 @@
 		<module>gears-input</module>
 		<module>gears-utilities</module>
 		<module>gears-mathematics</module>
-		<module>gears-system</module>
 		<module>gears-swing</module>
+		<module>gears-engine</module>
 	</modules>
 </project>

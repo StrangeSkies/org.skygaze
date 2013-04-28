@@ -2,15 +2,14 @@ package uk.co.elionline.gears.entities;
 
 import uk.co.elionline.gears.entities.management.EntityManager;
 import uk.co.elionline.gears.entities.management.impl.collections.CollectionsEntityManager;
-import uk.co.elionline.gears.entities.processing.PeriodicProcessor;
-import uk.co.elionline.gears.entities.processing.scheduling.LinearScheduler;
+import uk.co.elionline.gears.entities.scheduling.PeriodicScheduler;
+import uk.co.elionline.gears.entities.scheduling.terminating.LinearScheduler;
 
 public class Test2 {
 	EntityManager entityManager;
 
 	public Test2() {
 		entityManager = new CollectionsEntityManager();
-		entityManager.getStateManager().setLockingEnabled(false);
 	}
 
 	public EntityManager getEntityManager() {
@@ -18,9 +17,9 @@ public class Test2 {
 	}
 
 	public void run() {
-		PeriodicProcessor processor = new PeriodicProcessor(new LinearScheduler());
-		processor.setPeriodFrequency(5);
-		getEntityManager().getBehaviourManager().setDefaultProcessor(processor);
+		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler());
+		scheduler.setPeriodFrequency(5);
+		getEntityManager().getBehaviourManager().setDefaultScheduler(scheduler);
 		/*-
 		 final StateComponent<Vector2<DoubleValue>> position = StateComponent
 		 .<Vector2<DoubleValue>> builder().name("Position")
