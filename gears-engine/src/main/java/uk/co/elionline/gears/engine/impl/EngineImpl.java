@@ -13,6 +13,7 @@ public class EngineImpl implements Engine {
 	private Game game;
 	private SectionProcessor sectionProcessor;
 
+	@Override
 	@Activate
 	public void launch() {
 		getSectionProcessor().process(getGame().getEntranceSection());
@@ -22,6 +23,7 @@ public class EngineImpl implements Engine {
 		return game;
 	}
 
+	@Override
 	@Reference(service = Game.class)
 	public void setGame(Game game) {
 		this.game = game;
@@ -35,6 +37,7 @@ public class EngineImpl implements Engine {
 		return sectionProcessor;
 	}
 
+	@Override
 	@Reference(service = SectionProcessor.class)
 	public void setSectionProcessor(SectionProcessor sectionProcessor) {
 		this.sectionProcessor = sectionProcessor;
