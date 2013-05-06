@@ -17,7 +17,7 @@
 
 	<url>${project.organization.url}gears/utilities</url>
 
-	<description>General utilities</description>
+	<description>General utilities.</description>
 
 	<dependencies>
 		<dependency>

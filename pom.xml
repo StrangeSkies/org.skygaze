@@ -34,5 +34,6 @@
 		<module>gears-mathematics</module>
 		<module>gears-swing</module>
 		<module>gears-engine</module>
+		<module>gears-utilities-osgi</module>
 	</modules>
 </project>

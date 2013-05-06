@@ -12,7 +12,7 @@ public class HashMultiMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 
 	private final Factory<C> collectionFactory;
 
-	HashMultiMap(Factory<C> collectionFactory) {
+	public HashMultiMap(Factory<C> collectionFactory) {
 		this.collectionFactory = collectionFactory;
 	}
 
