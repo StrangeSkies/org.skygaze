@@ -18,7 +18,7 @@ import org.osgi.framework.hooks.service.FindHook;
 import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
 import org.osgi.service.component.annotations.Component;
 
-import uk.co.elionline.gears.gearbox.utilities.ServiceWrapper;
+import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
 
 @Component(service = ServiceWrapperManager.class)
 public class ServiceWrapperManager implements EventListenerHook, FindHook {
@@ -87,6 +87,7 @@ public class ServiceWrapperManager implements EventListenerHook, FindHook {
 			properties.put(propertyKey, serviceReference.getProperty(propertyKey));
 		}
 
+		/*-
 		T wrappedService = ((CompoundServiceWrapper<T>) serviceWrappers
 				.get(serviceClass)).wrapService((T) serviceReference.getBundle()
 				.getBundleContext().getService(serviceReference), properties);
@@ -98,6 +99,7 @@ public class ServiceWrapperManager implements EventListenerHook, FindHook {
 						getProxiedServiceProperties(serviceReference));
 
 		wrappedServiceRegistrations.put(serviceReference, serviceRegistration);
+		 */
 	}
 
 	private static Hashtable<String, Object> getProxiedServiceProperties(
