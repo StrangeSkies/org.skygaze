@@ -1,43 +1,36 @@
 package uk.co.elionline.gears.scripting.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
-import javax.script.SimpleBindings;
+import javax.script.ScriptEngineManager;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-import uk.co.elionline.gears.scripting.ScriptEngineManagerService;
-import uk.co.elionline.gears.utilities.collections.HashSetMultiMap;
-import uk.co.elionline.gears.utilities.collections.SetMultiMap;
-
-@Component(service = ScriptEngineManagerService.class)
-public class ScriptEngineManagerImpl extends ScriptEngineManagerService {
-	private Bindings globalScope;
-
+@Component(service = ScriptEngineManager.class)
+public class ScriptEngineManagerImpl extends ScriptEngineManager {
 	private final Set<ScriptEngineFactory> scriptEngineFactories;
 
-	private final SetMultiMap<String, ScriptEngineFactory> nameAssociations;
-	private final SetMultiMap<String, ScriptEngineFactory> extensionAssociations;
-	private final SetMultiMap<String, ScriptEngineFactory> mimeTypeAssociations;
+	private final Map<String, ScriptEngineFactory> nameAssociations;
+	private final Map<String, ScriptEngineFactory> extensionAssociations;
+	private final Map<String, ScriptEngineFactory> mimeTypeAssociations;
 
 	public ScriptEngineManagerImpl() {
-		globalScope = new SimpleBindings();
-
 		scriptEngineFactories = new HashSet<>();
 
-		nameAssociations = new HashSetMultiMap<>();
-		extensionAssociations = new HashSetMultiMap<>();
-		mimeTypeAssociations = new HashSetMultiMap<>();
+		nameAssociations = new HashMap<>();
+		extensionAssociations = new HashMap<>();
+		mimeTypeAssociations = new HashMap<>();
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
@@ -49,42 +42,75 @@ public class ScriptEngineManagerImpl extends ScriptEngineManagerService {
 		scriptEngineFactories.remove(factory);
 	}
 
-	@Override
-	public Object get(String key) {
-		return globalScope.get(key);
-	}
-
-	@Override
-	public void put(String key, Object value) {
-		globalScope.put(key, value);
-	}
-
-	@Override
-	public Bindings getBindings() {
-		return globalScope;
+	private ScriptEngine getEngine(ScriptEngineFactory factory) {
+		try {
+			ScriptEngine engine = factory.getScriptEngine();
+			engine.setBindings(getBindings(), ScriptContext.GLOBAL_SCOPE);
+			return engine;
+		} catch (Exception exp) {
+			return null;
+		}
 	}
 
 	@Override
 	public ScriptEngine getEngineByExtension(String extension) {
-		HashSet<ScriptEngineFactory> engineFactoriesByExtension = new HashSet<>();
-
-		for (ScriptEngineFactory factory : nameAssociations.get(extension)) {
-			try {
-				ScriptEngine engine = factory.getScriptEngine();
-				engine.setBindings(getBindings(), ScriptContext.GLOBAL_SCOPE);
+		ScriptEngineFactory assiciatedFactory = extensionAssociations
+				.get(extension);
+		if (assiciatedFactory != null) {
+			ScriptEngine engine = getEngine(assiciatedFactory);
+			if (engine != null)
 				return engine;
-			} catch (Exception exp) {
+		}
+
+		for (ScriptEngineFactory factory : getEngineFactories()) {
+			if (factory.getExtensions().contains(extension)) {
+				ScriptEngine engine = getEngine(factory);
+				if (engine != null)
+					return engine;
 			}
 		}
 
+		return null;
 	}
 
 	@Override
 	public ScriptEngine getEngineByMimeType(String mimeType) {
+		ScriptEngineFactory assiciatedFactory = mimeTypeAssociations.get(mimeType);
+		if (assiciatedFactory != null) {
+			ScriptEngine engine = getEngine(assiciatedFactory);
+			if (engine != null)
+				return engine;
+		}
+
+		for (ScriptEngineFactory factory : getEngineFactories()) {
+			if (factory.getMimeTypes().contains(mimeType)) {
+				ScriptEngine engine = getEngine(factory);
+				if (engine != null)
+					return engine;
+			}
+		}
+
+		return null;
 	}
 
 	@Override
-	public ScriptEngine getEngineByName(String shortName) {
+	public ScriptEngine getEngineByName(String name) {
+		ScriptEngineFactory assiciatedFactory = nameAssociations.get(name);
+		if (assiciatedFactory != null) {
+			ScriptEngine engine = getEngine(assiciatedFactory);
+			if (engine != null)
+				return engine;
+		}
+
+		for (ScriptEngineFactory factory : getEngineFactories()) {
+			if (factory.getNames().contains(name)) {
+				ScriptEngine engine = getEngine(factory);
+				if (engine != null)
+					return engine;
+			}
+		}
+
+		return null;
 	}
 
 	@Override
@@ -95,21 +121,16 @@ public class ScriptEngineManagerImpl extends ScriptEngineManagerService {
 	@Override
 	public void registerEngineExtension(String extension,
 			ScriptEngineFactory factory) {
-		extensionAssociations.add(extension, factory);
+		extensionAssociations.put(extension, factory);
 	}
 
 	@Override
 	public void registerEngineMimeType(String type, ScriptEngineFactory factory) {
-		mimeTypeAssociations.add(type, factory);
+		mimeTypeAssociations.put(type, factory);
 	}
 
 	@Override
 	public void registerEngineName(String name, ScriptEngineFactory factory) {
-		nameAssociations.add(name, factory);
-	}
-
-	@Override
-	public void setBindings(Bindings bindings) {
-		globalScope = bindings;
+		nameAssociations.put(name, factory);
 	}
 }

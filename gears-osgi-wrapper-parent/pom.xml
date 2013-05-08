@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>uk.co.elionline</groupId>
+	<artifactId>gears-osgi-wrapper-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Gears OSGi Wrapper Parent</name>
+
+	<url>${project.organization.url}gears/osgi</url>
+
+	<description>Parent for wrapper projects to bundle existing jars adding OSGi compatibility.</description>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>2.1.0</version>
+					<extensions>true</extensions>
+					<configuration>
+						<instructions>
+							<Embed-Dependency>*;scope=compile;inline=true</Embed-Dependency>
+							<_exportcontents>*</_exportcontents>
+						</instructions>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
