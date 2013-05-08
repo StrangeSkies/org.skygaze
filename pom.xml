@@ -35,5 +35,6 @@
 		<module>gears-entities-physics</module>
 		<module>gears-entities-rendering</module>
 		<module>gears-swing</module>
+		<module>gears-scripting</module>
 	</modules>
 </project>
