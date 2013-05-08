@@ -42,6 +42,12 @@
 				<artifactId>org.osgi.enterprise</artifactId>
 				<version>5.0.0</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.apache.aries.spifly</groupId>
+				<artifactId>org.apache.aries.spifly.dynamic.bundle</artifactId>
+				<version>1.0.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -133,7 +139,6 @@
 							<addMavenDescriptor>true</addMavenDescriptor>
 						</archive>
 						<instructions>
-							<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 							<Service-Component>*</Service-Component>
 							<_dsannotations>*</_dsannotations>
 						</instructions>

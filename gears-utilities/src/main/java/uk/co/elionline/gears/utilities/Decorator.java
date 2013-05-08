@@ -15,7 +15,7 @@ public abstract class Decorator<T> {
 		this.component = component;
 	}
 
-	protected T getComponent() {
+	protected final T getComponent() {
 		return component;
 	}
 

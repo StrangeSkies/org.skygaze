@@ -13,8 +13,7 @@ public class CompoundWrappedServiceSet<T> {
 		serviceWrappers = new HashSet<>();
 	}
 
-	public void add(ServiceWrapper<T> serviceWrapper, int priority,
-			boolean hidesPrevious) {
+	public void add(ServiceWrapper<T> serviceWrapper) {
 
 	}
 
