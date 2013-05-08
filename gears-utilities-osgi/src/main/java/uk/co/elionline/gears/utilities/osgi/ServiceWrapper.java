@@ -56,14 +56,6 @@ public interface ServiceWrapper<T> {
 
 	/**
 	 * If a property with this key is present on a service wrapper service, and if
-	 * the value is set to true, the wrapper will be applied to all existing
-	 * wrappable services, not just ones registered after this wrapper service.
-	 * The default value is assumed to be true if this key is not present.
-	 */
-	public static String APPLY_RETROACTIVELY = "Apply-Retroactively";
-
-	/**
-	 * If a property with this key is present on a service wrapper service, and if
 	 * the value is set to true, wrapped services will be hidden on application of
 	 * the wrapper. Services already in use will not be hidden from those bundles
 	 * which are using them. The default value is assumed to be false if this key
