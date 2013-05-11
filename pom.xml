@@ -35,8 +35,8 @@
 		<module>gears-entities-physics</module>
 		<module>gears-entities-rendering</module>
 		<module>gears-swing</module>
+		<module>gears-osgi-wrapper-parent</module>
 		<module>gears-scripting</module>
 		<module>gears-scripting-ruby</module>
-		<module>gears-osgi-wrapper-parent</module>
 	</modules>
 </project>

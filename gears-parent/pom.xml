@@ -142,10 +142,9 @@
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-scr-plugin</artifactId>
-					<version>1.10.0</version>
+					<version>1.12.0</version>
 					<configuration>
-						<outputDirectory>${project.build.directory}/classes
-						</outputDirectory>
+						<outputDirectory>${project.build.directory}/classes</outputDirectory>
 					</configuration>
 					<dependencies>
 						<dependency>
