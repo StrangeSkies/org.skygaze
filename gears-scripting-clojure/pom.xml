@@ -9,22 +9,18 @@
 		<relativePath>../gears-osgi-wrapper-parent</relativePath>
 	</parent>
 
-	<artifactId>gears-scripting-ruby</artifactId>
+	<artifactId>gears-scripting-clojure</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>Gears Scripting - Ruby</name>
+	<name>Gears Scripting - Clojure</name>
 
 	<url>${project.organization.url}gears/scripting</url>
 
-	<description>Scripting language support for Ruby.</description>
+	<description>Scripting language support for Clojure.</description>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.jruby</groupId>
-			<artifactId>jruby</artifactId>
-			<version>1.7.3</version>
-		</dependency>
-	</dependencies>
+	<!-- <repositories> <repository> <id>clojars</id> <url>http://clojars.org/repo/</url> 
+		</repository> </repositories> <dependencies> <dependency> <groupId>clojure-jsr223</groupId> 
+		<artifactId>clojure-jsr223</artifactId> <version>1.2</version> </dependency> </dependencies> -->
 
 	<build>
 		<plugins>

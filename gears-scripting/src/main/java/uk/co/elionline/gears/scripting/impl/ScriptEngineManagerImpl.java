@@ -17,7 +17,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-@Component(service = ScriptEngineManagerImpl.class)
+@Component(service = ScriptEngineManager.class)
 public class ScriptEngineManagerImpl extends ScriptEngineManager {
 	private final Set<ScriptEngineFactory> scriptEngineFactories;
 
@@ -35,10 +35,6 @@ public class ScriptEngineManagerImpl extends ScriptEngineManager {
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	protected void addScriptEngineFactory(ScriptEngineFactory factory) {
-		System.out.println("###");
-		System.out.println("###");
-		System.out.println("###");
-		System.out.println("  ScriptEngineFactory: " + factory.getEngineName());
 		scriptEngineFactories.add(factory);
 	}
 

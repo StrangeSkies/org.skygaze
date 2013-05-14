@@ -9,20 +9,20 @@
 		<relativePath>../gears-osgi-wrapper-parent</relativePath>
 	</parent>
 
-	<artifactId>gears-scripting-ruby</artifactId>
+	<artifactId>gears-scripting-javascript</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>Gears Scripting - Ruby</name>
+	<name>Gears Scripting - Javascript</name>
 
 	<url>${project.organization.url}gears/scripting</url>
 
-	<description>Scripting language support for Ruby.</description>
+	<description>Scripting language support for Javascript.</description>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.jruby</groupId>
-			<artifactId>jruby</artifactId>
-			<version>1.7.3</version>
+			<groupId>com.sun.phobos</groupId>
+			<artifactId>phobos-js</artifactId>
+			<version>0.6.2</version>
 		</dependency>
 	</dependencies>
 

@@ -38,5 +38,9 @@
 		<module>gears-osgi-wrapper-parent</module>
 		<module>gears-scripting</module>
 		<module>gears-scripting-ruby</module>
+		<module>gears-scripting-groovy</module>
+		<module>gears-scripting-python</module>
+		<module>gears-scripting-clojure</module>
+		<module>gears-scripting-javascript</module>
 	</modules>
 </project>

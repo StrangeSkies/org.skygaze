@@ -9,20 +9,20 @@
 		<relativePath>../gears-osgi-wrapper-parent</relativePath>
 	</parent>
 
-	<artifactId>gears-scripting-ruby</artifactId>
+	<artifactId>gears-scripting-python</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>Gears Scripting - Ruby</name>
+	<name>Gears Scripting - Python</name>
 
 	<url>${project.organization.url}gears/scripting</url>
 
-	<description>Scripting language support for Ruby.</description>
+	<description>Scripting language support for Python.</description>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.jruby</groupId>
-			<artifactId>jruby</artifactId>
-			<version>1.7.3</version>
+			<groupId>org.python</groupId>
+			<artifactId>jython</artifactId>
+			<version>2.5.3</version>
 		</dependency>
 	</dependencies>
 
