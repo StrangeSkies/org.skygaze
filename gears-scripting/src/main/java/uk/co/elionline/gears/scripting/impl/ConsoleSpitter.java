@@ -1,5 +1,6 @@
 package uk.co.elionline.gears.scripting.impl;
 
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
@@ -35,43 +36,55 @@ public class ConsoleSpitter {
 
 			ScriptEngine engine;
 
-			System.out.println("Testing javascript:");
+			System.out.println("Testing Javascript:");
 			engine = scriptEngineManager.getEngineByName("javascript");
 			try {
-				System.out.println("  "
+				System.out.println("  month = "
 						+ engine.eval("var date=new Date(); date.getMonth() + 1;"));
 			} catch (ScriptException e) {
 				e.printStackTrace();
 			}
 
-			System.out.println("Testing clojure:");
-			engine = scriptEngineManager.getEngineByName("clojure");
+			System.out.println("Testing Lua:");
+			engine = scriptEngineManager.getEngineByName("lua");
+			try {
+				engine.put("x", 25);
+				engine.eval("y = math.sqrt(x)");
+				System.out.println("  sqrt(25) = " + engine.get("y"));
+			} catch (ScriptException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("Testing Groovy:");
+			engine = scriptEngineManager.getEngineByName("groovy");
 			try {
 				System.out
-						.println("  "
-								+ engine
-										.eval("import re, collections"
-												+ "def words(text): return re.findall('[a-z]+', text.lower())"
-												+ "def train(features):"
-												+ "model = collections.defaultdict(lambda: 1)"
-												+ "for f in features:"
-												+ "model[f] += 1"
-												+ "return model"
-												+ "NWORDS = train(words(file('big.txt').read()))"
-												+ "alphabet = 'abcdefghijklmnopqrstuvwxyz'"
-												+ "def edits1(word):"
-												+ "   splits     = [(word[:i], word[i:]) for i in range(len(word) + 1)]"
-												+ "   deletes    = [a + b[1:] for a, b in splits if b]"
-												+ "   transposes = [a + b[1] + b[0] + b[2:] for a, b in splits if len(b)>1]"
-												+ "   replaces   = [a + c + b[1:] for a, b in splits for c in alphabet if b]"
-												+ "   inserts    = [a + c + b     for a, b in splits for c in alphabet]"
-												+ "   return set(deletes + transposes + replaces + inserts)"
-												+ "def known_edits2(word):"
-												+ "   return set(e2 for e1 in edits1(word) for e2 in edits1(e1) if e2 in NWORDS)"
-												+ "def known(words): return set(w for w in words if w in NWORDS)"
-												+ "def correct(word):"
-												+ "    candidates = known([word]) or known(edits1(word)) or known_edits2(word) or [word]"
-												+ "    return max(candidates, key=NWORDS.get) correct('speling')"));
+						.println("  sum of 1 to 10 = " + engine.eval("(1..10).sum()"));
+			} catch (ScriptException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("Testing Python:");
+			engine = scriptEngineManager.getEngineByName("python");
+			try {
+				engine.eval("import sys");
+				engine.eval("print sys");
+				engine.put("a", 42);
+				engine.eval("print a");
+				engine.eval("x = 2 + 2");
+				Object x = engine.get("x");
+				System.out.println("x: " + x);
+			} catch (ScriptException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("Testing Ruby:");
+			engine = scriptEngineManager.getEngineByName("ruby");
+			try {
+				ScriptContext context = engine.getContext();
+				context.setAttribute("label", new Integer(4),
+						ScriptContext.ENGINE_SCOPE);
+				engine.eval("puts 2 + $label", context);
 			} catch (ScriptException e) {
 				e.printStackTrace();
 			}

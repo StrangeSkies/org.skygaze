@@ -9,27 +9,20 @@
 		<relativePath>../gears-osgi-wrapper-parent</relativePath>
 	</parent>
 
-	<artifactId>gears-scripting-clojure</artifactId>
+	<artifactId>gears-scripting-lua</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>Gears Scripting - Clojure</name>
+	<name>Gears Scripting - Lua</name>
 
 	<url>${project.organization.url}gears/scripting</url>
 
-	<description>Scripting language support for Clojure.</description>
-
-	<repositories>
-		<repository>
-			<id>clojars</id>
-			<url>http://clojars.org/repo/</url>
-		</repository>
-	</repositories>
+	<description>Scripting language support for Lua.</description>
 
 	<dependencies>
 		<dependency>
-			<groupId>clojure-jsr223</groupId>
-			<artifactId>clojure-jsr223</artifactId>
-			<version>1.2</version>
+			<groupId>org.luaj</groupId>
+			<artifactId>luaj-jse</artifactId>
+			<version>3.0-alpha2</version>
 		</dependency>
 	</dependencies>
 
@@ -53,3 +46,4 @@
 		</plugins>
 	</build>
 </project>
+
