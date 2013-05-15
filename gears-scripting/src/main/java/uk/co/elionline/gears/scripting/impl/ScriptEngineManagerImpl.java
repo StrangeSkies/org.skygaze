@@ -17,7 +17,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-@Component(service = ScriptEngineManager.class)
+@Component(service = ScriptEngineManagerImpl.class)
 public class ScriptEngineManagerImpl extends ScriptEngineManager {
 	private final Set<ScriptEngineFactory> scriptEngineFactories;
 

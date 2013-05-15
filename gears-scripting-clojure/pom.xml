@@ -31,6 +31,12 @@
 			<artifactId>clojure-jsr223</artifactId>
 			<version>1.2</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.clojure</groupId>
+			<artifactId>clojure</artifactId>
+			<version>1.5.0-alpha3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

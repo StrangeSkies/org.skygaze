@@ -44,9 +44,7 @@
 		<module>gears-scripting-javascript</module>
 		<module>gears-scripting-lua</module>
 		<module>gears-scripting-beanshell</module>
-		<module>gears-scripting-judoscript</module>
 		<module>gears-scripting-r</module>
-		<module>gears-scripting-haskell</module>
 		<module>gears-scripting-frege</module>
 	</modules>
 </project>
