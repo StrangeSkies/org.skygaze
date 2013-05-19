@@ -1,9 +1,9 @@
 package uk.co.elionline.gears.entities;
 
-import uk.co.elionline.gears.entities.management.EntityManager;
-import uk.co.elionline.gears.entities.management.impl.collections.CollectionsEntityManager;
-import uk.co.elionline.gears.entities.scheduling.PeriodicScheduler;
-import uk.co.elionline.gears.entities.scheduling.terminating.LinearScheduler;
+import uk.co.elionline.gears.entity.management.EntityManager;
+import uk.co.elionline.gears.entity.management.impl.collections.CollectionsEntityManager;
+import uk.co.elionline.gears.entity.scheduling.schedulers.PeriodicScheduler;
+import uk.co.elionline.gears.entity.scheduling.terminating.schedulers.LinearScheduler;
 
 public class Test2 {
 	EntityManager entityManager;
@@ -19,7 +19,7 @@ public class Test2 {
 	public void run() {
 		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler());
 		scheduler.setPeriodFrequency(5);
-		getEntityManager().getBehaviourManager().setDefaultScheduler(scheduler);
+		getEntityManager().behaviour().setDefaultScheduler(scheduler);
 		/*-
 		 final StateComponent<Vector2<DoubleValue>> position = StateComponent
 		 .<Vector2<DoubleValue>> builder().name("Position")
@@ -38,9 +38,9 @@ public class Test2 {
 		 .readDependencies(velocity).writeDependencies(position)
 		 .process(new BehaviourComponentProcess() {
 		 @Override
-		 public void process(Set<? extends UUID> entities,
+		 public void process(Set<? extends Entity> entities,
 		 EntityManagerProcessingContext context) {
-		 for (UUID entity : entities) {
+		 for (Entity entity : entities) {
 		 context.getStateManager().getData(entity, position)
 		 .add(context.getStateManager().getData(entity, velocity));
 		 }
@@ -52,9 +52,9 @@ public class Test2 {
 		 .name("Movement").description("Basic movement of entity")
 		 .readDependencies(position).process(new BehaviourComponentProcess() {
 		 @Override
-		 public void process(Set<? extends UUID> entities,
+		 public void process(Set<? extends Entity> entities,
 		 EntityManagerProcessingContext context) {
-		 for (UUID entity : entities) {
+		 for (Entity entity : entities) {
 		 System.out.println(context.getStateManager()
 		 .getData(entity, position).toString());
 		 }
@@ -64,12 +64,12 @@ public class Test2 {
 
 		 reportPosition.addBehaviourDependencies(movement);
 
-		 UUID entity1 = getEntityManager().create();
+		 Entity entity1 = getEntityManager().create();
 		 getEntityManager().getStateManager().attach(entity1, position);
 		 getEntityManager().getStateManager().attachAndSet(entity1, velocity,
 		 new Vector2<>(DoubleValue.factory(), 1, 2));
 
-		 UUID entity2 = getEntityManager().create();
+		 Entity entity2 = getEntityManager().create();
 		 getEntityManager().getStateManager().attach(entity2, position);
 
 		 getEntityManager().startProcessing();

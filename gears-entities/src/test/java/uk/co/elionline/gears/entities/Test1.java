@@ -1,24 +1,23 @@
 package uk.co.elionline.gears.entities;
 
-import java.util.UUID;
-
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilder;
-import uk.co.elionline.gears.entities.behaviour.BehaviourComponentBuilderFactory;
-import uk.co.elionline.gears.entities.behaviour.BehaviourProcess;
-import uk.co.elionline.gears.entities.behaviour.BehaviourProcessingContext;
-import uk.co.elionline.gears.entities.behaviour.impl.BehaviourComponentBuilderFactoryImpl;
-import uk.co.elionline.gears.entities.management.EntityManager;
-import uk.co.elionline.gears.entities.management.EntityStateManager;
-import uk.co.elionline.gears.entities.management.impl.collections.CollectionsEntityManager;
-import uk.co.elionline.gears.entities.processing.Processor;
-import uk.co.elionline.gears.entities.processing.impl.ProcessorImpl;
-import uk.co.elionline.gears.entities.scheduling.PeriodicScheduler;
-import uk.co.elionline.gears.entities.scheduling.terminating.LinearScheduler;
-import uk.co.elionline.gears.entities.state.StateComponent;
-import uk.co.elionline.gears.entities.state.StateComponentBuilder;
-import uk.co.elionline.gears.entities.state.StateComponentBuilderFactory;
-import uk.co.elionline.gears.entities.state.impl.StateComponentBuilderFactoryImpl;
+import uk.co.elionline.gears.entity.Entity;
+import uk.co.elionline.gears.entity.behaviour.BehaviourComponent;
+import uk.co.elionline.gears.entity.behaviour.BehaviourComponentBuilder;
+import uk.co.elionline.gears.entity.behaviour.BehaviourComponentBuilderFactory;
+import uk.co.elionline.gears.entity.behaviour.BehaviourProcess;
+import uk.co.elionline.gears.entity.behaviour.BehaviourProcessingContext;
+import uk.co.elionline.gears.entity.behaviour.impl.BehaviourComponentBuilderFactoryImpl;
+import uk.co.elionline.gears.entity.management.EntityManager;
+import uk.co.elionline.gears.entity.management.EntityStateManager;
+import uk.co.elionline.gears.entity.management.impl.collections.CollectionsEntityManager;
+import uk.co.elionline.gears.entity.processing.Processor;
+import uk.co.elionline.gears.entity.processing.impl.ProcessorImpl;
+import uk.co.elionline.gears.entity.scheduling.schedulers.PeriodicScheduler;
+import uk.co.elionline.gears.entity.scheduling.terminating.schedulers.LinearScheduler;
+import uk.co.elionline.gears.entity.state.StateComponent;
+import uk.co.elionline.gears.entity.state.StateComponentBuilder;
+import uk.co.elionline.gears.entity.state.StateComponentBuilderFactory;
+import uk.co.elionline.gears.entity.state.impl.StateComponentBuilderFactoryImpl;
 import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
 import uk.co.elionline.gears.utilities.CopyFactory;
@@ -35,7 +34,7 @@ public class Test1 {
 		stateComponentBuilderFactory = new StateComponentBuilderFactoryImpl();
 	}
 
-	public EntityManager getEntityManager() {
+	public EntityManager entities() {
 		return entityManager;
 	}
 
@@ -50,7 +49,7 @@ public class Test1 {
 	private void run() {
 		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler());
 		scheduler.setPeriodFrequency(5);
-		getEntityManager().getBehaviourManager().setDefaultScheduler(scheduler);
+		entities().behaviour().setDefaultScheduler(scheduler);
 
 		final StateComponent<Vector2<DoubleValue>> position = this
 				.<Vector2<DoubleValue>> getStateComponentBuilder().name("Position")
@@ -70,28 +69,28 @@ public class Test1 {
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext context) {
-						for (UUID entity : context.getEntities()) {
-							EntityStateManager stateManager = context.getEntityManager()
-									.getStateManager();
+						for (Entity entity : context.getEntities()) {
+							EntityStateManager stateManager = context.entities()
+									.state();
 
 							System.out.println(stateManager.getData(entity, position).add(
 									stateManager.getData(entity, velocity)));
 						}
 					}
 				}).create();
-		getEntityManager().getBehaviourManager().addUniversal(movement);
+		entities().behaviour().addUniversal(movement);
 
-		UUID entity1 = getEntityManager().create();
-		getEntityManager().getStateManager().attachAndSet(entity1, position,
-				new Vector2<>(DoubleValue.factory(), 10, 20));
+		Entity entity1 = entities().create();
+		entities().state().attach(entity1, position)
+				.set(new Vector2<>(DoubleValue.factory(), 10, 20));
 
-		UUID entity2 = getEntityManager().create();
-		getEntityManager().getStateManager().attach(entity2, position);
-		getEntityManager().getStateManager().attachAndSet(entity2, velocity,
-				new Vector2<>(DoubleValue.factory(), 2, 2));
+		Entity entity2 = entities().create();
+		entities().state().attach(entity2, position);
+		entities().state().attach(entity2, velocity)
+				.set(new Vector2<>(DoubleValue.factory(), 2, 2));
 
 		Processor processingContext = new ProcessorImpl();
-		processingContext.startProcessing(getEntityManager());
+		processingContext.startProcessing(entities());
 		try {
 			synchronized (this) {
 				wait(2000);

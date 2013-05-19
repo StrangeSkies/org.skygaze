@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import uk.co.elionline.gears.utilities.collections.HashSetMultiMap;
+import uk.co.elionline.gears.utilities.collections.HashSetMultiHashMap;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
 public class HashingStripedReadWriteLock<K> implements StripedReadWriteLock<K> {
@@ -16,7 +16,7 @@ public class HashingStripedReadWriteLock<K> implements StripedReadWriteLock<K> {
 
 	public HashingStripedReadWriteLock() {
 		locks = new HashMap<>();
-		readLockingThreads = new HashSetMultiMap<>();
+		readLockingThreads = new HashSetMultiHashMap<>();
 	}
 
 	@Override
