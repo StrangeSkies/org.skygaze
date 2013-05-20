@@ -20,21 +20,24 @@ public class AssemblyContextImpl implements AssemblyContext {
 	private final Assemblage assemblage;
 	private final AssemblyContext parent;
 
-	private EntityManager entities;
-	private Entity entity;
+	private final EntityManager entities;
+	private final Entity entity;
 
 	private final FutureMap<StateComponent<?>, Object> stateData;
 	private final FutureMap<AssemblageVariable<?>, Object> variableValues;
 
 	private final FutureMap<Assemblage, AssemblyContextImpl> subcontexts;
 
-	public AssemblyContextImpl(Assemblage assemblage) {
-		this(assemblage, null);
+	public AssemblyContextImpl(Assemblage assemblage, EntityManager entities) {
+		this(assemblage, null, entities);
 	}
 
-	protected AssemblyContextImpl(Assemblage assemblage, AssemblyContext parent) {
+	protected AssemblyContextImpl(Assemblage assemblage, AssemblyContext parent,
+			final EntityManager entities) {
 		this.assemblage = assemblage;
 		this.parent = parent;
+		this.entities = entities;
+		entity = entities.create();
 
 		stateData = new FutureMap<>(new Mapping<StateComponent<?>, Object>() {
 			@Override
@@ -63,8 +66,8 @@ public class AssemblyContextImpl implements AssemblyContext {
 					@Override
 					public AssemblyContextImpl prepare(Assemblage key) {
 						AssemblyContextImpl assemblyContext = new AssemblyContextImpl(key,
-								AssemblyContextImpl.this);
-						assemblyContext.assemble(entities);
+								AssemblyContextImpl.this, entities);
+						assemblyContext.assemble();
 						return assemblyContext;
 					}
 				});
@@ -76,26 +79,22 @@ public class AssemblyContextImpl implements AssemblyContext {
 	}
 
 	@Override
-	public Set<AssemblyContext> getSubcontexts(Assemblage subassemblageMatch,
+	public Set<AssemblyContext> getSubcontexts(
 			Assemblage... subassemblageMatchPattern) {
 		Set<AssemblyContextImpl> subcontexts = new HashSet<>();
-		for (Assemblage subassemblage : assemblage.getSubassemblages()) {
-			if (isDerivedFrom(subassemblage, subassemblageMatch)) {
-				subcontexts.add(this.subcontexts.get(subassemblage));
-			}
-		}
+		subcontexts.add(this);
 
 		for (Assemblage base : subassemblageMatchPattern) {
-			Set<AssemblyContextImpl> nextSubcontexts = new HashSet<>();
-			for (AssemblyContextImpl subcontext : subcontexts) {
+			Set<AssemblyContextImpl> previousSubcontexts = subcontexts;
+			subcontexts = new HashSet<>();
+			for (AssemblyContextImpl subcontext : previousSubcontexts) {
 				for (Assemblage subassemblage : subcontext.assemblage
 						.getSubassemblages()) {
-					if (isDerivedFrom(subassemblage, subassemblageMatch)) {
-						nextSubcontexts.add(subcontext.subcontexts.get(subassemblage));
+					if (isDerivedFrom(subassemblage, base)) {
+						subcontexts.add(subcontext.subcontexts.get(subassemblage));
 					}
 				}
 			}
-			subcontexts = nextSubcontexts;
 		}
 
 		return Collections.<AssemblyContext> unmodifiableSet(subcontexts);
@@ -129,10 +128,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 		return (T) variableValues.get(variable);
 	}
 
-	protected synchronized void assemble(final EntityManager entities) {
-		this.entities = entities;
-		entity = entities.create();
-
+	protected synchronized void assemble() {
 		for (final Assemblage subassemblage : assemblage.getSubassemblages()) {
 			subcontexts.prepare(subassemblage);
 		}

@@ -11,7 +11,7 @@ import uk.co.elionline.gears.entity.scheduling.Scheduler;
 import uk.co.elionline.gears.utilities.collections.HashSetMultiHashMap;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 
-public class CollectionsEntityBehaviourManager extends
+public class EntityBehaviourManagerImpl extends
 		AbstractEntityBehaviourManager {
 	private final SetMultiMap<BehaviourComponent, Entity> entityBehaviours;
 	private final Set<BehaviourComponent> universalBehaviours;
@@ -22,7 +22,7 @@ public class CollectionsEntityBehaviourManager extends
 	private Scheduler defaultBehaviourProcessor;
 	private final SetMultiMap<Scheduler, BehaviourComponent> processorBehaviourAssociations;
 
-	public CollectionsEntityBehaviourManager() {
+	public EntityBehaviourManagerImpl() {
 		entityBehaviours = new HashSetMultiHashMap<>();
 		universalBehaviours = new HashSet<>();
 

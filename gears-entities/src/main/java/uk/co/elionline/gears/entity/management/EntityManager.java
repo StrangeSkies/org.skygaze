@@ -6,6 +6,9 @@ import uk.co.elionline.gears.entity.Entity;
 import uk.co.elionline.gears.utilities.Factory;
 
 /**
+ * Naming convention suggest 'entities' for instances of {@link EntityManager},
+ * as it is semantically consistent with the state() and behaviour() methods in
+ * that it is a description of the domain of operations.
  * 
  * @author Elias N Vasylenko
  * 

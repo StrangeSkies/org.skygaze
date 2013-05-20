@@ -1,7 +1,7 @@
 package uk.co.elionline.gears.entities;
 
 import uk.co.elionline.gears.entity.management.EntityManager;
-import uk.co.elionline.gears.entity.management.impl.collections.CollectionsEntityManager;
+import uk.co.elionline.gears.entity.management.impl.collections.EntityManagerImpl;
 import uk.co.elionline.gears.entity.scheduling.schedulers.PeriodicScheduler;
 import uk.co.elionline.gears.entity.scheduling.terminating.schedulers.LinearScheduler;
 
@@ -9,7 +9,7 @@ public class Test2 {
 	EntityManager entityManager;
 
 	public Test2() {
-		entityManager = new CollectionsEntityManager();
+		entityManager = new EntityManagerImpl();
 	}
 
 	public EntityManager getEntityManager() {

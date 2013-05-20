@@ -9,7 +9,7 @@ import uk.co.elionline.gears.entity.behaviour.BehaviourProcessingContext;
 import uk.co.elionline.gears.entity.behaviour.impl.BehaviourComponentBuilderFactoryImpl;
 import uk.co.elionline.gears.entity.management.EntityManager;
 import uk.co.elionline.gears.entity.management.EntityStateManager;
-import uk.co.elionline.gears.entity.management.impl.collections.CollectionsEntityManager;
+import uk.co.elionline.gears.entity.management.impl.collections.EntityManagerImpl;
 import uk.co.elionline.gears.entity.processing.Processor;
 import uk.co.elionline.gears.entity.processing.impl.ProcessorImpl;
 import uk.co.elionline.gears.entity.scheduling.schedulers.PeriodicScheduler;
@@ -28,7 +28,7 @@ public class Test1 {
 	private final StateComponentBuilderFactory stateComponentBuilderFactory;
 
 	public Test1() {
-		entityManager = new CollectionsEntityManager();
+		entityManager = new EntityManagerImpl();
 
 		behaviourComponentBuilderFactory = new BehaviourComponentBuilderFactoryImpl();
 		stateComponentBuilderFactory = new StateComponentBuilderFactoryImpl();

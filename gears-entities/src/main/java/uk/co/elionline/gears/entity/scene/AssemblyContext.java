@@ -8,7 +8,7 @@ import uk.co.elionline.gears.entity.state.StateComponent;
 public interface AssemblyContext {
 	public AssemblyContext getSupercontext();
 
-	public Set<AssemblyContext> getSubcontexts(Assemblage subassemblageMatch,
+	public/* @ReadOnly */Set<AssemblyContext> getSubcontexts(
 			Assemblage... subassemblageMatchPattern);
 
 	public/* @ReadOnly */Entity getEntity();

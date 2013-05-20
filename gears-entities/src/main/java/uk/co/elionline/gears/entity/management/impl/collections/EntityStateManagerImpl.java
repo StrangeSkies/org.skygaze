@@ -10,10 +10,10 @@ import uk.co.elionline.gears.entity.Entity;
 import uk.co.elionline.gears.entity.management.impl.AbstractEntityStateManager;
 import uk.co.elionline.gears.entity.state.StateComponent;
 
-public class CollectionsEntityStateManager extends AbstractEntityStateManager {
+public class EntityStateManagerImpl extends AbstractEntityStateManager {
 	private final Map<StateComponent<?>, Map<Entity, Object>> entityStateData;
 
-	public CollectionsEntityStateManager() {
+	public EntityStateManagerImpl() {
 		entityStateData = new HashMap<>();
 	}
 
