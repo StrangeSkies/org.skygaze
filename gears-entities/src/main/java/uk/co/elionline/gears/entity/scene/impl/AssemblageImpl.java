@@ -1,6 +1,5 @@
 package uk.co.elionline.gears.entity.scene.impl;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,15 +12,6 @@ import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.utilities.collections.ArrayListMultiHashMap;
 import uk.co.elionline.gears.utilities.collections.ListMultiMap;
 
-/**
- * An EntityAssemblage provides a set of states and behaviours which combine to
- * describe a potential Entity. An assemblage can be assembled onto an empty
- * Entity, or onto an existing Entity, optionally overriding any existing
- * behaviours or states which conflict with those described in the model.
- * 
- * @author Elias N Vasylenko
- * 
- */
 public class AssemblageImpl implements Assemblage {
 	private Assemblage base;
 
@@ -30,7 +20,7 @@ public class AssemblageImpl implements Assemblage {
 	private final Set<BehaviourComponent> behaviourComponents;
 
 	private final Set<StateComponent<?>> stateComponents;
-	private final ListMultiMap<StateComponent<?>, StatePreparator<?>> statePreparators;
+	private final ListMultiMap<StateComponent<?>, ? extends StatePreparator<?>> statePreparators;
 
 	private final Set<AssemblageVariable<?>> variables;
 
@@ -63,38 +53,35 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Set<Assemblage> subassemblages() {
+	public Set<Assemblage> getSubassemblages() {
 		return subassemblages;
 	}
 
 	@Override
-	public Set<AssemblageVariable<?>> variables() {
+	public Set<AssemblageVariable<?>> getVariables() {
 		return variables;
 	}
 
 	@Override
-	public Set<BehaviourComponent> behaviours() {
+	public Set<BehaviourComponent> getBehaviours() {
 		return behaviourComponents;
 	}
 
 	@Override
-	public Set<StateComponent<?>> states() {
+	public Set<StateComponent<?>> getStates() {
 		return stateComponents;
 	}
 
 	@Override
-	public <D> List<StatePreparator<D>> getPreparators(StateComponent<D> state) {
-		@SuppressWarnings("unchecked")
-		List<StatePreparator<D>> preparators = (List<StatePreparator<D>>) statePreparators
-				.get(state);
+	public Set<StateComponent<?>> getPreparatorStates() {
+		return statePreparators.keySet();
+	}
 
-		if (preparators == null) {
-			preparators = Collections.emptyList();
-		} else {
-			preparators = Collections.unmodifiableList(preparators);
-		}
-
-		return preparators;
+	@SuppressWarnings("unchecked")
+	@Override
+	public <D> List<StatePreparator<D>> getPreparators(
+			final StateComponent<D> state) {
+		return (List<StatePreparator<D>>) statePreparators.get(state);
 	}
 
 	@Override
@@ -102,12 +89,19 @@ public class AssemblageImpl implements Assemblage {
 		AssemblageImpl copy = new AssemblageImpl();
 
 		copy.setBase(getBase());
-		copy.behaviours().addAll(behaviours());
-		copy.states().addAll(states());
-		copy.preparators().putAll(preparators());
-		copy.variables().addAll(variables());
-		copy.subassemblages().addAll(subassemblages());
+		copy.getBehaviours().addAll(getBehaviours());
+		copy.getStates().addAll(getStates());
+		for (StateComponent<?> state : getPreparatorStates()) {
+			setCopyPreparators(copy, state);
+		}
+		copy.getVariables().addAll(getVariables());
+		copy.getSubassemblages().addAll(getSubassemblages());
 
 		return copy;
+	}
+
+	private <T> void setCopyPreparators(AssemblageImpl copy,
+			StateComponent<T> state) {
+		copy.getPreparators(state).addAll(getPreparators(state));
 	}
 }

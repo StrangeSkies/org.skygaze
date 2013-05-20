@@ -39,6 +39,10 @@ public class ListTransformationView<T, F> extends AbstractList<T> {
 		return Collections.unmodifiableList(backingList);
 	}
 
+	protected final List<? extends F> getModifiableBackingList() {
+		return backingList;
+	}
+
 	@Override
 	public final int size() {
 		return backingList.size();

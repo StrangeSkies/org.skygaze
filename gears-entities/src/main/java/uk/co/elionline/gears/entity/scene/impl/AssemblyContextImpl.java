@@ -1,5 +1,6 @@
 package uk.co.elionline.gears.entity.scene.impl;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.utilities.flowcontrol.FactoryFutureMap;
 import uk.co.elionline.gears.utilities.flowcontrol.FutureMap;
 import uk.co.elionline.gears.utilities.flowcontrol.FutureMap.Mapping;
+import uk.co.elionline.gears.utilities.flowcontrol.StoredFutureMap;
 
 public class AssemblyContextImpl implements AssemblyContext {
 	private final Assemblage assemblage;
@@ -24,12 +26,14 @@ public class AssemblyContextImpl implements AssemblyContext {
 	private final FutureMap<StateComponent<?>, Object> stateData;
 	private final FutureMap<AssemblageVariable<?>, Object> variableValues;
 
+	private final FutureMap<Assemblage, AssemblyContextImpl> subcontexts;
+
 	public AssemblyContextImpl(Assemblage assemblage) {
 		this(assemblage, null);
 	}
 
 	protected AssemblyContextImpl(Assemblage assemblage, AssemblyContext parent) {
-		this.assemblage = new CollapsedAssemblage(assemblage);
+		this.assemblage = assemblage;
 		this.parent = parent;
 
 		stateData = new FutureMap<>(new Mapping<StateComponent<?>, Object>() {
@@ -53,6 +57,17 @@ public class AssemblyContextImpl implements AssemblyContext {
 		});
 
 		variableValues = new FactoryFutureMap<AssemblageVariable<?>, Object>();
+
+		subcontexts = new StoredFutureMap<Assemblage, AssemblyContextImpl>(
+				new StoredFutureMap.Mapping<Assemblage, AssemblyContextImpl>() {
+					@Override
+					public AssemblyContextImpl prepare(Assemblage key) {
+						AssemblyContextImpl assemblyContext = new AssemblyContextImpl(key,
+								AssemblyContextImpl.this);
+						assemblyContext.assemble(entities);
+						return assemblyContext;
+					}
+				});
 	}
 
 	@Override
@@ -61,24 +76,29 @@ public class AssemblyContextImpl implements AssemblyContext {
 	}
 
 	@Override
-	public Set<? extends AssemblyContext> getSubcontexts(
-			Assemblage subassemblageMatch, Assemblage... subassemblageMatchPattern) {
-		Set<Assemblage> subassemblages = root.subassemblages();
-
-		for (Assemblage base : subassemblageMatchPattern) {
-			Set<Assemblage> validSubassemblages = new HashSet<>();
-			for (Assemblage subassemblage : subassemblages) {
-				if (isDerivedFrom(subassemblage, base)) {
-					validSubassemblages.add(subassemblage);
-				}
-			}
-			subassemblages.clear();
-			for (Assemblage subassemblage : validSubassemblages) {
-				subassemblages.addAll(subassemblage.subassemblages());
+	public Set<AssemblyContext> getSubcontexts(Assemblage subassemblageMatch,
+			Assemblage... subassemblageMatchPattern) {
+		Set<AssemblyContextImpl> subcontexts = new HashSet<>();
+		for (Assemblage subassemblage : assemblage.getSubassemblages()) {
+			if (isDerivedFrom(subassemblage, subassemblageMatch)) {
+				subcontexts.add(this.subcontexts.get(subassemblage));
 			}
 		}
 
-		return subassemblages;
+		for (Assemblage base : subassemblageMatchPattern) {
+			Set<AssemblyContextImpl> nextSubcontexts = new HashSet<>();
+			for (AssemblyContextImpl subcontext : subcontexts) {
+				for (Assemblage subassemblage : subcontext.assemblage
+						.getSubassemblages()) {
+					if (isDerivedFrom(subassemblage, subassemblageMatch)) {
+						nextSubcontexts.add(subcontext.subcontexts.get(subassemblage));
+					}
+				}
+			}
+			subcontexts = nextSubcontexts;
+		}
+
+		return Collections.<AssemblyContext> unmodifiableSet(subcontexts);
 	}
 
 	protected boolean isDerivedFrom(Assemblage assemblage, Assemblage base) {
@@ -113,21 +133,19 @@ public class AssemblyContextImpl implements AssemblyContext {
 		this.entities = entities;
 		entity = entities.create();
 
-		for (final Assemblage subassemblage : assemblage.subassemblages()) {
-			new Thread() {
-				@Override
-				public void run() {
-					new AssemblyContextImpl(subassemblage, AssemblyContextImpl.this)
-							.assemble(entities);
-				}
-			}.start();
+		for (final Assemblage subassemblage : assemblage.getSubassemblages()) {
+			subcontexts.prepare(subassemblage);
 		}
 
-		entities.behaviour().attachAll(entity, assemblage.behaviours());
-		entities.state().attachAll(entity, assemblage.states());
+		entities.behaviour().attachAll(entity, assemblage.getBehaviours());
+		entities.state().attachAll(entity, assemblage.getStates());
 
-		for (StateComponent<?> state : assemblage.states()) {
-			prepareData(state);
+		for (StateComponent<?> state : assemblage.getStates()) {
+			stateData.prepare(state);
+		}
+
+		for (AssemblageVariable<?> variable : assemblage.getVariables()) {
+			variableValues.prepare(variable);
 		}
 	}
 }

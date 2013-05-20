@@ -2,11 +2,11 @@ package uk.co.elionline.gears.utilities.flowcontrol;
 
 import java.util.HashMap;
 
-public class StoringFutureMap<K, V> extends FutureMap<K, V> {
-	private final HashMap<K, V> results;
-
-	public StoringFutureMap(final Mapping<K, V> mapping) {
+public class StoredFutureMap<K, V> extends FutureMap<K, V> {
+	public StoredFutureMap(final Mapping<K, V> mapping) {
 		super(new FutureMap.Mapping<K, V>() {
+			private final HashMap<K, V> results = new HashMap<>();
+
 			@Override
 			public void prepare(K key) {
 				results.put(key, mapping.prepare(key));
@@ -17,7 +17,6 @@ public class StoringFutureMap<K, V> extends FutureMap<K, V> {
 				return results.get(key);
 			}
 		});
-		results = new HashMap<>();
 	}
 
 	public interface Mapping<K, V> {

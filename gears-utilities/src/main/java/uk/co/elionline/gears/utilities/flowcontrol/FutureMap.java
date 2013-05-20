@@ -11,7 +11,7 @@ public class FutureMap<K, V> {
 		this.mapping = mapping;
 	}
 
-	protected void prepare(final K key) {
+	public void prepare(final K key) {
 		synchronized (preparationThreads) {
 			Thread thread = new Thread() {
 				@Override
