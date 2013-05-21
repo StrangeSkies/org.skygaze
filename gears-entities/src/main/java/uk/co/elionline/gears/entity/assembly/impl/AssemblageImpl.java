@@ -1,13 +1,13 @@
-package uk.co.elionline.gears.entity.scene.impl;
+package uk.co.elionline.gears.entity.assembly.impl;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import uk.co.elionline.gears.entity.assembly.Assemblage;
+import uk.co.elionline.gears.entity.assembly.StateInitialiser;
+import uk.co.elionline.gears.entity.assembly.Variable;
 import uk.co.elionline.gears.entity.behaviour.BehaviourComponent;
-import uk.co.elionline.gears.entity.scene.Assemblage;
-import uk.co.elionline.gears.entity.scene.AssemblageVariable;
-import uk.co.elionline.gears.entity.scene.StatePreparator;
 import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.utilities.collections.ArrayListMultiHashMap;
 import uk.co.elionline.gears.utilities.collections.ListMultiMap;
@@ -20,9 +20,9 @@ public class AssemblageImpl implements Assemblage {
 	private final Set<BehaviourComponent> behaviourComponents;
 
 	private final Set<StateComponent<?>> stateComponents;
-	private final ListMultiMap<StateComponent<?>, ? extends StatePreparator<?>> statePreparators;
+	private final ListMultiMap<StateComponent<?>, ? extends StateInitialiser<?>> statePreparators;
 
-	private final Set<AssemblageVariable<?>> variables;
+	private final Set<Variable<?>> variables;
 
 	protected AssemblageImpl() {
 		subassemblages = new HashSet<>();
@@ -58,7 +58,7 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Set<AssemblageVariable<?>> getVariables() {
+	public Set<Variable<?>> getVariables() {
 		return variables;
 	}
 
@@ -72,16 +72,11 @@ public class AssemblageImpl implements Assemblage {
 		return stateComponents;
 	}
 
-	@Override
-	public Set<StateComponent<?>> getPreparatorStates() {
-		return statePreparators.keySet();
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public <D> List<StatePreparator<D>> getPreparators(
+	public <D> List<StateInitialiser<D>> getInitialisers(
 			final StateComponent<D> state) {
-		return (List<StatePreparator<D>>) statePreparators.get(state);
+		return (List<StateInitialiser<D>>) statePreparators.get(state);
 	}
 
 	@Override
@@ -91,7 +86,7 @@ public class AssemblageImpl implements Assemblage {
 		copy.setBase(getBase());
 		copy.getBehaviours().addAll(getBehaviours());
 		copy.getStates().addAll(getStates());
-		for (StateComponent<?> state : getPreparatorStates()) {
+		for (StateComponent<?> state : statePreparators.keySet()) {
 			setCopyPreparators(copy, state);
 		}
 		copy.getVariables().addAll(getVariables());
@@ -102,6 +97,6 @@ public class AssemblageImpl implements Assemblage {
 
 	private <T> void setCopyPreparators(AssemblageImpl copy,
 			StateComponent<T> state) {
-		copy.getPreparators(state).addAll(getPreparators(state));
+		copy.getInitialisers(state).addAll(getInitialisers(state));
 	}
 }

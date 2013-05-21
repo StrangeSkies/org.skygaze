@@ -13,11 +13,10 @@ import uk.co.elionline.gears.entity.state.StateComponentData;
 public abstract class AbstractEntityStateManager implements EntityStateManager {
 	@Override
 	public final <D> D attach(Entity entity, StateComponent<D> stateComponent) {
-		if (has(entity, stateComponent)) {
-			return getData(entity, stateComponent);
-		} else {
-			return attachAndReset(entity, stateComponent);
+		if (!has(entity, stateComponent)) {
+			attachAndReset(entity, stateComponent);
 		}
+		return getData(entity, stateComponent);
 	}
 
 	@Override

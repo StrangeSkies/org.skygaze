@@ -18,7 +18,7 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 
 	@Override
 	public boolean add(K key, V value) {
-		C values = get(key);
+		C values = super.get(key);
 
 		if (values == null) {
 			values = collectionFactory.create();
@@ -30,7 +30,7 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 
 	@Override
 	public boolean addAll(K key, Collection<? extends V> values) {
-		C currentValues = get(key);
+		C currentValues = super.get(key);
 
 		if (currentValues == null) {
 			currentValues = collectionFactory.create();
@@ -64,7 +64,7 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 
 	@Override
 	public boolean remove(K key, V value) {
-		C values = get(key);
+		C values = super.get(key);
 
 		boolean removed = values != null && values.remove(value);
 
@@ -77,7 +77,7 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 
 	@Override
 	public boolean removeAll(K key, Collection<? extends V> values) {
-		C currentValues = get(key);
+		C currentValues = super.get(key);
 
 		boolean removed = currentValues != null && currentValues.removeAll(values);
 
@@ -128,8 +128,8 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 
 	@Override
 	public boolean contains(K key, V value) {
-		C values = get(key);
-		return values != null && get(key).contains(value);
+		C values = super.get(key);
+		return values != null && values.contains(value);
 	}
 
 	@Override

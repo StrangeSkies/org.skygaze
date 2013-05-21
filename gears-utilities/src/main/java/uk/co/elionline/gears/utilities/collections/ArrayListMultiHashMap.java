@@ -50,8 +50,9 @@ public class ArrayListMultiHashMap<K, V> extends MultiHashMap<K, V, List<V>>
 					} else {
 						throw new ArrayIndexOutOfBoundsException();
 					}
+				} else {
+					backingList.add(index, element);
 				}
-				backingList.add(index, element);
 			}
 
 			@Override

@@ -19,8 +19,8 @@ public class EntityStateManagerImpl extends AbstractEntityStateManager {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <D> D attachAndSet(Entity entity, StateComponent<D> stateComponent,
-			D stateData) {
+	public synchronized <D> D attachAndSet(Entity entity,
+			StateComponent<D> stateComponent, D stateData) {
 		Map<Entity, Object> entityData = entityStateData.get(stateComponent);
 
 		if (entityData == null) {
@@ -34,7 +34,8 @@ public class EntityStateManagerImpl extends AbstractEntityStateManager {
 	}
 
 	@Override
-	public boolean detach(Entity entity, StateComponent<?> stateComponent) {
+	public synchronized boolean detach(Entity entity,
+			StateComponent<?> stateComponent) {
 		Map<Entity, ?> entities = entityStateData.get(stateComponent);
 
 		boolean removed = entities != null && entities.remove(entity) != null;
@@ -47,7 +48,7 @@ public class EntityStateManagerImpl extends AbstractEntityStateManager {
 	}
 
 	@Override
-	public void clear(Entity entity) {
+	public synchronized void clear(Entity entity) {
 		Iterator<Map<Entity, Object>> entityDataIterator = entityStateData.values()
 				.iterator();
 		while (entityDataIterator.hasNext()) {
@@ -63,18 +64,21 @@ public class EntityStateManagerImpl extends AbstractEntityStateManager {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <D> D getData(Entity entity, StateComponent<D> stateComponent) {
+	public synchronized <D> D getData(Entity entity,
+			StateComponent<D> stateComponent) {
 		return (D) entityStateData.get(stateComponent).get(entity);
 	}
 
 	@Override
-	public boolean has(Entity entity, StateComponent<?> stateComponent) {
+	public synchronized boolean has(Entity entity,
+			StateComponent<?> stateComponent) {
 		Map<Entity, Object> dataMap = entityStateData.get(stateComponent);
 		return dataMap != null && dataMap.containsKey(entity);
 	}
 
 	@Override
-	public Set<Entity> getEntitiesWith(StateComponent<?> stateComponent) {
+	public synchronized Set<Entity> getEntitiesWith(
+			StateComponent<?> stateComponent) {
 		Map<Entity, Object> dataMap = entityStateData.get(stateComponent);
 		if (dataMap != null) {
 			return new HashSet<>(dataMap.keySet());
@@ -84,7 +88,7 @@ public class EntityStateManagerImpl extends AbstractEntityStateManager {
 	}
 
 	@Override
-	public Set<StateComponent<?>> getAll() {
+	public synchronized Set<StateComponent<?>> getAll() {
 		return entityStateData.keySet();
 	}
 }

@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entity.scene;
+package uk.co.elionline.gears.entity.assembly;
 
 import java.util.List;
 import java.util.Set;
@@ -19,13 +19,11 @@ public interface Assemblage extends Copyable<Assemblage> {
 
 	public Set<Assemblage> getSubassemblages();
 
-	public Set<AssemblageVariable<?>> getVariables();
+	public Set<Variable<?>> getVariables();
 
 	public Set<BehaviourComponent> getBehaviours();
 
 	public Set<StateComponent<?>> getStates();
 
-	public Set<StateComponent<?>> getPreparatorStates();
-
-	public <D> List<StatePreparator<D>> getPreparators(StateComponent<D> state);
+	public <D> List<StateInitialiser<D>> getInitialisers(StateComponent<D> state);
 }

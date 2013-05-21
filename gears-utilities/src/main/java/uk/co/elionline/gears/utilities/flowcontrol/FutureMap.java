@@ -1,6 +1,8 @@
 package uk.co.elionline.gears.utilities.flowcontrol;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FutureMap<K, V> {
 	private final HashMap<K, Thread> preparationThreads;
@@ -21,16 +23,23 @@ public class FutureMap<K, V> {
 			};
 			thread.start();
 			preparationThreads.put(key, thread);
-			preparationThreads.notify();
+			preparationThreads.notifyAll();
 		}
 	}
 
 	public V get(K key) {
+		wait(key);
+
+		return mapping.get(key);
+	}
+
+	private void wait(K key) {
 		Thread thread;
 		synchronized (preparationThreads) {
 			while (!preparationThreads.containsKey(key)) {
 				try {
 					preparationThreads.wait();
+					preparationThreads.notifyAll();
 				} catch (InterruptedException e) {
 				}
 			}
@@ -43,15 +52,22 @@ public class FutureMap<K, V> {
 			} catch (InterruptedException e) {
 			}
 		}
-
-		return get(key);
 	}
 
 	public void reset() {
 		synchronized (preparationThreads) {
-			for (K key : preparationThreads.keySet()) {
-				get(key);
-			}
+			waitForAll();
+			preparationThreads.clear();
+		}
+	}
+
+	public void waitForAll() {
+		Set<K> keys = new HashSet<>();
+		synchronized (preparationThreads) {
+			keys.addAll(preparationThreads.keySet());
+		}
+		for (K key : keys) {
+			wait(key);
 		}
 	}
 
@@ -59,5 +75,9 @@ public class FutureMap<K, V> {
 		public void prepare(K key);
 
 		public V get(K key);
+	}
+
+	public synchronized Set<K> getKeys() {
+		return preparationThreads.keySet();
 	}
 }

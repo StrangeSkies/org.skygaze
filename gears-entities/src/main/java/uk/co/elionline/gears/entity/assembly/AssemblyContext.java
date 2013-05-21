@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.entity.scene;
+package uk.co.elionline.gears.entity.assembly;
 
 import java.util.Set;
 
@@ -11,9 +11,12 @@ public interface AssemblyContext {
 	public/* @ReadOnly */Set<AssemblyContext> getSubcontexts(
 			Assemblage... subassemblageMatchPattern);
 
+	public/* @ReadOnly */AssemblyContext getSubcontext(
+			Assemblage... subassemblageMatchPattern);
+
 	public/* @ReadOnly */Entity getEntity();
 
 	public <D> /* @ReadOnly */D getData(StateComponent<D> state);
 
-	public <T> /* @ReadOnly */T getValue(AssemblageVariable<T> variable);
+	public <T> /* @ReadOnly */T getValue(Variable<T> variable);
 }

@@ -1,15 +1,18 @@
-package uk.co.elionline.gears.entity.scene.impl;
+package uk.co.elionline.gears.entity.assembly.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import uk.co.elionline.gears.entity.Entity;
+import uk.co.elionline.gears.entity.assembly.Assemblage;
+import uk.co.elionline.gears.entity.assembly.AssemblyContext;
+import uk.co.elionline.gears.entity.assembly.StateInitialiser;
+import uk.co.elionline.gears.entity.assembly.Variable;
+import uk.co.elionline.gears.entity.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entity.management.EntityManager;
-import uk.co.elionline.gears.entity.scene.Assemblage;
-import uk.co.elionline.gears.entity.scene.AssemblageVariable;
-import uk.co.elionline.gears.entity.scene.AssemblyContext;
-import uk.co.elionline.gears.entity.scene.StatePreparator;
 import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.utilities.flowcontrol.FactoryFutureMap;
 import uk.co.elionline.gears.utilities.flowcontrol.FutureMap;
@@ -24,7 +27,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 	private final Entity entity;
 
 	private final FutureMap<StateComponent<?>, Object> stateData;
-	private final FutureMap<AssemblageVariable<?>, Object> variableValues;
+	private final FutureMap<Variable<?>, Object> variableValues;
 
 	private final FutureMap<Assemblage, AssemblyContextImpl> subcontexts;
 
@@ -46,9 +49,8 @@ public class AssemblyContextImpl implements AssemblyContext {
 			}
 
 			protected <D> void prepareData(final StateComponent<D> state) {
-				for (StatePreparator<D> preparator : AssemblyContextImpl.this.assemblage
-						.getPreparators(state)) {
-					preparator.prepare(entities.state().getData(entity, state),
+				for (StateInitialiser<D> initialiser : collapseInitialisers(state)) {
+					initialiser.initialise(entities.state().getData(entity, state),
 							AssemblyContextImpl.this);
 				}
 			}
@@ -59,7 +61,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 			}
 		});
 
-		variableValues = new FactoryFutureMap<AssemblageVariable<?>, Object>();
+		variableValues = new FactoryFutureMap<Variable<?>, Object>();
 
 		subcontexts = new StoredFutureMap<Assemblage, AssemblyContextImpl>(
 				new StoredFutureMap.Mapping<Assemblage, AssemblyContextImpl>() {
@@ -67,7 +69,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 					public AssemblyContextImpl prepare(Assemblage key) {
 						AssemblyContextImpl assemblyContext = new AssemblyContextImpl(key,
 								AssemblyContextImpl.this, entities);
-						assemblyContext.assemble();
+						assemblyContext.startAssembly();
 						return assemblyContext;
 					}
 				});
@@ -88,9 +90,8 @@ public class AssemblyContextImpl implements AssemblyContext {
 			Set<AssemblyContextImpl> previousSubcontexts = subcontexts;
 			subcontexts = new HashSet<>();
 			for (AssemblyContextImpl subcontext : previousSubcontexts) {
-				for (Assemblage subassemblage : subcontext.assemblage
-						.getSubassemblages()) {
-					if (isDerivedFrom(subassemblage, base)) {
+				for (Assemblage subassemblage : subcontext.subcontexts.getKeys()) {
+					if (AssemblerImpl.isDerivedFrom(subassemblage, base)) {
 						subcontexts.add(subcontext.subcontexts.get(subassemblage));
 					}
 				}
@@ -100,15 +101,15 @@ public class AssemblyContextImpl implements AssemblyContext {
 		return Collections.<AssemblyContext> unmodifiableSet(subcontexts);
 	}
 
-	protected boolean isDerivedFrom(Assemblage assemblage, Assemblage base) {
-		do {
-			if (base == assemblage) {
-				return true;
-			}
-			assemblage = assemblage.getBase();
-		} while (assemblage != null);
+	@Override
+	public AssemblyContext getSubcontext(Assemblage... subassemblageMatchPattern) {
+		Set<AssemblyContext> subcontexts = getSubcontexts(subassemblageMatchPattern);
 
-		return false;
+		if (subcontexts.size() != 1) {
+			throw new IllegalArgumentException();
+		}
+
+		return subcontexts.iterator().next();
 	}
 
 	@Override
@@ -124,24 +125,87 @@ public class AssemblyContextImpl implements AssemblyContext {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getValue(AssemblageVariable<T> variable) {
+	public <T> T getValue(Variable<T> variable) {
 		return (T) variableValues.get(variable);
 	}
 
-	protected synchronized void assemble() {
+	public synchronized void startAssembly() {
 		for (final Assemblage subassemblage : assemblage.getSubassemblages()) {
 			subcontexts.prepare(subassemblage);
 		}
 
-		entities.behaviour().attachAll(entity, assemblage.getBehaviours());
-		entities.state().attachAll(entity, assemblage.getStates());
+		entities.behaviour().attachAll(entity, collapseBehaviours());
 
-		for (StateComponent<?> state : assemblage.getStates()) {
+		Set<StateComponent<?>> collapsedStates = collapseStates();
+		entities.state().attachAll(entity, collapsedStates);
+
+		for (StateComponent<?> state : collapsedStates) {
 			stateData.prepare(state);
 		}
 
-		for (AssemblageVariable<?> variable : assemblage.getVariables()) {
+		for (Variable<?> variable : collapseVariables()) {
 			variableValues.prepare(variable);
 		}
+	}
+
+	public void assemble() {
+		startAssembly();
+		waitForAssembly();
+	}
+
+	private void waitForAssembly() {
+		for (Assemblage subassemblage : subcontexts.getKeys()) {
+			subcontexts.get(subassemblage).waitForAssembly();
+		}
+		stateData.waitForAll();
+	}
+
+	public Set<Variable<?>> collapseVariables() {
+		Set<Variable<?>> collapsedVariables = new HashSet<>();
+
+		Assemblage base = assemblage;
+		do {
+			collapsedVariables.addAll(base.getVariables());
+			base = base.getBase();
+		} while (base != null);
+
+		return collapsedVariables;
+	}
+
+	public Set<BehaviourComponent> collapseBehaviours() {
+		Set<BehaviourComponent> collapsedBehaviours = new HashSet<>();
+
+		Assemblage base = assemblage;
+		do {
+			collapsedBehaviours.addAll(base.getBehaviours());
+			base = base.getBase();
+		} while (base != null);
+
+		return collapsedBehaviours;
+	}
+
+	public Set<StateComponent<?>> collapseStates() {
+		Set<StateComponent<?>> collapsedStates = new HashSet<>();
+
+		Assemblage base = assemblage;
+		do {
+			collapsedStates.addAll(base.getStates());
+			base = base.getBase();
+		} while (base != null);
+
+		return collapsedStates;
+	}
+
+	public <D> List<StateInitialiser<D>> collapseInitialisers(
+			StateComponent<D> state) {
+		List<StateInitialiser<D>> collapsedInitialisers = new ArrayList<>();
+
+		Assemblage base = assemblage;
+		do {
+			collapsedInitialisers.addAll(0, base.getInitialisers(state));
+			base = base.getBase();
+		} while (base != null);
+
+		return collapsedInitialisers;
 	}
 }
