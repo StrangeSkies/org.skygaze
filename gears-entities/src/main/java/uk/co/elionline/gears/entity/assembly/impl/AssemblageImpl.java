@@ -13,9 +13,11 @@ import uk.co.elionline.gears.utilities.collections.ArrayListMultiHashMap;
 import uk.co.elionline.gears.utilities.collections.ListMultiMap;
 
 public class AssemblageImpl implements Assemblage {
-	private Assemblage base;
+	private Set<Assemblage> base;
 
 	private final Set<Assemblage> subassemblages;
+
+	private final Set<Assemblage> derivedSubassemblages;
 
 	private final Set<BehaviourComponent> behaviourComponents;
 
@@ -36,20 +38,8 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Assemblage getBase() {
+	public Set</* @ReadOnly */Assemblage> getBaseAssemblages() {
 		return base;
-	}
-
-	private void setBase(Assemblage base) {
-		this.base = base;
-	}
-
-	@Override
-	public Assemblage derive() {
-		AssemblageImpl derivation = new AssemblageImpl();
-		derivation.setBase(this);
-
-		return derivation;
 	}
 
 	@Override
@@ -77,26 +67,5 @@ public class AssemblageImpl implements Assemblage {
 	public <D> List<StateInitialiser<D>> getInitialisers(
 			final StateComponent<D> state) {
 		return (List<StateInitialiser<D>>) statePreparators.get(state);
-	}
-
-	@Override
-	public Assemblage copy() {
-		AssemblageImpl copy = new AssemblageImpl();
-
-		copy.setBase(getBase());
-		copy.getBehaviours().addAll(getBehaviours());
-		copy.getStates().addAll(getStates());
-		for (StateComponent<?> state : statePreparators.keySet()) {
-			setCopyPreparators(copy, state);
-		}
-		copy.getVariables().addAll(getVariables());
-		copy.getSubassemblages().addAll(getSubassemblages());
-
-		return copy;
-	}
-
-	private <T> void setCopyPreparators(AssemblageImpl copy,
-			StateComponent<T> state) {
-		copy.getInitialisers(state).addAll(getInitialisers(state));
 	}
 }

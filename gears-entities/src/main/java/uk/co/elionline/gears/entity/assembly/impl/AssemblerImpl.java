@@ -23,7 +23,7 @@ public class AssemblerImpl implements Assembler {
 	}
 
 	@Override
-	public Assemblage base() {
+	public Assemblage create() {
 		return base;
 	}
 

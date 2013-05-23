@@ -46,6 +46,6 @@
 		<module>gears-scripting-beanshell</module>
 		<module>gears-scripting-r</module>
 		<module>gears-scripting-frege</module>
-		<module>gears-entities-persistence</module>
+		<module>gears-entities-declarative</module>
 	</modules>
 </project>

@@ -9,14 +9,14 @@
 		<relativePath>../gears-parent</relativePath>
 	</parent>
 
-	<artifactId>gears-engine-persistence</artifactId>
+	<artifactId>gears-entities-declarative</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>Gears Engine Persistence</name>
+	<name>Gears Declarative Entities</name>
 
 	<url>${project.organization.url}gears/engine</url>
 
-	<description>Gears engine functionality for persistence</description>
+	<description>Gears engine functionality for declarative definition of scenes as data</description>
 
 	<dependencies>
 		<dependency>

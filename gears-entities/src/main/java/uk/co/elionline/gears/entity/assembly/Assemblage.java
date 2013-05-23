@@ -5,17 +5,14 @@ import java.util.Set;
 
 import uk.co.elionline.gears.entity.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entity.state.StateComponent;
-import uk.co.elionline.gears.utilities.Copyable;
 
 /**
  * 
  * @author Elias N Vasylenko
  * 
  */
-public interface Assemblage extends Copyable<Assemblage> {
-	public/* @ReadOnly */Assemblage getBase();
-
-	public Assemblage derive();
+public interface Assemblage {
+	public Set</* @ReadOnly */Assemblage> getBaseAssemblages();
 
 	public Set<Assemblage> getSubassemblages();
 

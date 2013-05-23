@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>uk.co.elionline</groupId>
-		<artifactId>gears</artifactId>
+		<artifactId>gears-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../gears-parent</relativePath>
 	</parent>

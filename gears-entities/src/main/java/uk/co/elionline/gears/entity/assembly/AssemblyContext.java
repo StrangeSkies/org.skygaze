@@ -16,6 +16,8 @@ public interface AssemblyContext {
 
 	public/* @ReadOnly */Entity getEntity();
 
+	public/* @ReadOnly */Assemblage getAssemblage();
+
 	public <D> /* @ReadOnly */D getData(StateComponent<D> state);
 
 	public <T> /* @ReadOnly */T getValue(Variable<T> variable);

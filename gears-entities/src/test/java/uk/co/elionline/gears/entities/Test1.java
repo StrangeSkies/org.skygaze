@@ -11,10 +11,9 @@ import uk.co.elionline.gears.entity.assembly.Variable;
 import uk.co.elionline.gears.entity.assembly.impl.AssemblerImpl;
 import uk.co.elionline.gears.entity.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entity.behaviour.BehaviourComponentBuilder;
-import uk.co.elionline.gears.entity.behaviour.BehaviourComponentBuilderFactory;
 import uk.co.elionline.gears.entity.behaviour.BehaviourProcess;
 import uk.co.elionline.gears.entity.behaviour.BehaviourProcessingContext;
-import uk.co.elionline.gears.entity.behaviour.impl.BehaviourComponentBuilderFactoryImpl;
+import uk.co.elionline.gears.entity.behaviour.impl.BehaviourComponentBuilderImpl;
 import uk.co.elionline.gears.entity.management.EntityManager;
 import uk.co.elionline.gears.entity.management.EntityStateManager;
 import uk.co.elionline.gears.entity.management.impl.collections.EntityManagerImpl;
@@ -24,8 +23,7 @@ import uk.co.elionline.gears.entity.scheduling.schedulers.PeriodicScheduler;
 import uk.co.elionline.gears.entity.scheduling.terminating.schedulers.LinearScheduler;
 import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.entity.state.StateComponentBuilder;
-import uk.co.elionline.gears.entity.state.StateComponentBuilderFactory;
-import uk.co.elionline.gears.entity.state.impl.StateComponentBuilderFactoryImpl;
+import uk.co.elionline.gears.entity.state.impl.StateComponentBuilderImpl;
 import uk.co.elionline.gears.mathematics.expressions.IdentityExpression;
 import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
@@ -35,15 +33,15 @@ import uk.co.elionline.gears.utilities.Factory;
 
 public class Test1 {
 	private final EntityManager entityManager;
-	private final BehaviourComponentBuilderFactory behaviourComponentBuilderFactory;
-	private final StateComponentBuilderFactory stateComponentBuilderFactory;
+	private final BehaviourComponentBuilder behaviourComponentBuilderFactory;
+	private final StateComponentBuilder stateComponentBuilder;
 	private final Assembler assembler;
 
 	public Test1() {
 		entityManager = new EntityManagerImpl();
 
-		behaviourComponentBuilderFactory = new BehaviourComponentBuilderFactoryImpl();
-		stateComponentBuilderFactory = new StateComponentBuilderFactoryImpl();
+		behaviourComponentBuilderFactory = new BehaviourComponentBuilderImpl();
+		stateComponentBuilder = new StateComponentBuilderImpl();
 
 		assembler = new AssemblerImpl();
 	}
@@ -56,12 +54,12 @@ public class Test1 {
 		return assembler;
 	}
 
-	public <D> StateComponentBuilder<D> getStateComponentBuilder() {
-		return stateComponentBuilderFactory.begin();
+	public StateComponentBuilder stateBuilder() {
+		return stateComponentBuilder;
 	}
 
-	public <D> BehaviourComponentBuilder getBehaviourComponentBuilder() {
-		return behaviourComponentBuilderFactory.begin();
+	public BehaviourComponentBuilder behaviourBuilder() {
+		return behaviourComponentBuilderFactory;
 	}
 
 	private void run() {
@@ -69,59 +67,53 @@ public class Test1 {
 		scheduler.setPeriodFrequency(5);
 		entities().behaviour().setDefaultScheduler(scheduler);
 
-		final StateComponent<Vector2<DoubleValue>> position = this
-				.<Vector2<DoubleValue>> getStateComponentBuilder().name("Position")
-				.description("Position of entity")
+		final StateComponent<Vector2<DoubleValue>> position = stateBuilder()
 				.dataFactory(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
-				.create();
+				.name("Position").description("Position of entity").create();
 
-		final StateComponent<Vector2<DoubleValue>> velocity = this
-				.<Vector2<DoubleValue>> getStateComponentBuilder().name("Velocity")
-				.description("Velocity of entity").readDependencies(position)
+		final StateComponent<Vector2<DoubleValue>> velocity = stateBuilder()
 				.dataFactory(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
-				.create();
+				.name("Velocity").description("Velocity of entity")
+				.readDependencies(position).create();
 
-		final StateComponent<IdentityExpression<String>> parrot = this
-				.<IdentityExpression<String>> getStateComponentBuilder().name("Parrot")
-				.description("A parrot which knows a word")
+		final StateComponent<IdentityExpression<String>> parrot = stateBuilder()
 				.dataFactory(new Factory<IdentityExpression<String>>() {
 					@Override
 					public IdentityExpression<String> create() {
 						return new IdentityExpression<>("");
 					}
-				}).create();
+				}).name("Parrot").description("A parrot which knows a word").create();
 
-		final BehaviourComponent movement = getBehaviourComponentBuilder()
-				.name("Movement").description("Moves entity by velocity")
-				.readDependencies(velocity).writeDependencies(position)
+		final BehaviourComponent movement = behaviourBuilder()
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext context) {
 						for (Entity entity : context.getEntities()) {
-							EntityStateManager stateManager = context.entities().state();
+							EntityStateManager state = context.entities().state();
 
-							System.out.println(stateManager.getData(entity, position).add(
-									stateManager.getData(entity, velocity)));
+							System.out.println(state.getData(entity, position).add(
+									state.getData(entity, velocity)));
 						}
 					}
-				}).create();
+				}).name("Movement").description("Moves entity by velocity")
+				.readDependencies(velocity).writeDependencies(position).create();
 		entities().behaviour().addUniversal(movement);
 
-		final BehaviourComponent parrotting = getBehaviourComponentBuilder()
-				.name("Parrotting").description("Parrot makes a noise")
-				.readDependencies(parrot).process(new BehaviourProcess() {
+		final BehaviourComponent parrotting = behaviourBuilder()
+				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext context) {
 						for (Entity entity : context.getEntities()) {
-							EntityStateManager stateManager = context.entities().state();
+							EntityStateManager state = context.entities().state();
 
-							System.out.println(stateManager.getData(entity, parrot).get());
+							System.out.println(state.getData(entity, parrot).get());
 						}
 					}
-				}).create();
+				}).name("Parrotting").description("Parrot makes a noise")
+				.readDependencies(parrot).create();
 		entities().behaviour().addUniversal(parrotting);
 
-		final Assemblage assemblage1 = assembler().base().derive();
+		final Assemblage assemblage1 = assembler().create();
 		final Variable<IntValue> numberVariable = new Variable<IntValue>() {
 			@Override
 			public IntValue create() {
@@ -140,7 +132,8 @@ public class Test1 {
 					}
 				});
 
-		final Assemblage assemblage2 = assemblage1.derive();
+		final Assemblage assemblage2 = assembler().create();
+		assemblage2.getBaseAssemblages().add(assemblage1);
 		assemblage2.getStates().add(velocity);
 		assemblage2.getInitialisers(position).add(
 				new StateInitialiser<Vector2<DoubleValue>>() {
@@ -159,7 +152,7 @@ public class Test1 {
 								.getSubtracted(new Vector2<>(DoubleValue.factory(), 2, 2)));
 					}
 				});
-		assemblage1.getSubassemblages().add(assemblage2);
+		assemblage2.getSubassemblages().add(assemblage1);
 
 		assemblage1.getInitialisers(parrot).add(
 				new StateInitialiser<IdentityExpression<String>>() {
@@ -178,8 +171,8 @@ public class Test1 {
 					}
 				});
 
-		assembler().assemble(assemblage1, entities());
-		assembler().assemble(assemblage1, entities());
+		assembler().assemble(assemblage2, entities());
+		assembler().assemble(assemblage2, entities());
 
 		Processor processor = new ProcessorImpl();
 		processor.startProcessing(entities());
