@@ -2,6 +2,7 @@ package uk.co.elionline.gears.entity.state.impl;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.entity.state.StateComponentConfigurator;
@@ -18,7 +19,13 @@ public class StateComponentConfiguratorImpl<D> implements
 	private Collection<? extends StateComponent<?>> writeDependencies;
 
 	public StateComponentConfiguratorImpl(Factory<? extends D> dataFactory) {
+		name = "";
+		description = "";
+
 		this.dataFactory = dataFactory;
+
+		readDependencies = Collections.emptySet();
+		writeDependencies = Collections.emptySet();
 	}
 
 	@Override

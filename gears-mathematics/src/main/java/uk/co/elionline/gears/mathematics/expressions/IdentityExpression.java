@@ -6,6 +6,9 @@ public class IdentityExpression<T> extends ExpressionImplementation<T>
 		implements Property<T, T> {
 	private T value;
 
+	public IdentityExpression() {
+	}
+
 	public IdentityExpression(T value) {
 		this.value = value;
 	}

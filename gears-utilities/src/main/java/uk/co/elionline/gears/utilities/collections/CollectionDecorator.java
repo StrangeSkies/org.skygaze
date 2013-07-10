@@ -4,75 +4,80 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import uk.co.elionline.gears.utilities.Decorator;
+import uk.co.elionline.gears.utilities.Property;
 
 public abstract class CollectionDecorator<T extends Collection<E>, E> extends
-    Decorator<T> implements Collection<E> {
-  public CollectionDecorator(T component) {
-    super(component);
-  }
+		Decorator<T> implements Collection<E> {
+	public CollectionDecorator(T component) {
+		super(component);
+	}
 
-  @Override
-  public boolean add(E e) {
-    return getComponent().add(e);
-  }
+	public CollectionDecorator(Property<T, ? super T> component) {
+		super(component);
+	}
 
-  @Override
-  public boolean addAll(Collection<? extends E> c) {
-    return getComponent().addAll(c);
-  }
+	@Override
+	public boolean add(E e) {
+		return getComponent().add(e);
+	}
 
-  @Override
-  public void clear() {
-    getComponent().clear();
-  }
+	@Override
+	public boolean addAll(Collection<? extends E> c) {
+		return getComponent().addAll(c);
+	}
 
-  @Override
-  public boolean contains(Object o) {
-    return getComponent().contains(o);
-  }
+	@Override
+	public void clear() {
+		getComponent().clear();
+	}
 
-  @Override
-  public boolean containsAll(Collection<?> c) {
-    return getComponent().containsAll(c);
-  }
+	@Override
+	public boolean contains(Object o) {
+		return getComponent().contains(o);
+	}
 
-  @Override
-  public boolean isEmpty() {
-    return getComponent().isEmpty();
-  }
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		return getComponent().containsAll(c);
+	}
 
-  @Override
-  public Iterator<E> iterator() {
-    return getComponent().iterator();
-  }
+	@Override
+	public boolean isEmpty() {
+		return getComponent().isEmpty();
+	}
 
-  @Override
-  public boolean remove(Object o) {
-    return getComponent().remove(o);
-  }
+	@Override
+	public Iterator<E> iterator() {
+		return getComponent().iterator();
+	}
 
-  @Override
-  public boolean removeAll(Collection<?> c) {
-    return getComponent().removeAll(c);
-  }
+	@Override
+	public boolean remove(Object o) {
+		return getComponent().remove(o);
+	}
 
-  @Override
-  public boolean retainAll(Collection<?> c) {
-    return getComponent().retainAll(c);
-  }
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		return getComponent().removeAll(c);
+	}
 
-  @Override
-  public int size() {
-    return getComponent().size();
-  }
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		return getComponent().retainAll(c);
+	}
 
-  @Override
-  public Object[] toArray() {
-    return getComponent().toArray();
-  }
+	@Override
+	public int size() {
+		return getComponent().size();
+	}
 
-  @Override
-  public <A> A[] toArray(A[] a) {
-    return getComponent().toArray(a);
-  }
+	@Override
+	public Object[] toArray() {
+		return getComponent().toArray();
+	}
+
+	@Override
+	public <A> A[] toArray(A[] a) {
+		return getComponent().toArray(a);
+	}
 }

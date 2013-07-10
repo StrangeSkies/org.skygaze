@@ -20,7 +20,7 @@ public class BehaviourProcessingContextImpl implements
 			final EntityManager entityManager,
 			StripedReadWriteLockRelease<StateComponent<?>> locks) {
 		this.behaviour = behaviour;
-		this.entityManager = new EntityManagerWrapper(entityManager, locks);
+		this.entityManager = new EntityManagerProcessingWrapper(entityManager, locks);
 		this.locks = locks;
 	}
 

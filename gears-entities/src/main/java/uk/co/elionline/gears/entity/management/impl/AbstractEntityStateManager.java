@@ -8,7 +8,6 @@ import java.util.Set;
 import uk.co.elionline.gears.entity.Entity;
 import uk.co.elionline.gears.entity.management.EntityStateManager;
 import uk.co.elionline.gears.entity.state.StateComponent;
-import uk.co.elionline.gears.entity.state.StateComponentData;
 
 public abstract class AbstractEntityStateManager implements EntityStateManager {
 	@Override
@@ -68,22 +67,9 @@ public abstract class AbstractEntityStateManager implements EntityStateManager {
 		return true;
 	}
 
-	/**
-	 * Get the instance of a particular type of data component that is associated
-	 * with this entity.
-	 * 
-	 * @param entity
-	 *          The entity for whom we want to retrieve the data.
-	 * @param dataComponentClass
-	 *          The class of the data component for which we want the data.
-	 * @return The data of the given data component type for the given entity, if
-	 *         it exists, otherwise null.
-	 */
 	@Override
-	public final <D> StateComponentData<D> getStateComponentData(Entity entity,
-			StateComponent<D> stateComponent) {
-		return new StateComponentDataImpl<D>(entity, stateComponent, getData(
-				entity, stateComponent));
+	public <D> D getReadOnlyData(Entity entity, StateComponent<D> stateComponent) {
+		return getData(entity, stateComponent);
 	}
 
 	@Override

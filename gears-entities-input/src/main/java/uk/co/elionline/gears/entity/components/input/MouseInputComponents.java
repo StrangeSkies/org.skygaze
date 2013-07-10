@@ -29,7 +29,7 @@ public class MouseInputComponents {
 		mouseMovementAdapter.setMovementType(MovementType.Relative);
 
 		cursorState = stateComponentBuilder
-				.dataFactory(new CopyFactory<>(new CursorStateData()))
+				.data(new CopyFactory<>(new CursorStateData()))
 				.name("Cursor State")
 				.description("The state of an entity which behaves like a cursor")
 				.create();

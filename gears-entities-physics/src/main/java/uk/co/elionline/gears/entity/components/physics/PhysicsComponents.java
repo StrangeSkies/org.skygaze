@@ -22,12 +22,12 @@ public class PhysicsComponents {
 			BehaviourComponentBuilder behaviourComponentBuilder,
 			StateComponentBuilder stateComponentBuilder) {
 		physicsBodyState = stateComponentBuilder
-				.dataFactory(new CopyFactory<>(new PhysicsBody()))
+				.data(new CopyFactory<>(new PhysicsBody()))
 				.name("Physics Body State")
 				.description("The state of a body which can physically interact")
 				.create();
 
-		physicsSpaceState = stateComponentBuilder.dataFactory(physicsSpaceFactory)
+		physicsSpaceState = stateComponentBuilder.data(physicsSpaceFactory)
 				.name("Physics Space State")
 				.description("The state of a self contained physics space")
 				.writeDependencies(physicsBodyState).create();

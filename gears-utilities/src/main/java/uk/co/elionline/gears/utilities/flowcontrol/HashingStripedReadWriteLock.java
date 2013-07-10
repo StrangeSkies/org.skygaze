@@ -134,7 +134,7 @@ public class HashingStripedReadWriteLock<K> implements StripedReadWriteLock<K> {
 	}
 
 	@Override
-	public final boolean releaseReadLocks(Collection<K> readKeys) {
+	public final boolean releaseReadLocks(Collection<? extends K> readKeys) {
 		boolean released = false;
 
 		synchronized (locks) {
@@ -151,7 +151,7 @@ public class HashingStripedReadWriteLock<K> implements StripedReadWriteLock<K> {
 	}
 
 	@Override
-	public final boolean releaseWriteLocks(Collection<K> writeKeys) {
+	public final boolean releaseWriteLocks(Collection<? extends K> writeKeys) {
 		boolean released = false;
 
 		synchronized (locks) {
@@ -168,16 +168,21 @@ public class HashingStripedReadWriteLock<K> implements StripedReadWriteLock<K> {
 	}
 
 	@Override
-	public final boolean releaseLocks(Collection<K> readKeys,
-			Collection<K> writeKeys) {
+	public boolean releaseLocks(Collection<? extends K> keys) {
+		return releaseLocks(keys, keys);
+	}
+
+	@Override
+	public final boolean releaseLocks(Collection<? extends K> readKeys,
+			Collection<? extends K> writeKeys) {
 		boolean released = false;
 
 		synchronized (locks) {
 			for (K readkey : readKeys) {
 				released |= silentlyReleaseReadLock(readkey);
 			}
-			for (K readkey : writeKeys) {
-				released |= silentlyReleaseWriteLock(readkey);
+			for (K writekey : writeKeys) {
+				released |= silentlyReleaseWriteLock(writekey);
 			}
 
 			if (released) {

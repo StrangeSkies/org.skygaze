@@ -1,29 +1,36 @@
 package uk.co.elionline.gears.rendering;
 
-import java.awt.Shape;
+import java.util.Collection;
 
-import uk.co.elionline.gears.mathematics.geometry.matrices.MatrixH2;
+public interface Renderer<T, C extends Camera<T>> {
+	public boolean supportsDataExtension(Class<? extends T> extensionDataClass);
 
-public interface Renderer {
-	public abstract void initialise();
+	public boolean supportsDataExtensionCombination(
+			Collection<? extends Class<? extends T>> extensionDataClasses);
 
-	public abstract void render(Sprite sprite);
-
-	public abstract void render(Shape shape);
-
-	public abstract void setColour(Colour colour);
-
-	public abstract void setTransformation2(MatrixH2<?> transformation);
-
-	public abstract void setCamera2(Camera2 camera);
-
-	public abstract void display();
-
-	public abstract void requestSize(int width, int height);
-
-	public abstract int getWidth();
-
-	public abstract int getHeight();
-
-	public abstract void showSystemCursor(boolean show);
+	public void render(C camera);
 }
+
+/*
+
+public boolean requestFullscreen(boolean fullscreen);
+
+public boolean isFullscreen();
+
+public boolean isFullscreenAvailable();
+
+public boolean isWindowedAvailable();
+
+public List<Vector2<IntValue>> getAvailableResolutions();
+
+public boolean requestResolution(Vector2<IntValue> resolution);
+
+public boolean requestResolution(int width, int height);
+
+public Vector2<IntValue> getResolution();
+
+public int getWidth();
+
+public int getHeight();
+
+*/

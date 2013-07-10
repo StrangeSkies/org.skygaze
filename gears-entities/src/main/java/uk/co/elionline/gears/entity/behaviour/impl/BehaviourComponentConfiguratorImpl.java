@@ -2,6 +2,7 @@ package uk.co.elionline.gears.entity.behaviour.impl;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import uk.co.elionline.gears.entity.behaviour.BehaviourComponent;
 import uk.co.elionline.gears.entity.behaviour.BehaviourComponentConfigurator;
@@ -25,7 +26,19 @@ public class BehaviourComponentConfiguratorImpl implements
 	private Collection<? extends StateComponent<?>> indirectWriteDependencies;
 
 	public BehaviourComponentConfiguratorImpl(BehaviourProcess process) {
+		name = "";
+		description = "";
+
 		this.process = process;
+
+		behaviourDependencies = Collections.emptySet();
+		behaviourDependents = Collections.emptySet();
+
+		readDependencies = Collections.emptySet();
+		writeDependencies = Collections.emptySet();
+
+		indirectReadDependencies = Collections.emptySet();
+		indirectWriteDependencies = Collections.emptySet();
 	}
 
 	@Override

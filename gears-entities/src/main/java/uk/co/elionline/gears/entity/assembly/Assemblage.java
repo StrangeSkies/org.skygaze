@@ -12,9 +12,26 @@ import uk.co.elionline.gears.entity.state.StateComponent;
  * 
  */
 public interface Assemblage {
-	public Set</* @ReadOnly */Assemblage> getBaseAssemblages();
+	public List<Assemblage> getComposition();
+
+	public/*@ReadOnly*/Assemblage getCollapsedCompositionView();
 
 	public Set<Assemblage> getSubassemblages();
+
+	public Assemblage getSubassemblage(Assemblage subassemblageMatch);
+
+	public Set<Assemblage> getSubassemblages(Assemblage subassemblageMatch);
+
+	public Assemblage overrideSubassemblage(
+	/*@Mutable Assemblage this, */Assemblage subassemblageMatch);
+
+	public Set<Assemblage> overrideSubassemblages(
+	/*@Mutable Assemblage this, */Assemblage subassemblageMatch);
+
+	public void revertOverrides(
+	/*@Mutable Assemblage this, */Assemblage subassemblageMatch);
+
+	public void revertOverrides(/*@Mutable Assemblage this*/);
 
 	public Set<Variable<?>> getVariables();
 

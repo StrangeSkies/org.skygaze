@@ -9,7 +9,7 @@ import uk.co.elionline.gears.utilities.Factory;
 @Component(service = StateComponentBuilder.class)
 public class StateComponentBuilderImpl implements StateComponentBuilder {
 	@Override
-	public <D> StateComponentConfigurator<D> dataFactory(
+	public <D> StateComponentConfigurator<D> data(
 			Factory<? extends D> dataFactory) {
 		return new StateComponentConfiguratorImpl<>(dataFactory);
 	}

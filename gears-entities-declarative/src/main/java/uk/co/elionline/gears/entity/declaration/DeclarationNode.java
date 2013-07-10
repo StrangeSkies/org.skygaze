@@ -5,7 +5,7 @@ public interface DeclarationNode<T> {
 
 	public String setID();
 
-	public DeclarationNodeType<T> getDeclarationNodeType();
+	public DeclarationNodeType<T> getType();
 
 	public T getData();
 }

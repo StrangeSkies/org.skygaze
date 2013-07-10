@@ -9,14 +9,18 @@ package uk.co.elionline.gears.utilities;
  * @param <T>
  */
 public abstract class Decorator<T> {
-	private final T component;
+	private final/*@ReadOnly*/Property<T, ? super T> componentProperty;
 
 	public Decorator(T component) {
-		this.component = component;
+		this.componentProperty = new IdentityProperty<>(component);
+	}
+
+	public Decorator(Property<T, ? super T> component) {
+		this.componentProperty = component;
 	}
 
 	protected final T getComponent() {
-		return component;
+		return componentProperty.get();
 	}
 
 	@Override

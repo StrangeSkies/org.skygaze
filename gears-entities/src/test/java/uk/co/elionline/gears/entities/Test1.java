@@ -68,16 +68,16 @@ public class Test1 {
 		entities().behaviour().setDefaultScheduler(scheduler);
 
 		final StateComponent<Vector2<DoubleValue>> position = stateBuilder()
-				.dataFactory(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
+				.data(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
 				.name("Position").description("Position of entity").create();
 
 		final StateComponent<Vector2<DoubleValue>> velocity = stateBuilder()
-				.dataFactory(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
+				.data(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
 				.name("Velocity").description("Velocity of entity")
 				.readDependencies(position).create();
 
 		final StateComponent<IdentityExpression<String>> parrot = stateBuilder()
-				.dataFactory(new Factory<IdentityExpression<String>>() {
+				.data(new Factory<IdentityExpression<String>>() {
 					@Override
 					public IdentityExpression<String> create() {
 						return new IdentityExpression<>("");
@@ -133,7 +133,7 @@ public class Test1 {
 				});
 
 		final Assemblage assemblage2 = assembler().create();
-		assemblage2.getBaseAssemblages().add(assemblage1);
+		assemblage2.getComposition().add(assemblage1);
 		assemblage2.getStates().add(velocity);
 		assemblage2.getInitialisers(position).add(
 				new StateInitialiser<Vector2<DoubleValue>>() {
@@ -160,8 +160,8 @@ public class Test1 {
 					public void initialise(IdentityExpression<String> data,
 							AssemblyContext context) {
 						try {
-							data.set("Child velocity: "
-									+ context.getSubcontext(assemblage2).getData(velocity)
+							data.set("Child position: "
+									+ context.getSubcontext(assemblage1).getData(position)
 									+ " num " + context.getValue(numberVariable));
 						} catch (IllegalArgumentException e) {
 							data.set("Parent num: "
@@ -171,8 +171,21 @@ public class Test1 {
 					}
 				});
 
-		assembler().assemble(assemblage2, entities());
-		assembler().assemble(assemblage2, entities());
+		final Assemblage assemblage3 = assembler().create();
+		assemblage3.getVariables().add(numberVariable);
+		assemblage3.getStates().add(position);
+		assemblage3.getInitialisers(position).add(
+				new StateInitialiser<Vector2<DoubleValue>>() {
+					@Override
+					public void initialise(Vector2<DoubleValue> data,
+							AssemblyContext context) {
+						data.set(context.getSubcontext(assemblage2, assemblage1)
+								.getData(position).getMultiplied(3));
+					}
+				});
+		assemblage3.getSubassemblages().add(assemblage2);
+
+		assembler().assemble(assemblage3, entities());
 
 		Processor processor = new ProcessorImpl();
 		processor.startProcessing(entities());
