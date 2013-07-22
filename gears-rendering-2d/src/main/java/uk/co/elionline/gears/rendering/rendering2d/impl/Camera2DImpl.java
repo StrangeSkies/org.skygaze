@@ -1,7 +1,7 @@
 package uk.co.elionline.gears.rendering.rendering2d.impl;
 
 import uk.co.elionline.gears.mathematics.expressions.Expression;
-import uk.co.elionline.gears.mathematics.geometry.matrices.MatrixH2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.MatrixH2;
 import uk.co.elionline.gears.rendering.Scene;
 import uk.co.elionline.gears.rendering.rendering2d.Camera2D;
 import uk.co.elionline.gears.rendering.rendering2d.Data2D;

@@ -9,11 +9,12 @@ import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.utilities.Decorator;
 import uk.co.elionline.gears.utilities.flowcontrol.StripedReadWriteLockRelease;
 
-public class EntityStateManagerProcessingWrapper extends Decorator<EntityStateManager>
-		implements EntityStateManager {
+public class EntityStateManagerProcessingWrapper extends
+		Decorator<EntityStateManager> implements EntityStateManager {
 	private final StripedReadWriteLockRelease<StateComponent<?>> locks;
 
-	public EntityStateManagerProcessingWrapper(EntityStateManager entityStateManager,
+	public EntityStateManagerProcessingWrapper(
+			EntityStateManager entityStateManager,
 			StripedReadWriteLockRelease<StateComponent<?>> locks) {
 		super(entityStateManager);
 		this.locks = locks;
@@ -48,6 +49,20 @@ public class EntityStateManagerProcessingWrapper extends Decorator<EntityStateMa
 		if (locks.isLockHeldByCurrentThread(stateComponent))
 			throw new IllegalStateException();
 		return getComponent().getReadOnlyData(entity, stateComponent);
+	}
+
+	@Override
+	public <D> Set<D> getAllData(StateComponent<D> stateComponent) {
+		if (locks.isWriteLockHeldByCurrentThread(stateComponent))
+			throw new IllegalStateException();
+		return getComponent().getAllData(stateComponent);
+	}
+
+	@Override
+	public <D> Set<D> getAllReadOnlyData(StateComponent<D> stateComponent) {
+		if (locks.isLockHeldByCurrentThread(stateComponent))
+			throw new IllegalStateException();
+		return getComponent().getAllReadOnlyData(stateComponent);
 	}
 
 	@Override

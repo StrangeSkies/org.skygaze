@@ -304,4 +304,32 @@ public final class DoubleValue extends ContinuousValue<DoubleValue> {
 	public static DoubleValueFactory factory() {
 		return DoubleValueFactory.instance();
 	}
+
+	@Override
+	public DoubleValue square() {
+		value *= value;
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public DoubleValue squareRoot() {
+		value = (int) Math.sqrt(value);
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public DoubleValue exponentiate(Value<?> exponential) {
+		value = (int) Math.pow(value, exponential.doubleValue());
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public DoubleValue root(Value<?> root) {
+		value = (int) Math.pow(value, root.reciprocate().doubleValue());
+		postUpdate();
+		return this;
+	}
 }

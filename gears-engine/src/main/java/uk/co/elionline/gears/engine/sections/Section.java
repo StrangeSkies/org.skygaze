@@ -13,8 +13,8 @@ public interface Section {
 	public void enter(SectionProcessingContext context);
 
 	/**
-	 * Called by the SectionStack to pause this interface when another is pushed
-	 * onto the stack.
+	 * Called by the SectionStack to pause this interface before any another is
+	 * pushed onto the stack.
 	 */
 	public void halt();
 

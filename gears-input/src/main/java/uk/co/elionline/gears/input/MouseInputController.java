@@ -3,7 +3,7 @@ package uk.co.elionline.gears.input;
 import java.util.List;
 import java.util.Set;
 
-import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
 import uk.co.elionline.gears.mathematics.values.IntValue;
 
 /**

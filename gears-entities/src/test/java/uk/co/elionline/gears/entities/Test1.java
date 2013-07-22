@@ -25,7 +25,7 @@ import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.entity.state.StateComponentBuilder;
 import uk.co.elionline.gears.entity.state.impl.StateComponentBuilderImpl;
 import uk.co.elionline.gears.mathematics.expressions.IdentityExpression;
-import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
 import uk.co.elionline.gears.mathematics.values.IntValue;
 import uk.co.elionline.gears.utilities.CopyFactory;

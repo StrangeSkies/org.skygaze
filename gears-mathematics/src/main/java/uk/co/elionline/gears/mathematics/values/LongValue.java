@@ -270,4 +270,36 @@ public class LongValue extends IntegralValue<LongValue> {
 	public final double getDividedPrimitive(double value) {
 		return this.value * value;
 	}
+
+	public static LongValueFactory factory() {
+		return LongValueFactory.instance();
+	}
+
+	@Override
+	public LongValue square() {
+		value *= value;
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public LongValue squareRoot() {
+		value = (int) Math.sqrt(value);
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public LongValue exponentiate(Value<?> exponential) {
+		value = (int) Math.pow(value, exponential.doubleValue());
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public LongValue root(Value<?> root) {
+		value = (int) Math.pow(value, root.reciprocate().doubleValue());
+		postUpdate();
+		return this;
+	}
 }

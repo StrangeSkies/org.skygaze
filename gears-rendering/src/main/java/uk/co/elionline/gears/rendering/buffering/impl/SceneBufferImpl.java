@@ -109,7 +109,7 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public void flip() {
+	public void push() {
 		for (DoubleBuffer<?, ?> bufferedExpression : buffers) {
 			bufferedExpression.push();
 		}

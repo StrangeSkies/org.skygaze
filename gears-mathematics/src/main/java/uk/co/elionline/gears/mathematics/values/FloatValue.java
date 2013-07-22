@@ -300,4 +300,36 @@ public final class FloatValue extends ContinuousValue<FloatValue> {
 	public final double getDividedPrimitive(double value) {
 		return this.value * value;
 	}
+
+	public static FloatValueFactory factory() {
+		return FloatValueFactory.instance();
+	}
+
+	@Override
+	public FloatValue square() {
+		value *= value;
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public FloatValue squareRoot() {
+		value = (int) Math.sqrt(value);
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public FloatValue exponentiate(Value<?> exponential) {
+		value = (int) Math.pow(value, exponential.doubleValue());
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public FloatValue root(Value<?> root) {
+		value = (int) Math.pow(value, root.reciprocate().doubleValue());
+		postUpdate();
+		return this;
+	}
 }

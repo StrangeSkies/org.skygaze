@@ -1,14 +1,11 @@
 package uk.co.elionline.gears.rendering;
 
-import java.util.Collection;
-
 public interface Renderer<T, C extends Camera<T>> {
 	public boolean supportsDataExtension(Class<? extends T> extensionDataClass);
 
-	public boolean supportsDataExtensionCombination(
-			Collection<? extends Class<? extends T>> extensionDataClasses);
-
 	public void render(C camera);
+
+	public RendererBuffer getBuffer();
 }
 
 /*

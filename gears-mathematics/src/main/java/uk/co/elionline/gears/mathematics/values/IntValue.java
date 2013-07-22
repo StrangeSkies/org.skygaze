@@ -274,4 +274,32 @@ public final class IntValue extends IntegralValue<IntValue> {
 	public static IntValueFactory factory() {
 		return IntValueFactory.instance();
 	}
+
+	@Override
+	public IntValue square() {
+		value *= value;
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public IntValue squareRoot() {
+		value = (int) Math.sqrt(value);
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public IntValue exponentiate(Value<?> exponential) {
+		value = (int) Math.pow(value, exponential.doubleValue());
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public IntValue root(Value<?> root) {
+		value = (int) Math.pow(value, root.reciprocate().doubleValue());
+		postUpdate();
+		return this;
+	}
 }

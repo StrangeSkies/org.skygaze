@@ -271,4 +271,32 @@ public final class Quantity<V extends Value<V>> extends Value<Quantity<V>> {
 		return this.value.longValue();
 	}
 
+	@Override
+	public Quantity<V> square() {
+		value.square();
+
+		return this;
+	}
+
+	@Override
+	public Quantity<V> squareRoot() {
+		value.squareRoot();
+
+		return this;
+	}
+
+	@Override
+	public Quantity<V> exponentiate(Value<?> exponential) {
+		value.exponentiate(exponential);
+
+		return this;
+	}
+
+	@Override
+	public Quantity<V> root(Value<?> root) {
+		value.root(root);
+
+		return this;
+	}
+
 }

@@ -1,24 +1,26 @@
 package uk.co.elionline.gears.mathematics.functions.collections;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import uk.co.elionline.gears.mathematics.functions.Function;
+import uk.co.elionline.gears.utilities.Factory;
 
+public class ListTransformationFunction<T, F> extends
+		CollectionTransformationFunction<T, F, List<T>> {
 
-public class ListTransformationFunction<T, F> implements
-    Function<List<T>, List<? extends F>> {
-  private final Function<? extends T, ? super F> function;
+	public ListTransformationFunction(Function<? extends T, ? super F> function) {
+		super(function, new Factory<List<T>>() {
+			@Override
+			public List<T> create() {
+				return new ArrayList<>();
+			}
+		});
+	}
 
-  public ListTransformationFunction(Function<? extends T, ? super F> function) {
-    this.function = function;
-  }
-
-  @Override
-  public final List<T> applyTo(List<? extends F> input) {
-    return new ListTransformation<>(input, function);
-  }
-
-  public final Function<? extends T, ? super F> getFunction() {
-    return function;
-  }
+	public static <X, Y> List<X> applyTo(Collection<? extends Y> collection,
+			Function<? extends X, ? super Y> function) {
+		return new ListTransformationFunction<X, Y>(function).applyTo(collection);
+	}
 }

@@ -3,7 +3,7 @@ package uk.co.elionline.gears.input;
 import uk.co.elionline.gears.mathematics.expressions.collections.ExpressionBuffer;
 import uk.co.elionline.gears.mathematics.expressions.collections.ExpressionResultSettingBuffer;
 import uk.co.elionline.gears.mathematics.geometry.Bounds2;
-import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
 import uk.co.elionline.gears.mathematics.values.DoubleValueFactory;
 import uk.co.elionline.gears.mathematics.values.IntValue;

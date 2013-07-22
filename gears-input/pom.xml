@@ -34,7 +34,7 @@
 
 		<dependency>
 			<groupId>uk.co.elionline</groupId>
-			<artifactId>gears-mathematics</artifactId>
+			<artifactId>gears-mathematics-geometry</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

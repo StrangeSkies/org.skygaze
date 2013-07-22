@@ -49,5 +49,7 @@
 		<module>gears-scripting-r</module>
 		<module>gears-scripting-frege</module>
 		<module>gears-entities-declarative</module>
+		<module>gears-rendering-2d-3d</module>
+		<module>gears-mathematics-geometry</module>
 	</modules>
 </project>

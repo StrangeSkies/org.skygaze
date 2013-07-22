@@ -260,4 +260,28 @@ public abstract class Value<S extends Value<S>> extends Number implements
 
 	@Override
 	public abstract double doubleValue();
+
+	public abstract S square();
+
+	public S getSquared() {
+		return copy().square();
+	}
+
+	public abstract S squareRoot();
+
+	public S getSquareRoot() {
+		return copy().squareRoot();
+	}
+
+	public abstract S exponentiate(Value<?> exponential);
+
+	public S getExponentiated(Value<?> exponential) {
+		return copy().exponentiate(exponential);
+	}
+
+	public abstract S root(Value<?> root);
+
+	public S getRoot(Value<?> root) {
+		return copy().root(root);
+	}
 }

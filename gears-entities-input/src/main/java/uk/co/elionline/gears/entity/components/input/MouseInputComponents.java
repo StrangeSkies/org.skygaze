@@ -11,7 +11,7 @@ import uk.co.elionline.gears.input.MouseInputController;
 import uk.co.elionline.gears.input.MouseMovementAdapter;
 import uk.co.elionline.gears.input.MouseMovementAdapter.MovementType;
 import uk.co.elionline.gears.input.WindowManagerInputController;
-import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
 import uk.co.elionline.gears.mathematics.values.IntValue;
 import uk.co.elionline.gears.utilities.CopyFactory;
 

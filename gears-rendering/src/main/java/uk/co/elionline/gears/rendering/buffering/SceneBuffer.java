@@ -13,7 +13,7 @@ import uk.co.elionline.gears.utilities.Copyable;
 import uk.co.elionline.gears.utilities.Self;
 
 public interface SceneBuffer {
-	public void flip();
+	public void push();
 
 	public void registerBuffer(DoubleBuffer<?, ?> buffer);
 

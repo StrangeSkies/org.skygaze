@@ -3,11 +3,12 @@ package uk.co.elionline.gears.mathematics.logic;
 import uk.co.elionline.gears.mathematics.expressions.BinaryOperationExpression;
 import uk.co.elionline.gears.mathematics.expressions.Expression;
 
-public class NAND
-    extends
-    BinaryOperationExpression</*@ReadOnly*/BooleanValue, /*@ReadOnly*/BooleanValue, /*@ReadOnly*/BooleanValue> {
-  public NAND(Expression<? extends /*@ReadOnly*/BooleanValue> firstOperand,
-      Expression<? extends /*@ReadOnly*/BooleanValue> secondOperand) {
-    super(firstOperand, secondOperand, new NANDOperation());
-  }
+public class NAND<O extends NANDable<?, ? super T>, T>
+		extends
+		BinaryOperationExpression</*@ReadOnly*/O, /*@ReadOnly*/NANDable<? extends O, ? super T>, /*@ReadOnly*/T> {
+	public NAND(
+			Expression<? extends /*@ReadOnly*/NANDable<? extends O, ? super T>> firstOperand,
+			Expression<? extends /*@ReadOnly*/T> secondOperand) {
+		super(firstOperand, secondOperand, new NANDOperation<O, T>());
+	}
 }

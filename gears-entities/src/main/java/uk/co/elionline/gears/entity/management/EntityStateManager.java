@@ -31,6 +31,11 @@ public interface EntityStateManager {
 	public <D> /*@ReadOnly*/D getReadOnlyData(Entity entity,
 			StateComponent<D> stateComponent);
 
+	public <D> Set<D> getAllData(StateComponent<D> stateComponent);
+
+	public <D> Set</*@ReadOnly*/D> getAllReadOnlyData(
+			StateComponent<D> stateComponent);
+
 	public boolean has(Entity entity, StateComponent<?> stateComponent);
 
 	public boolean hasAll(Entity entity,

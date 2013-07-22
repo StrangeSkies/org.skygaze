@@ -57,6 +57,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>uk.co.elionline</groupId>
+			<artifactId>gears-mathematics-geometry</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 		</dependency>

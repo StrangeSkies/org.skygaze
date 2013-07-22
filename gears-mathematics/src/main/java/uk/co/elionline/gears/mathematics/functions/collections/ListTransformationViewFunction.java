@@ -14,15 +14,16 @@ import uk.co.elionline.gears.mathematics.functions.Function;
  * @param <F>
  */
 public class ListTransformationViewFunction<T, F> implements
-		Function<List<T>, List<F>> {
+		Function<List<T>, List<? extends F>> {
 	private final Function<? extends T, ? super F> function;
 
-	public ListTransformationViewFunction(Function<T, F> function) {
+	public ListTransformationViewFunction(
+			Function<? extends T, ? super F> function) {
 		this.function = function;
 	}
 
 	@Override
-	public final List<T> applyTo(List<F> input) {
+	public final List<T> applyTo(List<? extends F> input) {
 		return new ListTransformationView<T, F>(input, function);
 	}
 

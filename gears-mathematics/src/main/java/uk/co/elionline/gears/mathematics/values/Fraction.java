@@ -374,4 +374,36 @@ public final class Fraction extends Value<Fraction> {
 	public final double getDividedPrimitive(double value) {
 		return value * denominator / numerator;
 	}
+
+	@Override
+	public Fraction square() {
+		denominator *= denominator;
+		numerator *= numerator;
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public Fraction squareRoot() {
+		denominator = (int) Math.sqrt(denominator);
+		numerator = (int) Math.sqrt(numerator);
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public Fraction exponentiate(Value<?> exponential) {
+		denominator = (int) Math.pow(denominator, exponential.doubleValue());
+		numerator = (int) Math.pow(numerator, exponential.doubleValue());
+		postUpdate();
+		return this;
+	}
+
+	@Override
+	public Fraction root(Value<?> root) {
+		denominator = (int) Math.pow(denominator, root.reciprocate().doubleValue());
+		numerator = (int) Math.pow(numerator, root.reciprocate().doubleValue());
+		postUpdate();
+		return this;
+	}
 }

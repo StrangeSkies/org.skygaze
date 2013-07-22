@@ -24,7 +24,7 @@ import uk.co.elionline.gears.input.MouseInputController;
 import uk.co.elionline.gears.input.WindowManagerInputController;
 import uk.co.elionline.gears.mathematics.expressions.collections.AssignmentBuffer;
 import uk.co.elionline.gears.mathematics.expressions.collections.CloneBuffer;
-import uk.co.elionline.gears.mathematics.geometry.matrices.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
 import uk.co.elionline.gears.mathematics.values.IntValue;
 import uk.co.elionline.gears.mathematics.values.IntValueFactory;
 

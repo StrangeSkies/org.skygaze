@@ -8,6 +8,8 @@ import java.util.Set;
 import uk.co.elionline.gears.entity.Entity;
 import uk.co.elionline.gears.entity.management.EntityStateManager;
 import uk.co.elionline.gears.entity.state.StateComponent;
+import uk.co.elionline.gears.mathematics.functions.Function;
+import uk.co.elionline.gears.mathematics.functions.collections.SetTransformationFunction;
 
 public abstract class AbstractEntityStateManager implements EntityStateManager {
 	@Override
@@ -70,6 +72,22 @@ public abstract class AbstractEntityStateManager implements EntityStateManager {
 	@Override
 	public <D> D getReadOnlyData(Entity entity, StateComponent<D> stateComponent) {
 		return getData(entity, stateComponent);
+	}
+
+	@Override
+	public <D> Set<D> getAllData(final StateComponent<D> stateComponent) {
+		return SetTransformationFunction.applyTo(getEntitiesWith(stateComponent),
+				new Function<D, Entity>() {
+					@Override
+					public D applyTo(Entity input) {
+						return getData(input, stateComponent);
+					}
+				});
+	}
+
+	@Override
+	public <D> Set<D> getAllReadOnlyData(final StateComponent<D> stateComponent) {
+		return getAllData(stateComponent);
 	}
 
 	@Override

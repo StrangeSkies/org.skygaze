@@ -1,11 +1,11 @@
 package uk.co.elionline.gears.mathematics.logic;
 
-import uk.co.elionline.gears.mathematics.Negatable;
-import uk.co.elionline.gears.mathematics.expressions.Expression;
 import uk.co.elionline.gears.mathematics.expressions.ExpressionImplementation;
+import uk.co.elionline.gears.utilities.Self;
 
 public class BooleanValue extends ExpressionImplementation<BooleanValue>
-		implements Negatable<BooleanValue, BooleanValue> {
+		implements BooleanCombinationBehaviour<BooleanValue, BooleanValue>,
+		NOTable<BooleanValue, BooleanValue>, Self<BooleanValue> {
 	private boolean value;
 
 	public BooleanValue() {
@@ -15,7 +15,7 @@ public class BooleanValue extends ExpressionImplementation<BooleanValue>
 		this.value = value;
 	}
 
-	public BooleanValue(Expression<? extends BooleanValue> expression) {
+	public BooleanValue(BooleanValue expression) {
 		value = expression.getValue().getBooleanValue();
 	}
 
@@ -54,7 +54,7 @@ public class BooleanValue extends ExpressionImplementation<BooleanValue>
 		this.value = value;
 	}
 
-	public final void setValue(Expression<? extends BooleanValue> value) {
+	public final void setValue(BooleanValue value) {
 		this.value = value.getValue().getBooleanValue();
 	}
 
@@ -63,84 +63,84 @@ public class BooleanValue extends ExpressionImplementation<BooleanValue>
 	}
 
 	@Override
-	public final BooleanValue getNegated() {
-		return copy().negate();
-	}
-
-	@Override
-	public final BooleanValue negate() {
-		value = !value;
-
-		return this;
-	}
-
-	public final BooleanValue getAnd(Expression<? extends BooleanValue> expression) {
-		return copy().and(expression);
-	}
-
-	public final BooleanValue getOr(Expression<? extends BooleanValue> expression) {
-		return copy().or(expression);
-	}
-
-	public final BooleanValue getXor(Expression<? extends BooleanValue> expression) {
-		return copy().xor(expression);
-	}
-
-	public final BooleanValue getNot() {
-		return copy().not();
-	}
-
-	public final BooleanValue getNand(
-			Expression<? extends BooleanValue> expression) {
-		return copy().nand(expression);
-	}
-
-	public final BooleanValue getNor(Expression<? extends BooleanValue> expression) {
-		return copy().nor(expression);
-	}
-
-	public final BooleanValue getXnor(
-			Expression<? extends BooleanValue> expression) {
-		return copy().xnor(expression);
-	}
-
-	public final BooleanValue and(Expression<? extends BooleanValue> expression) {
+	public final BooleanValue and(BooleanValue expression) {
 		value = value && expression.getValue().getBooleanValue();
 
 		return this;
 	}
 
-	public final BooleanValue or(Expression<? extends BooleanValue> expression) {
+	@Override
+	public final BooleanValue getAnd(BooleanValue expression) {
+		return copy().and(expression);
+	}
+
+	@Override
+	public final BooleanValue getOr(BooleanValue expression) {
+		return copy().or(expression);
+	}
+
+	@Override
+	public final BooleanValue getXor(BooleanValue expression) {
+		return copy().xor(expression);
+	}
+
+	@Override
+	public final BooleanValue getNot() {
+		return copy().not();
+	}
+
+	@Override
+	public final BooleanValue getNand(BooleanValue expression) {
+		return copy().nand(expression);
+	}
+
+	@Override
+	public final BooleanValue getNor(BooleanValue expression) {
+		return copy().nor(expression);
+	}
+
+	@Override
+	public final BooleanValue getXnor(BooleanValue expression) {
+		return copy().xnor(expression);
+	}
+
+	@Override
+	public final BooleanValue or(BooleanValue expression) {
 		value = value || expression.getValue().getBooleanValue();
 
 		return this;
 	}
 
-	public final BooleanValue xor(Expression<? extends BooleanValue> expression) {
+	@Override
+	public final BooleanValue xor(BooleanValue expression) {
 		value = value ^ expression.getValue().getBooleanValue();
 
 		return this;
 	}
 
+	@Override
 	public final BooleanValue not() {
 		value = !value;
 
 		return this;
 	}
 
-	public final BooleanValue nand(Expression<? extends BooleanValue> expression) {
+	@Override
+	public final BooleanValue nand(BooleanValue expression) {
 		value = !(value && expression.getValue().getBooleanValue());
 
 		return this;
 	}
 
-	public final BooleanValue nor(Expression<? extends BooleanValue> expression) {
+	@Override
+	public final BooleanValue nor(BooleanValue expression) {
 		value = !(value || expression.getValue().getBooleanValue());
 
 		return this;
 	}
 
-	public final BooleanValue xnor(Expression<? extends BooleanValue> expression) {
+	@Override
+	public final BooleanValue xnor(BooleanValue expression) {
 		value = value == expression.getValue().getBooleanValue();
 
 		return this;

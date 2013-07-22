@@ -1,8 +1,8 @@
 package uk.co.elionline.gears.rendering.rendering3d.impl;
 
 import uk.co.elionline.gears.mathematics.expressions.Expression;
-import uk.co.elionline.gears.mathematics.geometry.matrices.Matrix4;
-import uk.co.elionline.gears.mathematics.geometry.matrices.MatrixH3;
+import uk.co.elionline.gears.mathematics.geometry.matrix.Matrix4;
+import uk.co.elionline.gears.mathematics.geometry.matrix.MatrixH3;
 import uk.co.elionline.gears.rendering.Scene;
 import uk.co.elionline.gears.rendering.rendering3d.Camera3D;
 import uk.co.elionline.gears.rendering.rendering3d.Data3D;

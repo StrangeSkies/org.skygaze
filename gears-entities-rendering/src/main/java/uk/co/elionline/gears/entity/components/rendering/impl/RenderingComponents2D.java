@@ -20,6 +20,8 @@ public class RenderingComponents2D {
 
 	private final BehaviourComponent renderingBehaviour;
 
+	private final BehaviourComponent bufferingBehaviour;
+
 	private final StateComponent<Camera2D> cameraState;
 
 	private final StateComponent<Scene<Data2D>> sceneState;
@@ -64,10 +66,23 @@ public class RenderingComponents2D {
 					}
 				}).name("Rendering").description("Behaviour for rendering entities")
 				.readDependencies(cameraState).create();
+
+		bufferingBehaviour = behaviourComponentBuilder
+				.process(new BehaviourProcess() {
+					@Override
+					public void process(BehaviourProcessingContext processingContext) {
+						renderer.getBuffer().push();
+					}
+				}).behaviourDependencies(renderingBehaviour).name("Renderer Buffering")
+				.description("Behaviour for pushing rendering buffer").create();
 	}
 
 	public BehaviourComponent getRenderingBehaviour() {
 		return renderingBehaviour;
+	}
+
+	public BehaviourComponent getBufferingBehaviour() {
+		return bufferingBehaviour;
 	}
 
 	public StateComponent<Renderable<Data2D>> getRenderableState() {
