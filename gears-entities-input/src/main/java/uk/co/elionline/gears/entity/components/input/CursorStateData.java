@@ -1,6 +1,6 @@
 package uk.co.elionline.gears.entity.components.input;
 
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.elionline.gears.mathematics.values.IntValue;
 import uk.co.elionline.gears.utilities.Copyable;
 

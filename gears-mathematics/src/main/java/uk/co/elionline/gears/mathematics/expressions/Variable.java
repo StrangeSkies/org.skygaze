@@ -20,7 +20,7 @@ public interface Variable<S extends Variable<S>> extends Expression<S>,
 	 * 
 	 * In the case of a CompoundExpression for example, this would be achieved
 	 * most simply by overriding the abstract 'evaluate()' method to return 'this'
-	 * or 'getThis()'.
+	 * or 'getThis()'...
 	 */
 	@Override
 	public/*@ReadOnly*/S getValue(/*@ReadOnly Addable<S> this*/);

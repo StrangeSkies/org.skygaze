@@ -25,7 +25,8 @@ import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.entity.state.StateComponentBuilder;
 import uk.co.elionline.gears.entity.state.impl.StateComponentBuilderImpl;
 import uk.co.elionline.gears.mathematics.expressions.IdentityExpression;
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.builder.impl.MatrixBuilderImpl;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
 import uk.co.elionline.gears.mathematics.values.IntValue;
 import uk.co.elionline.gears.utilities.CopyFactory;
@@ -36,12 +37,15 @@ public class Test1 {
 	private final BehaviourComponentBuilder behaviourComponentBuilderFactory;
 	private final StateComponentBuilder stateComponentBuilder;
 	private final Assembler assembler;
+	private final MatrixBuilderImpl matrixBuilder;
 
 	public Test1() {
 		entityManager = new EntityManagerImpl();
 
 		behaviourComponentBuilderFactory = new BehaviourComponentBuilderImpl();
 		stateComponentBuilder = new StateComponentBuilderImpl();
+
+		matrixBuilder = new MatrixBuilderImpl();
 
 		assembler = new AssemblerImpl();
 	}
@@ -62,17 +66,21 @@ public class Test1 {
 		return behaviourComponentBuilderFactory;
 	}
 
+	public MatrixBuilderImpl matrices() {
+		return matrixBuilder;
+	}
+
 	private void run() {
 		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler());
 		scheduler.setPeriodFrequency(5);
 		entities().behaviour().setDefaultScheduler(scheduler);
 
 		final StateComponent<Vector2<DoubleValue>> position = stateBuilder()
-				.data(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
+				.data(new CopyFactory<>(matrices().doubles().vector2()))
 				.name("Position").description("Position of entity").create();
 
 		final StateComponent<Vector2<DoubleValue>> velocity = stateBuilder()
-				.data(new CopyFactory<>(new Vector2<>(DoubleValue.factory())))
+				.data(new CopyFactory<>(matrices().doubles().vector2()))
 				.name("Velocity").description("Velocity of entity")
 				.readDependencies(position).create();
 
@@ -128,7 +136,7 @@ public class Test1 {
 					@Override
 					public void initialise(Vector2<DoubleValue> data,
 							AssemblyContext context) {
-						data.set(new Vector2<>(DoubleValue.factory(), 5, 5));
+						data.setData(5, 5);
 					}
 				});
 
@@ -140,7 +148,7 @@ public class Test1 {
 					@Override
 					public void initialise(Vector2<DoubleValue> data,
 							AssemblyContext context) {
-						data.set(new Vector2<>(DoubleValue.factory(), 12, 12));
+						data.setData(12, 12);
 					}
 				});
 		assemblage2.getInitialisers(velocity).add(
@@ -149,7 +157,7 @@ public class Test1 {
 					public void initialise(Vector2<DoubleValue> data,
 							AssemblyContext context) {
 						data.set(context.getSupercontext().getData(position)
-								.getSubtracted(new Vector2<>(DoubleValue.factory(), 2, 2)));
+								.getSubtracted(matrices().doubles().vector2().setData(2, 2)));
 					}
 				});
 		assemblage2.getSubassemblages().add(assemblage1);

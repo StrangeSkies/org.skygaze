@@ -26,91 +26,91 @@ public final class IntValue extends IntegralValue<IntValue> {
 	@Override
 	public final IntValue add(Value<?> value) {
 		this.value += value.intValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue negate() {
 		value = -value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue multiply(int value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue multiply(long value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue multiply(float value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue multiply(double value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue multiply(Value<?> value) {
 		this.value = value.getMultipliedPrimitive(this.value);
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue divide(int value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue divide(long value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue divide(float value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue divide(double value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue divide(Value<?> value) {
 		this.value = value.getDividedPrimitive(this.value);
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue subtract(Value<?> value) {
 		this.value -= value.intValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -142,14 +142,14 @@ public final class IntValue extends IntegralValue<IntValue> {
 	@Override
 	public final IntValue set(Value<?> value) {
 		this.value = value.intValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue setValue(Number value) {
 		this.value = value.intValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -205,14 +205,14 @@ public final class IntValue extends IntegralValue<IntValue> {
 	@Override
 	public final IntValue increment() {
 		value++;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final IntValue decrement() {
 		value--;
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -278,28 +278,34 @@ public final class IntValue extends IntegralValue<IntValue> {
 	@Override
 	public IntValue square() {
 		value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public IntValue squareRoot() {
 		value = (int) Math.sqrt(value);
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public IntValue exponentiate(Value<?> exponential) {
 		value = (int) Math.pow(value, exponential.doubleValue());
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public IntValue root(Value<?> root) {
 		value = (int) Math.pow(value, root.reciprocate().doubleValue());
-		postUpdate();
+		update();
+		return this;
+	}
+
+	@Override
+	public IntValue modulus() {
+		value = Math.abs(value);
 		return this;
 	}
 }

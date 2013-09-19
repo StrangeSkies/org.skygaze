@@ -1,6 +1,6 @@
 package uk.co.elionline.gears.mathematics.geometry;
 
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.elionline.gears.mathematics.values.Value;
 import uk.co.elionline.gears.utilities.Self;
 

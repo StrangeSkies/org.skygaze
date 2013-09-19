@@ -22,21 +22,21 @@ public class ImmutableExpression<T> implements Self<ImmutableExpression<T>>,
 	}
 
 	@Override
-	public final boolean addObserver(Observer<? super Void> observer) {
-		return false;
-	}
-
-	@Override
-	public final boolean removeObserver(Observer<? super Void> observer) {
-		return false;
-	}
-
-	@Override
 	public final void clearObservers() {
 	}
 
 	@Override
 	public final T getValue() {
 		return value;
+	}
+
+	@Override
+	public final boolean addObserver(Observer<? super Expression<T>> observer) {
+		return false;
+	}
+
+	@Override
+	public final boolean removeObserver(Observer<? super Expression<T>> observer) {
+		return false;
 	}
 }

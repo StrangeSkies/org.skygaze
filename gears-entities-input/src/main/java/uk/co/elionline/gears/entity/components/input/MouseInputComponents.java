@@ -11,7 +11,8 @@ import uk.co.elionline.gears.input.MouseInputController;
 import uk.co.elionline.gears.input.MouseMovementAdapter;
 import uk.co.elionline.gears.input.MouseMovementAdapter.MovementType;
 import uk.co.elionline.gears.input.WindowManagerInputController;
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.builder.MatrixBuilder;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.elionline.gears.mathematics.values.IntValue;
 import uk.co.elionline.gears.utilities.CopyFactory;
 
@@ -23,14 +24,13 @@ public class MouseInputComponents {
 	public MouseInputComponents(MouseInputController mouseInputController,
 			WindowManagerInputController windowManagerInputController,
 			BehaviourComponentBuilder behaviourComponentBuilder,
-			StateComponentBuilder stateComponentBuilder) {
+			StateComponentBuilder stateComponentBuilder, MatrixBuilder matrixBuilder) {
 		final MouseMovementAdapter mouseMovementAdapter = new MouseMovementAdapter(
-				mouseInputController, windowManagerInputController);
+				mouseInputController, windowManagerInputController, matrixBuilder);
 		mouseMovementAdapter.setMovementType(MovementType.Relative);
 
 		cursorState = stateComponentBuilder
-				.data(new CopyFactory<>(new CursorStateData()))
-				.name("Cursor State")
+				.data(new CopyFactory<>(new CursorStateData())).name("Cursor State")
 				.description("The state of an entity which behaves like a cursor")
 				.create();
 

@@ -1,6 +1,7 @@
 package uk.co.elionline.gears.rendering.impl;
 
 import java.awt.Color;
+import java.util.Arrays;
 
 import uk.co.elionline.gears.mathematics.expressions.CompoundExpression;
 import uk.co.elionline.gears.mathematics.values.DoubleValue;
@@ -21,7 +22,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 
 		alpha = new DoubleValue();
 
-		getDependencies().set(red, green, blue, alpha);
+		getDependencies().set(Arrays.asList(red, green, blue, alpha));
 	}
 
 	public ColourIml(int red, int green, int blue, int alpha) {

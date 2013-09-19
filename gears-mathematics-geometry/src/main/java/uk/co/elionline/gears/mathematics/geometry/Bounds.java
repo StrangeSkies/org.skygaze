@@ -1,12 +1,14 @@
 package uk.co.elionline.gears.mathematics.geometry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import uk.co.elionline.gears.mathematics.Range;
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector;
 import uk.co.elionline.gears.mathematics.values.Value;
 import uk.co.elionline.gears.utilities.Factory;
 import uk.co.elionline.gears.utilities.Self;
@@ -21,23 +23,15 @@ public abstract class Bounds<S extends Bounds<S, V>, V extends Value<V>>
 		} catch (DimensionalityException e) {
 			throw new IllegalArgumentException(e);
 		}
-		ranges = createDataList(dimensions, valueFactory);
+
+		ranges = new ArrayList<Range<V>>();
+		for (int i = 0; i < dimensions; i++) {
+			ranges.add(Range.create(valueFactory.create(), valueFactory.create()));
+		}
 	}
 
 	public Bounds(Vector<?, V> from, Vector<?, V> to) {
-		try {
-			DimensionalityException.checkEquivalence(from.getDimensions(),
-					to.getDimensions());
-		} catch (DimensionalityException e) {
-			throw new IllegalArgumentException(e);
-		}
-		ranges = new ArrayList<Range<V>>();
-
-		Iterator<? extends V> fromIterator = from.getData().iterator();
-		Iterator<? extends V> toIterator = to.getData().iterator();
-		while (fromIterator.hasNext()) {
-			ranges.add(Range.create(fromIterator.next(), toIterator.next()));
-		}
+		this(from, to, from.getDimensions());
 	}
 
 	public Bounds(Vector<?, V> from, Vector<?, V> to, int dimensions) {
@@ -54,6 +48,43 @@ public abstract class Bounds<S extends Bounds<S, V>, V extends Value<V>>
 		Iterator<? extends V> toIterator = to.getData().iterator();
 		while (fromIterator.hasNext()) {
 			ranges.add(Range.create(fromIterator.next(), toIterator.next()));
+		}
+	}
+
+	public Bounds(@SuppressWarnings("unchecked") Vector<?, V>... points) {
+		this(Arrays.asList(points));
+	}
+
+	public Bounds(int dimensions,
+			@SuppressWarnings("unchecked") Vector<?, V>... points) {
+		this(dimensions, Arrays.asList(points));
+	}
+
+	public Bounds(Collection<? extends Vector<?, V>> points) {
+		this(points.iterator().next().getDimensions(), points);
+	}
+
+	public Bounds(int dimensions, Collection<? extends Vector<?, V>> points) {
+		try {
+			for (Vector<?, V> point : points) {
+				DimensionalityException.checkEquivalence(dimensions,
+						point.getDimensions());
+			}
+		} catch (DimensionalityException e) {
+			throw new IllegalArgumentException(e);
+		}
+		ranges = new ArrayList<Range<V>>();
+
+		Iterator<? extends Vector<?, V>> pointIterator = points.iterator();
+		Vector<?, V> firstPoint = pointIterator.next();
+		for (V value : firstPoint.getData()) {
+			ranges.add(Range.create(value, value));
+		}
+		while (pointIterator.hasNext()) {
+			Iterator<Range<V>> rangeIterator = ranges.iterator();
+			for (V value : pointIterator.next().getData()) {
+				rangeIterator.next().extendThrough(value, true);
+			}
 		}
 	}
 
@@ -77,14 +108,6 @@ public abstract class Bounds<S extends Bounds<S, V>, V extends Value<V>>
 		}
 	}
 
-	public ArrayList<Range<V>> createDataList(int size, Factory<V> valueFactory) {
-		ArrayList<Range<V>> ranges = new ArrayList<Range<V>>();
-		for (int i = 0; i < size; i++) {
-			ranges.add(Range.create(valueFactory.create(), valueFactory.create()));
-		}
-		return ranges;
-	}
-
 	public final List<Range<V>> getData() {
 		return Collections.unmodifiableList(ranges);
 	}
@@ -95,6 +118,20 @@ public abstract class Bounds<S extends Bounds<S, V>, V extends Value<V>>
 
 	public int getDimension() {
 		return ranges.size();
+	}
+
+	public void expandThrough(
+			@SuppressWarnings("unchecked") Vector<?, V>... points) {
+		expandThrough(Arrays.asList(points));
+	}
+
+	public void expandThrough(Collection<? extends Vector<?, V>> points) {
+		for (Vector<?, V> point : points) {
+			Iterator<Range<V>> rangeIterator = ranges.iterator();
+			for (V value : point.getData()) {
+				rangeIterator.next().extendThrough(value, true);
+			}
+		}
 	}
 
 	public <M extends Vector<M, X>, X extends Value<X>> M getConfined(M value) {

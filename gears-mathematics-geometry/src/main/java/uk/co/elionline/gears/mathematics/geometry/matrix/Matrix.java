@@ -12,6 +12,9 @@ import uk.co.elionline.gears.mathematics.expressions.Variable;
 import uk.co.elionline.gears.mathematics.functions.AssignmentOperation;
 import uk.co.elionline.gears.mathematics.functions.BinaryOperation;
 import uk.co.elionline.gears.mathematics.functions.UnaryOperation;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
 import uk.co.elionline.gears.mathematics.values.IntValue;
 import uk.co.elionline.gears.mathematics.values.Value;
 import uk.co.elionline.gears.utilities.Copyable;
@@ -24,7 +27,20 @@ public interface Matrix<S extends Matrix<S, V>, V extends Value<V>> extends
 		Negatable<S, S>, NonCommutativelyMultipliable<S, Matrix<?, ?>>,
 		Property<S, Matrix<?, ?>> {
 	public enum Order {
-		RowMajor, ColumnMajor;
+		RowMajor {
+			@Override
+			public Orientation getAssociatedOrientation() {
+				return Orientation.Row;
+			}
+		},
+		ColumnMajor {
+			@Override
+			public Orientation getAssociatedOrientation() {
+				return Orientation.Column;
+			}
+		};
+
+		public abstract Orientation getAssociatedOrientation();
 	}
 
 	public Order getOrder();
@@ -75,7 +91,7 @@ public interface Matrix<S extends Matrix<S, V>, V extends Value<V>> extends
 
 	public boolean isResizable();
 
-	public Value<V> getElement(int major, int minor);
+	public V getElement(int major, int minor);
 
 	public int[] getData(int[] dataArray, Order order);
 
@@ -200,14 +216,6 @@ public interface Matrix<S extends Matrix<S, V>, V extends Value<V>> extends
 	public S setData(boolean setByReference, Order order, List<? extends V> to);
 
 	public S setData(boolean setByReference, List<? extends V> to);
-
-	public S setData(boolean setByReference, Order order, Vector<?, V> to);
-
-	public S setData(boolean setByReference, Vector<?, V> to);
-
-	public S setData(Order order, Vector<?, ?> to);
-
-	public S setData(Vector<?, ?> to);
 
 	public S setData(Order order, int[] to);
 

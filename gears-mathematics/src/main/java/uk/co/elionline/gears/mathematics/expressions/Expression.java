@@ -18,7 +18,7 @@ import uk.co.elionline.gears.utilities.Observer;
  * @param <T>
  *          The type of the result value of this expression.
  */
-public interface Expression<T> extends Observable<Void> {
+public interface Expression<T> extends Observable<Expression<T>> {
 	/**
 	 * This should always return the correct value for this Expression. Be careful
 	 * to remember that the object returned from getValue() should not be an

@@ -1,8 +1,8 @@
 package uk.co.elionline.gears.rendering.rendering3d.impl;
 
 import uk.co.elionline.gears.mathematics.expressions.Expression;
-import uk.co.elionline.gears.mathematics.geometry.matrix.Matrix4;
-import uk.co.elionline.gears.mathematics.geometry.matrix.MatrixH3;
+import uk.co.elionline.gears.mathematics.geometry.matrix.impl.Matrix4Impl;
+import uk.co.elionline.gears.mathematics.geometry.matrix.impl.MatrixH3Impl;
 import uk.co.elionline.gears.rendering.Scene;
 import uk.co.elionline.gears.rendering.rendering3d.Camera3D;
 import uk.co.elionline.gears.rendering.rendering3d.Data3D;
@@ -10,8 +10,8 @@ import uk.co.elionline.gears.rendering.rendering3d.Data3D;
 public class Camera3DImpl implements Camera3D {
 	private Scene<Data3D> scene;
 
-	private Expression<? extends MatrixH3<?>> transformation;
-	private Expression<? extends Matrix4<?>> projection;
+	private Expression<? extends MatrixH3Impl<?>> transformation;
+	private Expression<? extends Matrix4Impl<?>> projection;
 
 	@Override
 	public Scene<Data3D> getScene() {
@@ -24,22 +24,22 @@ public class Camera3DImpl implements Camera3D {
 	}
 
 	@Override
-	public Expression<? extends MatrixH3<?>> getTransformation() {
+	public Expression<? extends MatrixH3Impl<?>> getTransformation() {
 		return transformation;
 	}
 
 	@Override
-	public void setTransformation(Expression<? extends MatrixH3<?>> transformation) {
+	public void setTransformation(Expression<? extends MatrixH3Impl<?>> transformation) {
 		this.transformation = transformation;
 	}
 
 	@Override
-	public Expression<? extends Matrix4<?>> getProjection() {
+	public Expression<? extends Matrix4Impl<?>> getProjection() {
 		return projection;
 	}
 
 	@Override
-	public void setProjection(Expression<? extends Matrix4<?>> projection) {
+	public void setProjection(Expression<? extends Matrix4Impl<?>> projection) {
 		this.projection = projection;
 	}
 }

@@ -1,6 +1,6 @@
 package uk.co.elionline.gears.mathematics.geometry;
 
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector;
 
 public interface NonCommutativelyTranslatable<S extends NonCommutativelyTranslatable<S>>
 		extends Translatable<S> {

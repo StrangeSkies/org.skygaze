@@ -1,14 +1,15 @@
 package uk.co.elionline.gears.mathematics.expressions;
 
-
+import java.util.Arrays;
 import java.util.Collection;
 
+import uk.co.elionline.gears.mathematics.expressions.collections.ExpressionTreeSet;
 import uk.co.elionline.gears.mathematics.expressions.collections.SortedExpressionSet;
 import uk.co.elionline.gears.utilities.IdentityComparator;
 import uk.co.elionline.gears.utilities.Observer;
 
 public abstract class CompoundExpression<T> extends ExpressionImplementation<T> {
-	private final SortedExpressionSet<Object> dependencies;
+	private final SortedExpressionSet<?, Expression<? extends Object>> dependencies;
 
 	private T value;
 
@@ -23,21 +24,21 @@ public abstract class CompoundExpression<T> extends ExpressionImplementation<T> 
 	public CompoundExpression(Expression<?>... dependencies) {
 		this();
 
-		this.dependencies.addAll(dependencies);
+		this.dependencies.addAll(Arrays.asList(dependencies));
 	}
 
 	public CompoundExpression() {
-		dependencies = new SortedExpressionSet<>(new IdentityComparator<>());
+		dependencies = new ExpressionTreeSet<>(new IdentityComparator<>());
 
-		dependencies.addObserver(new Observer<Void>() {
+		dependencies.addObserver(new Observer<Expression<? extends Object>>() {
 			@Override
-			public void notify(Void message) {
+			public void notify(Expression<? extends Object> message) {
 				update();
 			}
 		});
 	}
 
-	protected void update() {
+	protected final void update() {
 		if (evaluated) {
 			evaluated = false;
 			postUpdate();
@@ -45,7 +46,7 @@ public abstract class CompoundExpression<T> extends ExpressionImplementation<T> 
 	}
 
 	@Override
-	public T getValue() {
+	public final T getValue() {
 		if (!evaluated) {
 			value = evaluate();
 			evaluated = true;
@@ -53,17 +54,17 @@ public abstract class CompoundExpression<T> extends ExpressionImplementation<T> 
 		return value;
 	}
 
-	public boolean isEvaluated() {
+	public final boolean isEvaluated() {
 		return evaluated;
 	}
 
-	protected T getCurrentValue() {
+	protected final T getCurrentValue() {
 		return value;
 	}
 
 	protected abstract T evaluate();
 
-	protected SortedExpressionSet<Object> getDependencies() {
+	protected SortedExpressionSet<?, Expression<?>> getDependencies() {
 		return dependencies;
 	}
 }

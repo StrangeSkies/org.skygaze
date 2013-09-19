@@ -24,9 +24,9 @@ import uk.co.elionline.gears.input.MouseInputController;
 import uk.co.elionline.gears.input.WindowManagerInputController;
 import uk.co.elionline.gears.mathematics.expressions.collections.AssignmentBuffer;
 import uk.co.elionline.gears.mathematics.expressions.collections.CloneBuffer;
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.builder.MatrixBuilder;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.elionline.gears.mathematics.values.IntValue;
-import uk.co.elionline.gears.mathematics.values.IntValueFactory;
 
 @Component(service = { MouseInputController.class,
 		KeyboardInputController.class, WindowManagerInputController.class })
@@ -38,7 +38,7 @@ public class SwingInputController implements BasicInputController,
 	private final CloneBuffer<HashSet<Integer>> buttonsDown;
 	private final CloneBuffer<ArrayList<Integer>> buttonsPressed;
 
-	private final JFrame frame;
+	private JFrame frame;
 
 	private final AssignmentBuffer<Boolean> windowClosing;
 	private final AssignmentBuffer<Boolean> windowMinimising;
@@ -54,13 +54,9 @@ public class SwingInputController implements BasicInputController,
 
 	private final Robot robot;
 
+	private MatrixBuilder matrices;
+
 	public SwingInputController() {
-		this(null);
-	}
-
-	public SwingInputController(JFrame frame) {
-		this.frame = frame;
-
 		keysDown = new CloneBuffer<>(new HashSet<Integer>());
 		keysPressed = new CloneBuffer<>(new ArrayList<Integer>());
 
@@ -85,11 +81,27 @@ public class SwingInputController implements BasicInputController,
 			throw new IllegalStateException(e);
 		}
 
-		frame.requestFocusInWindow();
-		frame.addMouseListener(this);
-		keyRepeatSuppressor.installTo(frame);
 		keyRepeatSuppressor.addKeyListener(this);
+	}
+
+	public void setFrame(JFrame frame) {
+		if (this.frame != null) {
+			keyRepeatSuppressor.removeFrom(this.frame);
+			this.frame.removeMouseListener(this);
+			this.frame.removeWindowListener(this);
+		}
+
+		frame.requestFocusInWindow();
+
+		frame.addMouseListener(this);
 		frame.addWindowListener(this);
+		keyRepeatSuppressor.installTo(frame);
+
+		this.frame = frame;
+	}
+
+	public void setMatrixBuilder(MatrixBuilder matrices) {
+		this.matrices = matrices;
 	}
 
 	@Override
@@ -187,9 +199,9 @@ public class SwingInputController implements BasicInputController,
 	}
 
 	private Vector2<IntValue> getActualMousePosition() {
-		Vector2<IntValue> actualMousePosition = new Vector2<IntValue>(
-				IntValueFactory.instance(), MouseInfo.getPointerInfo().getLocation());
-		actualMousePosition.add(getWindowPosition().getNegated());
+		Vector2<IntValue> actualMousePosition = matrices.ints().vector2()
+				.setData(MouseInfo.getPointerInfo().getLocation());
+		actualMousePosition.subtract(getWindowPosition());
 
 		return actualMousePosition;
 	}
@@ -223,7 +235,7 @@ public class SwingInputController implements BasicInputController,
 		if (mousePosition == null) {
 			return null;
 		}
-		return new Vector2<IntValue>(mousePosition);
+		return mousePosition.copy();
 	}
 
 	@Override
@@ -314,13 +326,16 @@ public class SwingInputController implements BasicInputController,
 
 	@Override
 	public Vector2<IntValue> getWindowSize() {
-		return new Vector2<IntValue>(IntValueFactory.instance(), frame
-				.getContentPane().getWidth(), frame.getContentPane().getHeight());
+		return matrices
+				.ints()
+				.vector2()
+				.setData(frame.getContentPane().getWidth(),
+						frame.getContentPane().getHeight());
 	}
 
 	@Override
 	public Vector2<IntValue> getWindowPosition() {
-		return new Vector2<IntValue>(IntValueFactory.instance(), frame
-				.getContentPane().getLocationOnScreen());
+		return matrices.ints().vector2()
+				.setData(frame.getContentPane().getLocationOnScreen());
 	}
 }

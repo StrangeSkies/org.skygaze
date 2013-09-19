@@ -26,84 +26,84 @@ public final class FloatValue extends ContinuousValue<FloatValue> {
 	@Override
 	public final FloatValue add(Value<?> value) {
 		this.value += value.doubleValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue subtract(Value<?> value) {
 		this.value -= value.doubleValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue negate() {
 		value = -value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue multiply(int value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue multiply(long value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue multiply(float value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue multiply(double scalar) {
 		this.value *= scalar;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue divide(int value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue divide(long value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue divide(float value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue divide(double value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue divide(Value<?> value) {
 		this.value = value.getDividedPrimitive(this.value);
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -135,21 +135,21 @@ public final class FloatValue extends ContinuousValue<FloatValue> {
 	@Override
 	public final FloatValue set(Value<?> value) {
 		this.value = value.floatValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue setValue(Number value) {
 		this.value = value.floatValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue multiply(Value<?> value) {
 		this.value = value.getMultipliedPrimitive(this.value);
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -205,14 +205,14 @@ public final class FloatValue extends ContinuousValue<FloatValue> {
 	@Override
 	public final FloatValue increment() {
 		value++;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final FloatValue decrement() {
 		value--;
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -308,28 +308,34 @@ public final class FloatValue extends ContinuousValue<FloatValue> {
 	@Override
 	public FloatValue square() {
 		value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public FloatValue squareRoot() {
 		value = (int) Math.sqrt(value);
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public FloatValue exponentiate(Value<?> exponential) {
 		value = (int) Math.pow(value, exponential.doubleValue());
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public FloatValue root(Value<?> root) {
 		value = (int) Math.pow(value, root.reciprocate().doubleValue());
-		postUpdate();
+		update();
+		return this;
+	}
+
+	@Override
+	public FloatValue modulus() {
+		value = Math.abs(value);
 		return this;
 	}
 }

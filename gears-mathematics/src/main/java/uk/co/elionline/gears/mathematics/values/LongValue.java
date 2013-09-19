@@ -26,91 +26,91 @@ public class LongValue extends IntegralValue<LongValue> {
 	@Override
 	public final LongValue add(Value<?> value) {
 		this.value += value.longValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue negate() {
 		value = -value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue multiply(int value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue multiply(long value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue multiply(float value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue multiply(double value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue multiply(Value<?> value) {
 		this.value = value.getMultipliedPrimitive(this.value);
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue divide(int value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue divide(long value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue divide(float value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue divide(double value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue divide(Value<?> value) {
 		this.value = value.getDividedPrimitive(this.value);
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue subtract(Value<?> value) {
 		this.value -= value.longValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -142,14 +142,14 @@ public class LongValue extends IntegralValue<LongValue> {
 	@Override
 	public final LongValue set(Value<?> value) {
 		this.value = value.longValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue setValue(Number value) {
 		this.value = value.longValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -205,14 +205,14 @@ public class LongValue extends IntegralValue<LongValue> {
 	@Override
 	public final LongValue increment() {
 		value++;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final LongValue decrement() {
 		value--;
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -278,28 +278,34 @@ public class LongValue extends IntegralValue<LongValue> {
 	@Override
 	public LongValue square() {
 		value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public LongValue squareRoot() {
 		value = (int) Math.sqrt(value);
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public LongValue exponentiate(Value<?> exponential) {
 		value = (int) Math.pow(value, exponential.doubleValue());
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public LongValue root(Value<?> root) {
 		value = (int) Math.pow(value, root.reciprocate().doubleValue());
-		postUpdate();
+		update();
+		return this;
+	}
+
+	@Override
+	public LongValue modulus() {
+		value = Math.abs(value);
 		return this;
 	}
 }

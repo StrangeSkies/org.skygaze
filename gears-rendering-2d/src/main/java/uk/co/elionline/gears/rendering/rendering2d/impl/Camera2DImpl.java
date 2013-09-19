@@ -1,7 +1,7 @@
 package uk.co.elionline.gears.rendering.rendering2d.impl;
 
 import uk.co.elionline.gears.mathematics.expressions.Expression;
-import uk.co.elionline.gears.mathematics.geometry.matrix.MatrixH2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.impl.MatrixH2Impl;
 import uk.co.elionline.gears.rendering.Scene;
 import uk.co.elionline.gears.rendering.rendering2d.Camera2D;
 import uk.co.elionline.gears.rendering.rendering2d.Data2D;
@@ -9,7 +9,7 @@ import uk.co.elionline.gears.rendering.rendering2d.Data2D;
 public class Camera2DImpl implements Camera2D {
 	private Scene<Data2D> scene;
 
-	private Expression<? extends MatrixH2<?>> transformation;
+	private Expression<? extends MatrixH2Impl<?>> transformation;
 
 	@Override
 	public Scene<Data2D> getScene() {
@@ -22,12 +22,12 @@ public class Camera2DImpl implements Camera2D {
 	}
 
 	@Override
-	public Expression<? extends MatrixH2<?>> getTransformation() {
+	public Expression<? extends MatrixH2Impl<?>> getTransformation() {
 		return transformation;
 	}
 
 	@Override
-	public void setTransformation(Expression<? extends MatrixH2<?>> transformation) {
+	public void setTransformation(Expression<? extends MatrixH2Impl<?>> transformation) {
 		this.transformation = transformation;
 	}
 }

@@ -2,7 +2,7 @@ package uk.co.elionline.gears.mathematics.geometry;
 
 import uk.co.elionline.gears.mathematics.expressions.BinaryOperationExpression;
 import uk.co.elionline.gears.mathematics.expressions.Expression;
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector;
 
 public class Translate<O> extends
 		BinaryOperationExpression<O, Translatable<? extends O>, Vector<?, ?>> {

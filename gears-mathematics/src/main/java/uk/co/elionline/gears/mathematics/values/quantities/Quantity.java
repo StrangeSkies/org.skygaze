@@ -299,4 +299,10 @@ public final class Quantity<V extends Value<V>> extends Value<Quantity<V>> {
 		return this;
 	}
 
+	@Override
+	public Quantity<V> modulus() {
+		value.modulus();
+
+		return this;
+	}
 }

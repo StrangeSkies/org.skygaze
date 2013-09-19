@@ -147,7 +147,7 @@ public final class Fraction extends Value<Fraction> {
 			add((Fraction) value);
 		} else {
 			numerator += value.getMultipliedPrimitive(denominator);
-			postUpdate();
+			update();
 		}
 		return this;
 	}
@@ -156,7 +156,7 @@ public final class Fraction extends Value<Fraction> {
 		this.numerator = (this.numerator * that.getDenominator())
 				+ (that.getNumerator() * this.denominator);
 		this.denominator *= that.getDenominator();
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -166,7 +166,7 @@ public final class Fraction extends Value<Fraction> {
 			subtract((Fraction) value);
 		} else {
 			numerator -= value.getMultipliedPrimitive(denominator);
-			postUpdate();
+			update();
 		}
 		return this;
 	}
@@ -175,7 +175,7 @@ public final class Fraction extends Value<Fraction> {
 		this.numerator = (this.numerator * that.getDenominator())
 				- (that.getNumerator() * this.denominator);
 		this.denominator *= that.getDenominator();
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -185,7 +185,7 @@ public final class Fraction extends Value<Fraction> {
 			multiply((Fraction) value);
 		} else {
 			numerator = value.getMultipliedPrimitive(numerator);
-			postUpdate();
+			update();
 		}
 		return this;
 	}
@@ -193,35 +193,35 @@ public final class Fraction extends Value<Fraction> {
 	public final Fraction multiply(Fraction that) {
 		this.numerator *= that.getNumerator();
 		this.denominator *= that.getDenominator();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction multiply(int value) {
 		numerator *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction multiply(long value) {
 		numerator *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction multiply(float value) {
 		numerator *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction multiply(double value) {
 		numerator *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -231,7 +231,7 @@ public final class Fraction extends Value<Fraction> {
 			divide((Fraction) value);
 		} else {
 			denominator = value.getMultipliedPrimitive(denominator);
-			postUpdate();
+			update();
 		}
 		return this;
 	}
@@ -239,56 +239,56 @@ public final class Fraction extends Value<Fraction> {
 	public final Fraction divide(Fraction that) {
 		this.numerator *= that.getDenominator();
 		this.denominator *= that.getNumerator();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction divide(int value) {
 		denominator *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction divide(long value) {
 		denominator *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction divide(float value) {
 		denominator *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction divide(double value) {
 		denominator *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction increment() {
 		numerator += denominator;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction decrement() {
 		numerator -= denominator;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final Fraction negate() {
 		numerator = -numerator;
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -296,7 +296,7 @@ public final class Fraction extends Value<Fraction> {
 	public final Fraction set(Value<?> value) {
 		numerator = value.intValue();
 		denominator = 1;
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -304,14 +304,14 @@ public final class Fraction extends Value<Fraction> {
 	public final Fraction setValue(Number value) {
 		numerator = value.intValue();
 		denominator = 1;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	public final Fraction setValue(Number numerator, Number denominator) {
 		this.numerator = numerator.intValue();
 		this.denominator = denominator.intValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -379,7 +379,7 @@ public final class Fraction extends Value<Fraction> {
 	public Fraction square() {
 		denominator *= denominator;
 		numerator *= numerator;
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -387,7 +387,7 @@ public final class Fraction extends Value<Fraction> {
 	public Fraction squareRoot() {
 		denominator = (int) Math.sqrt(denominator);
 		numerator = (int) Math.sqrt(numerator);
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -395,7 +395,7 @@ public final class Fraction extends Value<Fraction> {
 	public Fraction exponentiate(Value<?> exponential) {
 		denominator = (int) Math.pow(denominator, exponential.doubleValue());
 		numerator = (int) Math.pow(numerator, exponential.doubleValue());
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -403,7 +403,14 @@ public final class Fraction extends Value<Fraction> {
 	public Fraction root(Value<?> root) {
 		denominator = (int) Math.pow(denominator, root.reciprocate().doubleValue());
 		numerator = (int) Math.pow(numerator, root.reciprocate().doubleValue());
-		postUpdate();
+		update();
+		return this;
+	}
+
+	@Override
+	public Fraction modulus() {
+		denominator = Math.abs(denominator);
+		numerator = Math.abs(numerator);
 		return this;
 	}
 }

@@ -1,8 +1,10 @@
 package uk.co.elionline.gears.mathematics.geometry;
 
+import java.util.Collection;
+
 import uk.co.elionline.gears.mathematics.Range;
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector;
-import uk.co.elionline.gears.mathematics.geometry.matrix.Vector2;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.impl.Vector2Impl;
 import uk.co.elionline.gears.mathematics.values.Value;
 import uk.co.elionline.gears.utilities.Factory;
 
@@ -15,12 +17,24 @@ public class Bounds2<V extends Value<V>> extends Bounds<Bounds2<V>, V> {
 		super(other);
 	}
 
-	public Bounds2(Vector2<V> from, Vector2<V> to) {
+	public Bounds2(Vector2Impl<V> from, Vector2Impl<V> to) {
 		super(from, to);
 	}
 
 	public Bounds2(Vector<?, V> from, Vector<?, V> to) {
 		super(from, to, 2);
+	}
+
+	public Bounds2(@SuppressWarnings("unchecked") Vector2Impl<V>... points) {
+		super(points);
+	}
+
+	public Bounds2(@SuppressWarnings("unchecked") Vector<?, V>... points) {
+		super(2, points);
+	}
+
+	public Bounds2(Collection<? extends Vector<?, V>> points) {
+		super(2, points);
 	}
 
 	public Bounds2(Factory<V> valueFactory) {

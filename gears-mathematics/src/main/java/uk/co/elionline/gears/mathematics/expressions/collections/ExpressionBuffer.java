@@ -7,7 +7,7 @@ import uk.co.elionline.gears.utilities.Observer;
 
 public class ExpressionBuffer<T, F extends Expression<?>> extends
 		OperationApplicationBuffer<T, F> {
-	private Observer<Void> backObserver;
+	private Observer<Expression<?>> backObserver;
 
 	public ExpressionBuffer(T front, F back,
 			BinaryOperation<? extends T, ? super T, ? super F> operation) {
@@ -50,16 +50,16 @@ public class ExpressionBuffer<T, F extends Expression<?>> extends
 		return super.setBack(next);
 	}
 
-	public Observer<Void> nextBackObserver() {
-		return backObserver = new Observer<Void>() {
+	public Observer<Expression<?>> nextBackObserver() {
+		return backObserver = new Observer<Expression<?>>() {
 			@Override
-			public void notify(Void message) {
+			public void notify(Expression<?> message) {
 				invalidateBack();
 			}
 		};
 	}
 
-	public Observer<Void> getBackObserver() {
+	public Observer<Expression<?>> getBackObserver() {
 		return backObserver;
 	}
 }

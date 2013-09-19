@@ -9,6 +9,7 @@ import uk.co.elionline.gears.mathematics.Multipliable;
 import uk.co.elionline.gears.mathematics.Negatable;
 import uk.co.elionline.gears.mathematics.Scalable;
 import uk.co.elionline.gears.mathematics.Subtractable;
+import uk.co.elionline.gears.mathematics.expressions.Expression;
 import uk.co.elionline.gears.mathematics.expressions.Variable;
 import uk.co.elionline.gears.utilities.Copyable;
 import uk.co.elionline.gears.utilities.IdentityComparator;
@@ -22,20 +23,24 @@ public abstract class Value<S extends Value<S>> extends Number implements
 		Incrementable<S>, Self<S>, Variable<S>, Copyable<S>, Comparable<Value<?>> {
 	private static final long serialVersionUID = -979949605176385397L;
 
-	private final Set<Observer<? super Void>> observers;
+	private final Set<Observer<? super Expression<S>>> observers;
+	private boolean evaluated = true;
 
 	public Value() {
-		observers = new TreeSet<Observer<? super Void>>(new IdentityComparator<>());
+		observers = new TreeSet<Observer<? super Expression<S>>>(
+				new IdentityComparator<>());
 		setValue(0);
 	}
 
 	public Value(Number value) {
-		observers = new TreeSet<Observer<? super Void>>(new IdentityComparator<>());
+		observers = new TreeSet<Observer<? super Expression<S>>>(
+				new IdentityComparator<>());
 		setValue(value);
 	}
 
 	public Value(Value<?> value) {
-		observers = new TreeSet<Observer<? super Void>>(new IdentityComparator<>());
+		observers = new TreeSet<Observer<? super Expression<S>>>(
+				new IdentityComparator<>());
 		set(value);
 	}
 
@@ -188,6 +193,7 @@ public abstract class Value<S extends Value<S>> extends Number implements
 
 	@Override
 	public final S getValue() {
+		evaluated = true;
 		return getThis();
 	}
 
@@ -196,19 +202,26 @@ public abstract class Value<S extends Value<S>> extends Number implements
 		return copy();
 	}
 
+	protected final void update() {
+		if (evaluated) {
+			evaluated = false;
+			postUpdate();
+		}
+	}
+
 	protected final void postUpdate() {
-		for (Observer<? super Void> observer : observers) {
+		for (Observer<? super Expression<S>> observer : observers) {
 			observer.notify(null);
 		}
 	}
 
 	@Override
-	public final boolean addObserver(Observer<? super Void> observer) {
+	public final boolean addObserver(Observer<? super Expression<S>> observer) {
 		return observers.add(observer);
 	}
 
 	@Override
-	public final boolean removeObserver(Observer<? super Void> observer) {
+	public final boolean removeObserver(Observer<? super Expression<S>> observer) {
 		return observers.remove(observer);
 	}
 
@@ -283,5 +296,11 @@ public abstract class Value<S extends Value<S>> extends Number implements
 
 	public S getRoot(Value<?> root) {
 		return copy().root(root);
+	}
+
+	public abstract S modulus();
+
+	public S getModulus() {
+		return copy().modulus();
 	}
 }

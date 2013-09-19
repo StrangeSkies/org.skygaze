@@ -26,84 +26,84 @@ public final class DoubleValue extends ContinuousValue<DoubleValue> {
 	@Override
 	public final DoubleValue add(Value<?> value) {
 		this.value += value.doubleValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue subtract(Value<?> value) {
 		this.value -= value.doubleValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue negate() {
 		value = -value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue multiply(int value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue multiply(long value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue multiply(float value) {
 		this.value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue multiply(double scalar) {
 		this.value *= scalar;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue divide(int value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue divide(long value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue divide(float value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue divide(double value) {
 		this.value /= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue divide(Value<?> value) {
 		this.value = value.getDividedPrimitive(this.value);
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -135,21 +135,21 @@ public final class DoubleValue extends ContinuousValue<DoubleValue> {
 	@Override
 	public final DoubleValue set(Value<?> value) {
 		this.value = value.doubleValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue setValue(Number value) {
 		this.value = value.doubleValue();
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue multiply(Value<?> value) {
 		this.value = value.getMultipliedPrimitive(this.value);
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -205,14 +205,14 @@ public final class DoubleValue extends ContinuousValue<DoubleValue> {
 	@Override
 	public final DoubleValue increment() {
 		value++;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public final DoubleValue decrement() {
 		value--;
-		postUpdate();
+		update();
 		return this;
 	}
 
@@ -308,28 +308,34 @@ public final class DoubleValue extends ContinuousValue<DoubleValue> {
 	@Override
 	public DoubleValue square() {
 		value *= value;
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public DoubleValue squareRoot() {
 		value = (int) Math.sqrt(value);
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public DoubleValue exponentiate(Value<?> exponential) {
 		value = (int) Math.pow(value, exponential.doubleValue());
-		postUpdate();
+		update();
 		return this;
 	}
 
 	@Override
 	public DoubleValue root(Value<?> root) {
 		value = (int) Math.pow(value, root.reciprocate().doubleValue());
-		postUpdate();
+		update();
+		return this;
+	}
+
+	@Override
+	public DoubleValue modulus() {
+		value = Math.abs(value);
 		return this;
 	}
 }

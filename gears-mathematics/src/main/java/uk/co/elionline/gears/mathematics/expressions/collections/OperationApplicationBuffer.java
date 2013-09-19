@@ -14,9 +14,8 @@ public class OperationApplicationBuffer<R, T> extends CompoundExpression<R>
 			return back;
 		}
 
-		@Override
-		protected final void update() {
-			super.update();
+		public void forwardUpdate() {
+			update();
 		}
 	}
 
@@ -99,7 +98,7 @@ public class OperationApplicationBuffer<R, T> extends CompoundExpression<R>
 	 * has been modified externally.
 	 */
 	public void invalidateBack() {
-		getBackExpression().update();
+		getBackExpression().forwardUpdate();
 		isFlat = false;
 	}
 
