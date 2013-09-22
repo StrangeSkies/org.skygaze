@@ -8,9 +8,7 @@ import java.util.Set;
 
 import uk.co.elionline.gears.mathematics.expressions.collections.ExpressionSet;
 import uk.co.elionline.gears.mathematics.expressions.collections.ExpressionTreeSet;
-import uk.co.elionline.gears.mathematics.geometry.matrix.impl.Matrix2Impl;
 import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.elionline.gears.mathematics.geometry.matrix.vector.impl.Vector2Impl;
 import uk.co.elionline.gears.mathematics.geometry.shape.ConvexPolygon;
 import uk.co.elionline.gears.mathematics.values.Value;
 import uk.co.elionline.gears.utilities.Observable;
@@ -36,12 +34,12 @@ public class ConvexPolygonImpl<V extends Value<V>> extends
 
 		}
 
-		private boolean tryAdd(Vector2Impl<V> point) {
+		private boolean tryAdd(Vector2<V> point) {
 			if (backingList.contains(point)) {
 				return false;
 			}
 
-			List<Vector2Impl<V>> vertices = getVertices();
+			List<Vector2<V>> vertices = getVertices();
 
 			// fail if point is already part of shape
 			if (touches(point))
@@ -65,45 +63,45 @@ public class ConvexPolygonImpl<V extends Value<V>> extends
 			// was the point on the right of the last edge
 			boolean right = false;
 
-			for (int i = begin; i < end; i++) {
-				// is the point on the right of the edge from this vertex to the next
-				if (new Matrix2Impl<V>(i - (i + 1), i - point).Det() > 0.01) {
-					// was it on the other side last time
-					if (right == false) {
-						right = true;
-						first = i;
-						if (last >= begin)
-							i = end;
-					}
-				} else {
-					// was it on the other side last time
-					if (right == true) {
-						right = false;
-						last = i;
-						if (first > begin)
-							i = end;
-					}
-				}
-			}
-			if (last == begin - 1)
-				last = begin;
-
-			// construct new convex polygon
-			List<Vector2Impl<V>> newVertices;
-
-			if (first < last) {
-				for (i = first; i <= last; i++)
-					newVertices.push_back(i);
-				newVertices.push_back(point);
-			} else {
-				for (i = first; i < end; i++)
-					newVertices.push_back(i);
-				for (i = begin; i <= last; i++)
-					newVertices.push_back(i);
-				newVertices.push_back(point);
-			}
-
-			vertices = newVertices;
+			// for (int i = begin; i < end; i++) {
+			// // is the point on the right of the edge from this vertex to the next
+			// if (new Matrix2Impl<V>(i - (i + 1), i - point).Det() > 0.01) {
+			// // was it on the other side last time
+			// if (right == false) {
+			// right = true;
+			// first = i;
+			// if (last >= begin)
+			// i = end;
+			// }
+			// } else {
+			// // was it on the other side last time
+			// if (right == true) {
+			// right = false;
+			// last = i;
+			// if (first > begin)
+			// i = end;
+			// }
+			// }
+			// }
+			// if (last == begin - 1)
+			// last = begin;
+			//
+			// // construct new convex polygon
+			// List<Vector2Impl<V>> newVertices;
+			//
+			// if (first < last) {
+			// for (i = first; i <= last; i++)
+			// newVertices.push_back(i);
+			// newVertices.push_back(point);
+			// } else {
+			// for (i = first; i < end; i++)
+			// newVertices.push_back(i);
+			// for (i = begin; i <= last; i++)
+			// newVertices.push_back(i);
+			// newVertices.push_back(point);
+			// }
+			//
+			// vertices = newVertices;
 
 			return true;
 		}

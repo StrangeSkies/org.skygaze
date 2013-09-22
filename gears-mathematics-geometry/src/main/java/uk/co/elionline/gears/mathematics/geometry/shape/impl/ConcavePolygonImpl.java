@@ -2,7 +2,7 @@ package uk.co.elionline.gears.mathematics.geometry.shape.impl;
 
 import java.util.List;
 
-import uk.co.elionline.gears.mathematics.geometry.matrix.vector.impl.Vector2Impl;
+import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.elionline.gears.mathematics.geometry.shape.ConcavePolygon;
 import uk.co.elionline.gears.mathematics.values.Value;
 
@@ -109,7 +109,7 @@ public class ConcavePolygonImpl<V extends Value<V>> extends
 	}
 
 	@Override
-	public List<Vector2Impl<V>> getVertices() {
+	public List<Vector2<V>> getVertices() {
 		// TODO Auto-generated method stub
 		return null;
 	}

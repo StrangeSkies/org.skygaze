@@ -13,15 +13,15 @@ import uk.co.elionline.gears.utilities.Factory;
 
 public class Line2Impl<V extends Value<V>> extends CompoundExpression<Line2<V>>
 		implements Line2<V> {
-	private final Vector2Impl<V> a;
-	private final Vector2Impl<V> b;
+	private final Vector2<V> a;
+	private final Vector2<V> b;
 
 	public Line2Impl(Factory<V> valueFactory) {
 		a = new Vector2Impl<>(valueFactory);
 		b = new Vector2Impl<>(valueFactory);
 	}
 
-	public Line2Impl(Vector2Impl<V> a, Vector2Impl<V> b) {
+	public Line2Impl(Vector2<V> a, Vector2<V> b) {
 		this.a = a;
 		this.b = b;
 	}

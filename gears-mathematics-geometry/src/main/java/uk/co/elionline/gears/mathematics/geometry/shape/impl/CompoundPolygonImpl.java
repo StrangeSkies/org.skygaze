@@ -3,13 +3,9 @@ package uk.co.elionline.gears.mathematics.geometry.shape.impl;
 import java.util.List;
 import java.util.Set;
 
-import uk.co.elionline.gears.mathematics.geometry.matrix.builder.MatrixBuilder;
-import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
 import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.elionline.gears.mathematics.geometry.matrix.vector.impl.Vector2Impl;
 import uk.co.elionline.gears.mathematics.geometry.shape.CompoundPolygon;
 import uk.co.elionline.gears.mathematics.geometry.shape.Polygon;
-import uk.co.elionline.gears.mathematics.values.IntValue;
 import uk.co.elionline.gears.mathematics.values.Value;
 import uk.co.elionline.gears.mathematics.values.ValueFactory;
 
@@ -50,19 +46,6 @@ public class CompoundPolygonImpl<V extends Value<V>> extends
 
 	@Override
 	public CompoundPolygon<V> copy() {
-		Vector2<IntValue> v = null;
-		IntValue a = new IntValue(1);
-		IntValue b = new IntValue(2);
-
-		MatrixBuilder matrices = null;
-		v = new Vector2Impl<>(IntValue.factory(), 0, 1);
-
-		v = matrices.ints().vector2().create().setData(0, 1)
-
-		.setOrientation(Orientation.Column);
-		v = matrices.ints().vector2().create(a, b);
-		v = matrices.values(IntValue.factory()).vector2().create(0, 1);
-
 		// TODO Auto-generated method stub
 		return null;
 	}
