@@ -21,30 +21,27 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 import uk.co.elionline.gears.utilities.collections.TreeSetMultiHashMap;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
+import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
 
+/**
+ * 
+ * @author Elias N Vasylenko
+ * 
+ */
 @Component(service = { EventListenerHook.class, FindHook.class })
-public class ServiceWrapperManager implements EventListenerHook, FindHook {
+public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	private final Map<ServiceReference<?>, ServiceRegistration<?>> wrappedServiceRegistrations;
-	private final SetMultiMap<Class<?>, ServiceWrapper<?, ?>> wrappedServices;
+	private final SetMultiMap<Class<?>, ServiceWrapper<?>> wrappedServices;
 
-	public ServiceWrapperManager() {
+	public ServiceWrapperManagerImpl() {
 		wrappedServiceRegistrations = new HashMap<>();
 		wrappedServices = new TreeSetMultiHashMap<>();
 	}
 
+	@Override
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	public <T> void addServiceWrapper(ServiceWrapper<T, ?> serviceWrapper,
+	public void addServiceWrapper(ServiceWrapper<?> serviceWrapper,
 			Map<String, Object> serviceProperties) {
-		@SuppressWarnings("unchecked")
-		CompoundServiceWrapper<T> compoundWrappedServiceSet = (CompoundServiceWrapper<T>) wrappedServices
-				.get(serviceWrapper.getServiceClass());
-
-		if (compoundWrappedServiceSet == null) {
-			compoundWrappedServiceSet = new CompoundServiceWrapper<>();
-			wrappedServices.put(serviceWrapper.getServiceClass(),
-					compoundWrappedServiceSet);
-		}
-
 		int serviceRanking;
 		boolean hideWrappedServices;
 		try {
@@ -55,22 +52,40 @@ public class ServiceWrapperManager implements EventListenerHook, FindHook {
 		}
 		try {
 			hideWrappedServices = (Boolean) serviceProperties
-					.get(ServiceWrapper.HIDE_WRAPPED_SERVICES);
+					.get(ServiceWrapper.HIDE_WRAPPED_SERVICE_TYPES);
 		} catch (ClassCastException | NullPointerException e) {
 			hideWrappedServices = false;
 		}
+
+		addServiceWrapper(serviceWrapper, serviceRanking, hideWrappedServices);
+	}
+
+	public <T> void addServiceWrapper(ServiceWrapper<T> serviceWrapper,
+			int serviceRanking, boolean hideWrappedServices) {
+		@SuppressWarnings("unchecked")
+		CompoundServiceWrapper<T> compoundWrappedServiceSet = (CompoundServiceWrapper<T>) wrappedServices
+				.get(serviceWrapper.getServiceClass());
+
+		if (compoundWrappedServiceSet == null) {
+			compoundWrappedServiceSet = new CompoundServiceWrapper<>();
+			wrappedServices.put(serviceWrapper.getServiceClass(),
+					compoundWrappedServiceSet);
+		}
+
 		compoundWrappedServiceSet.add(serviceWrapper, serviceRanking,
 				hideWrappedServices);
 	}
 
-	public <T> void modifyServiceWrapper(ServiceWrapper<T, ?> serviceWrapper,
+	@Override
+	public void modifyServiceWrapper(ServiceWrapper<?> serviceWrapper,
 			Map<String, Object> serviceProperties) {
 		addServiceWrapper(serviceWrapper, serviceProperties);
 	}
 
-	public <T> void removeServiceWrapper(ServiceWrapper<T, ?> serviceWrapper) {
+	@Override
+	public void removeServiceWrapper(ServiceWrapper<?> serviceWrapper) {
 		@SuppressWarnings("unchecked")
-		CompoundServiceWrapper<T> compoundWrappedServiceSet = (CompoundServiceWrapper<T>) wrappedServices
+		CompoundServiceWrapper<?> compoundWrappedServiceSet = wrappedServices
 				.get(serviceWrapper.getServiceClass());
 
 		if (compoundWrappedServiceSet != null) {
@@ -83,9 +98,9 @@ public class ServiceWrapperManager implements EventListenerHook, FindHook {
 			Map<BundleContext, Collection<ListenerInfo>> listeners) {
 		ServiceReference<?> serviceReference = event.getServiceReference();
 
-		if (serviceReference.getProperty(ServiceWrapperManager.class.getName()) == null) {
+		if (serviceReference.getProperty(ServiceWrapperManagerImpl.class.getName()) == null) {
 			switch (event.getType()) {
-			case org.osgi.framework.ServiceEvent.REGISTERED:
+			case ServiceEvent.REGISTERED:
 				ServiceRegistration<?> serviceRegistration = registerWrappedServices(serviceReference);
 
 				try {
@@ -95,15 +110,15 @@ public class ServiceWrapperManager implements EventListenerHook, FindHook {
 				}
 
 				break;
-			case org.osgi.framework.ServiceEvent.UNREGISTERING:
+			case ServiceEvent.UNREGISTERING:
 				try {
 					wrappedServiceRegistrations.get(serviceReference).unregister();
 				} catch (IllegalStateException | NullPointerException e) {
 				}
 
 				break;
-			case org.osgi.framework.ServiceEvent.MODIFIED:
-			case org.osgi.framework.ServiceEvent.MODIFIED_ENDMATCH:
+			case ServiceEvent.MODIFIED:
+			case ServiceEvent.MODIFIED_ENDMATCH:
 				try {
 					wrappedServiceRegistrations.get(serviceReference).setProperties(
 							getWrappedServiceProperties(serviceReference));
@@ -112,7 +127,6 @@ public class ServiceWrapperManager implements EventListenerHook, FindHook {
 
 				break;
 			}
-
 			if (wrappedServiceRegistrations.containsKey(serviceReference)) {
 				listeners.clear();
 			}
@@ -162,10 +176,6 @@ public class ServiceWrapperManager implements EventListenerHook, FindHook {
 				.getBundleContext()
 				.registerService(serviceClass, wrappedService,
 						getWrappedServiceProperties(serviceReference));
-	}
-
-	public void proxyExistingServices() {
-
 	}
 
 	@Override
