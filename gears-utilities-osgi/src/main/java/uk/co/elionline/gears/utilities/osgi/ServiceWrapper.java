@@ -105,6 +105,14 @@ public interface ServiceWrapper<T> {
 	 */
 	public static String HIDE_WRAPPED_SERVICE_TYPES = "hide.wrapped.service.types";
 
+	/**
+	 * Enumeration of possible values for the
+	 * {@link ServiceWrapper#HIDE_WRAPPED_SERVICE_TYPES} property of any
+	 * {@link ServiceWrapper} services.
+	 * 
+	 * @author Elias N Vasylenko
+	 * 
+	 */
 	public enum HideWrappedServiceTypes {
 		Always, Never, WhenWrapped;
 	}
