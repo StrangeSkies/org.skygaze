@@ -28,44 +28,41 @@ import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
  * @author Elias N Vasylenko
  * 
  */
-@Component(service = { EventListenerHook.class, FindHook.class })
-public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
+@Component(service = { EventListenerHook.class, FindHook.class }, properties = null)
+public class ServiceWrapperManagerRetroactingImpl implements
+		ServiceWrapperManager {
 	private final Map<ServiceReference<?>, ServiceRegistration<?>> wrappedServiceRegistrations;
 	private final SetMultiMap<Class<?>, ServiceWrapper<?>> wrappedServices;
 
-	public ServiceWrapperManagerImpl() {
+	public ServiceWrapperManagerRetroactingImpl() {
 		wrappedServiceRegistrations = new HashMap<>();
 		wrappedServices = new TreeSetMultiHashMap<>();
 	}
 
 	@Override
-	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "("
-			+ ServiceWrapper.WRAP_EXISTING_SERVICES + "=false)")
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	public void addServiceWrapper(ServiceWrapper<?> serviceWrapper,
 			Map<String, Object> serviceProperties) {
-		try {
-			if ((Boolean) serviceProperties
-					.get(ServiceWrapper.WRAP_EXISTING_SERVICES) == true) {
-				throw new IllegalArgumentException(
-						ServiceWrapper.WRAP_EXISTING_SERVICES + " = true @ "
-								+ serviceWrapper);
-			}
-		} catch (ClassCastException e) {
-		}
-
 		int serviceRanking;
+		boolean hideWrappedServices;
 		try {
 			serviceRanking = (Integer) serviceProperties
 					.get(Constants.SERVICE_RANKING);
 		} catch (ClassCastException | NullPointerException e) {
 			serviceRanking = 0;
 		}
+		try {
+			hideWrappedServices = (Boolean) serviceProperties
+					.get(ServiceWrapper.HIDE_WRAPPED_SERVICE_TYPES);
+		} catch (ClassCastException | NullPointerException e) {
+			hideWrappedServices = false;
+		}
 
-		addServiceWrapper(serviceWrapper, serviceRanking);
+		addServiceWrapper(serviceWrapper, serviceRanking, hideWrappedServices);
 	}
 
-	private <T> void addServiceWrapper(ServiceWrapper<T> serviceWrapper,
-			int serviceRanking) {
+	public <T> void addServiceWrapper(ServiceWrapper<T> serviceWrapper,
+			int serviceRanking, boolean hideWrappedServices) {
 		@SuppressWarnings("unchecked")
 		CompoundServiceWrapper<T> compoundWrappedServiceSet = (CompoundServiceWrapper<T>) wrappedServices
 				.get(serviceWrapper.getServiceClass());
@@ -102,7 +99,8 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 			Map<BundleContext, Collection<ListenerInfo>> listeners) {
 		ServiceReference<?> serviceReference = event.getServiceReference();
 
-		if (serviceReference.getProperty(ServiceWrapperManagerImpl.class.getName()) == null) {
+		if (serviceReference.getProperty(ServiceWrapperManagerRetroactingImpl.class
+				.getName()) == null) {
 			switch (event.getType()) {
 			case ServiceEvent.REGISTERED:
 				ServiceRegistration<?> serviceRegistration = registerWrappedServices(serviceReference);

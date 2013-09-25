@@ -7,7 +7,7 @@ import uk.co.elionline.gears.mathematics.geometry.matrix.vector.Vector;
 
 public interface Mesh<T extends Vector<?, ?>> {
 	public enum MeshingScheme {
-		Triangle, TriangleList, Fan, Strip, AlternatingStrip;
+		TriangleList, Fan, Strip, AlternatingStrip;
 	}
 
 	public List<T> getVertices();
