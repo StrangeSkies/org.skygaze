@@ -18,6 +18,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import uk.co.elionline.gears.utilities.collections.ArrayListMultiHashMap;
+import uk.co.elionline.gears.utilities.collections.ListMultiMap;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 import uk.co.elionline.gears.utilities.collections.TreeSetMultiHashMap;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
@@ -31,14 +33,13 @@ import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
  */
 @Component(service = { EventListenerHook.class, FindHook.class })
 public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
-	private final Map<ServiceReference<?>, ServiceRegistration<?>> wrappedServiceRegistrations;
-	private final SetMultiMap<Class<?>, ServiceWrapper<?>> serviceWrappers;
-	private final Map<ServiceWrapper<?>, Integer> serviceWrapperRankings;
+	private final ListMultiMap<ServiceReference<?>, WrappingServiceRegistration> wrappingServiceRegistrations;
+
+	private final SetMultiMap<Class<?>, ManagedServiceWrapper> serviceWrappers;
 
 	public ServiceWrapperManagerImpl() {
-		wrappedServiceRegistrations = new HashMap<>();
+		wrappingServiceRegistrations = new ArrayListMultiHashMap<>();
 		serviceWrappers = new TreeSetMultiHashMap<>();
-		serviceWrapperRankings = new HashMap<>();
 	}
 
 	@Override
@@ -63,6 +64,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		} catch (ClassCastException | NullPointerException e) {
 			serviceRanking = 0;
 		}
+
 		HideServices hideServices;
 		try {
 			hideServices = HideServices.valueOf((String) serviceProperties
@@ -71,9 +73,9 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 			hideServices = HideServices.NEVER;
 		}
 
-		serviceWrapperRankings.put(serviceWrapper, serviceRanking);
-
-		serviceWrappers.add(serviceWrapper.getServiceClass(), serviceWrapper);
+		serviceWrappers
+				.add(serviceWrapper.getServiceClass(), new ManagedServiceWrapper(
+						serviceWrapper, serviceRanking, hideServices));
 	}
 
 	@Override
@@ -84,7 +86,8 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 
 	@Override
 	public void removeServiceWrapper(ServiceWrapper<?> serviceWrapper) {
-		serviceWrappers.remove(serviceWrapper.getServiceClass(), serviceWrapper);
+		serviceWrappers.remove(serviceWrapper.getServiceClass(),
+				new ManagedServiceWrapper(serviceWrapper, null, null));
 	}
 
 	@Override
@@ -95,40 +98,30 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		if (serviceReference.getProperty(ServiceWrapperManagerImpl.class.getName()) == null) {
 			switch (event.getType()) {
 			case ServiceEvent.REGISTERED:
-				ServiceRegistration<?> serviceRegistration = registerWrappedServices(serviceReference);
-
-				try {
-					wrappedServiceRegistrations
-							.put(serviceReference, serviceRegistration);
-				} catch (IllegalStateException | NullPointerException e) {
-				}
+				registerWrappingServices(serviceReference);
 
 				break;
 			case ServiceEvent.UNREGISTERING:
-				try {
-					wrappedServiceRegistrations.get(serviceReference).unregister();
-				} catch (IllegalStateException | NullPointerException e) {
-				}
+				unregisterWrappingServices(serviceReference);
 
 				break;
 			case ServiceEvent.MODIFIED:
 			case ServiceEvent.MODIFIED_ENDMATCH:
 				try {
-					wrappedServiceRegistrations.get(serviceReference).setProperties(
+					wrappingServiceRegistrations.get(serviceReference).setProperties(
 							getWrappedServiceProperties(serviceReference));
 				} catch (IllegalStateException | NullPointerException e) {
 				}
 
 				break;
 			}
-			if (wrappedServiceRegistrations.containsKey(serviceReference)) {
+			if (wrappingServiceRegistrations.containsKey(serviceReference)) {
 				listeners.clear();
 			}
 		}
 	}
 
-	private ServiceRegistration<?> registerWrappedServices(
-			ServiceReference<?> serviceReference) {
+	private void registerWrappingServices(ServiceReference<?> serviceReference) {
 		String[] classNames = (String[]) serviceReference
 				.getProperty("objectClass");
 
@@ -137,17 +130,22 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 				Class<?> serviceClass = serviceReference.getBundle().loadClass(
 						classNames[0]);
 
-				return registerWrappedService(serviceClass, serviceReference);
+				registerWrappedService(serviceClass, serviceReference);
+
+				wrappingServiceRegistrations.addAll(serviceReference, null);
 			} catch (ClassNotFoundException ex) {
 				ex.printStackTrace();
-
-				return null;
 			}
 		} else {
 
 			for (String className : classNames) {
 			}
 		}
+
+	}
+
+	private String[] getClassNames(ServiceReference<?> serviceReference) {
+		return (String[]) serviceReference.getProperty("objectClass");
 	}
 
 	private <T> ServiceRegistration<T> registerWrappedService(
@@ -172,6 +170,23 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 						getWrappedServiceProperties(serviceReference));
 	}
 
+	private <T> void unregisterWrappingServices(
+			ServiceReference<T> serviceReference) {
+		try {
+			for (WrappingServiceRegistration<T> wrappingServiceRegistration : wrappingServiceRegistrations
+					.get(serviceReference)) {
+				wrappingServiceRegistration
+						.getServiceWrapper()
+						.getServiceWrapper()
+						.unwrapService(
+								serviceReference.getBundle().getBundleContext()
+										.getService(serviceReference));
+				wrappingServiceRegistration.getServiceRegistration().unregister();
+			}
+		} catch (IllegalStateException | NullPointerException e) {
+		}
+	}
+
 	@Override
 	public void find(BundleContext context, String name, String filter,
 			boolean allServices, Collection<ServiceReference<?>> references) {
@@ -179,7 +194,9 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		while (iterator.hasNext()) {
 			ServiceReference<?> serviceReference = iterator.next();
 
-			if (wrappedServiceRegistrations.containsKey(serviceReference)) {
+			WrappedServiceRegistrationGroup wrappedServiceRegistrationGroup = wrappingServiceRegistrations
+					.get(serviceReference);
+			if (wrappedServiceRegistrationGroup != null) {
 				iterator.remove();
 			}
 		}

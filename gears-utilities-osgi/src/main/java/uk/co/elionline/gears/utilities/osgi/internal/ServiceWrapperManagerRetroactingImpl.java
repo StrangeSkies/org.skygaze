@@ -28,7 +28,7 @@ import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
  * @author Elias N Vasylenko
  * 
  */
-@Component(service = { EventListenerHook.class, FindHook.class }, properties = null)
+@Component(service = { EventListenerHook.class, FindHook.class })
 public class ServiceWrapperManagerRetroactingImpl implements
 		ServiceWrapperManager {
 	private final Map<ServiceReference<?>, ServiceRegistration<?>> wrappedServiceRegistrations;
