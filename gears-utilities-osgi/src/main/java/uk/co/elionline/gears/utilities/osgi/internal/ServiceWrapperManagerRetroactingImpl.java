@@ -53,7 +53,7 @@ public class ServiceWrapperManagerRetroactingImpl implements
 		}
 		try {
 			hideWrappedServices = (Boolean) serviceProperties
-					.get(ServiceWrapper.HIDE_WRAPPED_SERVICE_TYPES);
+					.get(ServiceWrapper.HIDE_SERVICES);
 		} catch (ClassCastException | NullPointerException e) {
 			hideWrappedServices = false;
 		}

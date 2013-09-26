@@ -30,8 +30,8 @@ public interface ServiceWrapper<T> {
 	 * creates. For a class which registers itself under multiple services, this
 	 * order will be maintained across each wrapping service. For ServiceWrapper
 	 * services with the same ranking, those with the
-	 * {@link ServiceWrapper#HIDE_WRAPPED_SERVICE_TYPES} property set to true will
-	 * be selected first, otherwise the ordering is arbitrary.
+	 * {@link ServiceWrapper#HIDE_SERVICES} property set to true will be selected
+	 * first, otherwise the ordering is arbitrary.
 	 * </p>
 	 * 
 	 * <p>
@@ -132,22 +132,37 @@ public interface ServiceWrapper<T> {
 	 * subverted, with the wrapped service being manipulated without their
 	 * knowledge.
 	 * </p>
+	 * 
+	 * <p>
+	 * The default value when none is provided is
+	 * {@link ServiceWrapper#WHEN_WRAPPED}.
+	 * </p>
 	 */
-	public static final String HIDE_WRAPPED_SERVICE_TYPES = "hide.wrapped.service.types";
+	public static final String HIDE_SERVICES = "hide.services";
 
 	/**
 	 * <p>
-	 * Enumeration of possible values for the
-	 * {@link ServiceWrapper#HIDE_WRAPPED_SERVICE_TYPES} property of any
-	 * {@link ServiceWrapper} services.
+	 * Enumeration of possible values for the {@link ServiceWrapper#HIDE_SERVICES}
+	 * property of any {@link ServiceWrapper} services.
 	 * </p>
 	 * 
 	 * @author Elias N Vasylenko
 	 * 
 	 */
-	public static final String ALWAYS_HIDE_WRAPPED_SERVICE_TYPES = "always";
-	public static final String NEVER_HIDE_WRAPPED_SERVICE_TYPES = "never";
-	public static final String HIDE_SERVICES_WHEN_WRAPPED = "when.wrapped";
+	public enum HideServices {
+		ALWAYS("alwaysHide"), NEVER("neverHide"), WHEN_WRAPPED("hideWrapped");
+
+		private final String value;
+
+		private HideServices(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return value;
+		}
+	}
 
 	/**
 	 * <p>
@@ -170,6 +185,14 @@ public interface ServiceWrapper<T> {
 	 * will not be wrapped, so the wrapper can be sure that
 	 * {@link ServiceWrapper#wrapService(Object)} is only ever called once for any
 	 * service, at the point when that services is registered.
+	 * </p>
+	 * 
+	 * <p>
+	 * If this property is set to {@link Boolean#TRUE} then wrappers may be
+	 * removed and reapplied to maintain {@link Constants#SERVICE_RANKING} order.
+	 * Otherwise, wrappig services will ignore reorderings unless their raking
+	 * drops below that of the service they are wrapping, in which case they will
+	 * be unregistered.
 	 * </p>
 	 * 
 	 * <p>

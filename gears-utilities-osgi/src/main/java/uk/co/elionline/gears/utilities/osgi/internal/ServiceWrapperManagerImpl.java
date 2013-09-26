@@ -21,6 +21,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
 import uk.co.elionline.gears.utilities.collections.TreeSetMultiHashMap;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
+import uk.co.elionline.gears.utilities.osgi.ServiceWrapper.HideServices;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
 
 /**
@@ -31,11 +32,13 @@ import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
 @Component(service = { EventListenerHook.class, FindHook.class })
 public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	private final Map<ServiceReference<?>, ServiceRegistration<?>> wrappedServiceRegistrations;
-	private final SetMultiMap<Class<?>, ServiceWrapper<?>> wrappedServices;
+	private final SetMultiMap<Class<?>, ServiceWrapper<?>> serviceWrappers;
+	private final Map<ServiceWrapper<?>, Integer> serviceWrapperRankings;
 
 	public ServiceWrapperManagerImpl() {
 		wrappedServiceRegistrations = new HashMap<>();
-		wrappedServices = new TreeSetMultiHashMap<>();
+		serviceWrappers = new TreeSetMultiHashMap<>();
+		serviceWrapperRankings = new HashMap<>();
 	}
 
 	@Override
@@ -60,24 +63,17 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		} catch (ClassCastException | NullPointerException e) {
 			serviceRanking = 0;
 		}
-
-		addServiceWrapper(serviceWrapper, serviceRanking);
-	}
-
-	private <T> void addServiceWrapper(ServiceWrapper<T> serviceWrapper,
-			int serviceRanking) {
-		@SuppressWarnings("unchecked")
-		CompoundServiceWrapper<T> compoundWrappedServiceSet = (CompoundServiceWrapper<T>) wrappedServices
-				.get(serviceWrapper.getServiceClass());
-
-		if (compoundWrappedServiceSet == null) {
-			compoundWrappedServiceSet = new CompoundServiceWrapper<>();
-			wrappedServices.put(serviceWrapper.getServiceClass(),
-					compoundWrappedServiceSet);
+		HideServices hideServices;
+		try {
+			hideServices = HideServices.valueOf((String) serviceProperties
+					.get(ServiceWrapper.HIDE_SERVICES));
+		} catch (ClassCastException | NullPointerException e) {
+			hideServices = HideServices.NEVER;
 		}
 
-		compoundWrappedServiceSet.add(serviceWrapper, serviceRanking,
-				hideWrappedServices);
+		serviceWrapperRankings.put(serviceWrapper, serviceRanking);
+
+		serviceWrappers.add(serviceWrapper.getServiceClass(), serviceWrapper);
 	}
 
 	@Override
@@ -88,13 +84,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 
 	@Override
 	public void removeServiceWrapper(ServiceWrapper<?> serviceWrapper) {
-		@SuppressWarnings("unchecked")
-		CompoundServiceWrapper<?> compoundWrappedServiceSet = wrappedServices
-				.get(serviceWrapper.getServiceClass());
-
-		if (compoundWrappedServiceSet != null) {
-			compoundWrappedServiceSet.remove(serviceWrapper);
-		}
+		serviceWrappers.remove(serviceWrapper.getServiceClass(), serviceWrapper);
 	}
 
 	@Override
@@ -168,7 +158,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		}
 
 		@SuppressWarnings("unchecked")
-		CompoundServiceWrapper<T> compoundServiceWrapper = (CompoundServiceWrapper<T>) wrappedServices
+		CompoundServiceWrapper<T> compoundServiceWrapper = (CompoundServiceWrapper<T>) serviceWrappers
 				.get(serviceClass);
 		@SuppressWarnings("unchecked")
 		T wrappedService = compoundServiceWrapper.wrapService((T) serviceReference
