@@ -6,20 +6,22 @@ import uk.co.elionline.gears.entity.behaviour.BehaviourProcess;
 import uk.co.elionline.gears.entity.behaviour.BehaviourProcessingContext;
 import uk.co.elionline.gears.entity.state.StateComponent;
 import uk.co.elionline.gears.entity.state.StateComponentBuilder;
-import uk.co.elionline.gears.rendering.buffering.SceneInterpolator;
 import uk.co.elionline.gears.rendering.buffering.SceneBuffer;
-import uk.co.elionline.gears.rendering.buffering.impl.SceneInterpolatorImpl;
+import uk.co.elionline.gears.rendering.buffering.SceneInterpolator;
 import uk.co.elionline.gears.rendering.buffering.impl.SceneBufferImpl;
+import uk.co.elionline.gears.rendering.buffering.impl.SceneInterpolatorImpl;
 import uk.co.elionline.gears.utilities.Factory;
 
-public class BufferingComponents {
+public class SceneBufferingComponents {
 	private final StateComponent<SceneBuffer> sceneBufferState;
 
 	private final StateComponent<SceneInterpolator> interpolatableSceneBufferState;
 
 	private final BehaviourComponent bufferingBehaviour;
 
-	public BufferingComponents(
+	private final BehaviourComponentBuilder behaviourComponentBuilder;
+
+	public SceneBufferingComponents(
 			BehaviourComponentBuilder behaviourComponentBuilder,
 			StateComponentBuilder stateComponentBuilder) {
 		sceneBufferState = stateComponentBuilder.data(new Factory<SceneBuffer>() {
@@ -57,10 +59,8 @@ public class BufferingComponents {
 				.description("Behaviour for buffering renderable data")
 				.indirectWriteDependencies(sceneBufferState,
 						interpolatableSceneBufferState).create();
-	}
 
-	public BehaviourComponent getBufferingBehaviour() {
-		return bufferingBehaviour;
+		this.behaviourComponentBuilder = behaviourComponentBuilder;
 	}
 
 	public StateComponent<SceneBuffer> getSceneBufferState() {
@@ -69,5 +69,23 @@ public class BufferingComponents {
 
 	public StateComponent<SceneInterpolator> getInterpolatableSceneBufferState() {
 		return interpolatableSceneBufferState;
+	}
+
+	public BehaviourComponent getBufferingBehaviour() {
+		return bufferingBehaviour;
+	}
+
+	public BehaviourComponent getBufferingBehaviour(final SceneBuffer buffer) {
+		return behaviourComponentBuilder
+				.process(new BehaviourProcess() {
+					@Override
+					public void process(BehaviourProcessingContext context) {
+						buffer.push();
+					}
+				})
+				.name("Buffering Single")
+				.description(
+						"Behaviour for buffering renderable data prepared using a specific SceneBuffer")
+				.create();
 	}
 }

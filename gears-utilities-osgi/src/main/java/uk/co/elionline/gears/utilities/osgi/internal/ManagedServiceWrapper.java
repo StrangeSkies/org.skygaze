@@ -1,22 +1,21 @@
 package uk.co.elionline.gears.utilities.osgi.internal;
 
-import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
-import uk.co.elionline.gears.utilities.osgi.ServiceWrapper.HideServices;
+import java.util.Map;
 
-class ManagedServiceWrapper<T> implements Comparable<ManagedServiceWrapper<?>> {
-	private final ServiceWrapper<T> serviceWrapper;
+import uk.co.elionline.gears.utilities.Decorator;
+import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
+
+class ManagedServiceWrapper<T> extends Decorator<ServiceWrapper<T>> implements
+		ServiceWrapper<T>, Comparable<ManagedServiceWrapper<?>> {
 	private final Integer serviceRanking;
 	private final HideServices hideServices;
 
 	public ManagedServiceWrapper(ServiceWrapper<T> serviceWrapper,
 			Integer serviceRanking, HideServices hideServices) {
-		this.serviceWrapper = serviceWrapper;
+		super(serviceWrapper);
+
 		this.serviceRanking = serviceRanking;
 		this.hideServices = hideServices;
-	}
-
-	public ServiceWrapper<T> getServiceWrapper() {
-		return serviceWrapper;
 	}
 
 	public Integer getServiceRanking() {
@@ -35,8 +34,8 @@ class ManagedServiceWrapper<T> implements Comparable<ManagedServiceWrapper<?>> {
 		if (!(obj instanceof ManagedServiceWrapper))
 			return false;
 
-		return serviceWrapper
-				.equals(((ManagedServiceWrapper<?>) obj).serviceWrapper);
+		return getComponent().equals(
+				((ManagedServiceWrapper<?>) obj).getComponent());
 	}
 
 	@Override
@@ -48,5 +47,25 @@ class ManagedServiceWrapper<T> implements Comparable<ManagedServiceWrapper<?>> {
 		}
 
 		return compare;
+	}
+
+	@Override
+	public T wrapService(T service) {
+		return getComponent().wrapService(service);
+	}
+
+	@Override
+	public void unwrapService(T service) {
+		getComponent().unwrapService(service);
+	}
+
+	@Override
+	public boolean wrapServiceProperties(Map<String, Object> serviceProperties) {
+		return getComponent().wrapServiceProperties(serviceProperties);
+	}
+
+	@Override
+	public Class<T> getServiceClass() {
+		return getComponent().getServiceClass();
 	}
 }

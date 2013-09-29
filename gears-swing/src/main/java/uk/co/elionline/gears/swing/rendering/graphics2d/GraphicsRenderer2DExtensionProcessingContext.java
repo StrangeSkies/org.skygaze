@@ -13,5 +13,5 @@ public interface GraphicsRenderer2DExtensionProcessingContext<T extends Data2D> 
 
 	Renderable<Data2D> getRenderable();
 
-	T getData();
+	T getExtensionData();
 }

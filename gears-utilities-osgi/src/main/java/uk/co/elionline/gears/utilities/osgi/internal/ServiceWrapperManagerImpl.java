@@ -9,7 +9,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.service.EventListenerHook;
 import org.osgi.framework.hooks.service.FindHook;
 import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
@@ -18,10 +17,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-import uk.co.elionline.gears.utilities.collections.ArrayListMultiHashMap;
-import uk.co.elionline.gears.utilities.collections.ListMultiMap;
+import uk.co.elionline.gears.utilities.collections.HashSetMultiHashMap;
 import uk.co.elionline.gears.utilities.collections.SetMultiMap;
-import uk.co.elionline.gears.utilities.collections.TreeSetMultiHashMap;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper.HideServices;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
@@ -33,19 +30,40 @@ import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
  */
 @Component(service = { EventListenerHook.class, FindHook.class })
 public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
-	private final ListMultiMap<ServiceReference<?>, WrappingServiceRegistration> wrappingServiceRegistrations;
+	private final SetMultiMap<Class<?>, ManagedServiceWrapper<?>> serviceWrappers;
 
-	private final SetMultiMap<Class<?>, ManagedServiceWrapper> serviceWrappers;
+	private final SetMultiMap<ManagedServiceWrapper<?>, ServiceReference<?>> wrappedServices;
+
+	private final Map<ServiceReference<?>, WrappingServiceRegistration> wrappingServiceRegistrations;
 
 	public ServiceWrapperManagerImpl() {
-		wrappingServiceRegistrations = new ArrayListMultiHashMap<>();
-		serviceWrappers = new TreeSetMultiHashMap<>();
+		serviceWrappers = new HashSetMultiHashMap<>();
+
+		wrappedServices = new HashSetMultiHashMap<>();
+
+		wrappingServiceRegistrations = new HashMap<>();
 	}
 
 	@Override
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "("
 			+ ServiceWrapper.WRAP_EXISTING_SERVICES + "=false)")
 	public void addServiceWrapper(ServiceWrapper<?> serviceWrapper,
+			Map<String, Object> serviceProperties) {
+		addManagedServiceWrapper(serviceWrapper, serviceProperties);
+	}
+
+	@Override
+	public void removeServiceWrapper(ServiceWrapper<?> serviceWrapper) {
+		removeManagedServiceWrapper(serviceWrapper);
+	}
+
+	@Override
+	public void modifyServiceWrapper(ServiceWrapper<?> serviceWrapper,
+			Map<String, Object> serviceProperties) {
+		updateManagedServiceWrapper(serviceWrapper, serviceProperties);
+	}
+
+	private <T> void addManagedServiceWrapper(ServiceWrapper<T> serviceWrapper,
 			Map<String, Object> serviceProperties) {
 		try {
 			if ((Boolean) serviceProperties
@@ -73,21 +91,23 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 			hideServices = HideServices.NEVER;
 		}
 
-		serviceWrappers
-				.add(serviceWrapper.getServiceClass(), new ManagedServiceWrapper(
-						serviceWrapper, serviceRanking, hideServices));
+		serviceWrappers.add(serviceWrapper.getServiceClass(),
+				new ManagedServiceWrapper<T>(serviceWrapper, serviceRanking,
+						hideServices));
 	}
 
-	@Override
-	public void modifyServiceWrapper(ServiceWrapper<?> serviceWrapper,
-			Map<String, Object> serviceProperties) {
-		addServiceWrapper(serviceWrapper, serviceProperties);
-	}
-
-	@Override
-	public void removeServiceWrapper(ServiceWrapper<?> serviceWrapper) {
+	private <T> void removeManagedServiceWrapper(ServiceWrapper<T> serviceWrapper) {
 		serviceWrappers.remove(serviceWrapper.getServiceClass(),
-				new ManagedServiceWrapper(serviceWrapper, null, null));
+				new ManagedServiceWrapper<T>(serviceWrapper, null, null));
+	}
+
+	private void updateManagedServiceWrapper(ServiceWrapper<?> serviceWrapper,
+			Map<String, Object> serviceProperties) {
+		for (ServiceReference<?> serviceReference : wrappedServices
+				.get(serviceWrapper)) {
+			wrappingServiceRegistrations.get(serviceReference).updateWrapper(
+					serviceWrapper);
+		}
 	}
 
 	@Override
@@ -107,11 +127,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 				break;
 			case ServiceEvent.MODIFIED:
 			case ServiceEvent.MODIFIED_ENDMATCH:
-				try {
-					wrappingServiceRegistrations.get(serviceReference).setProperties(
-							getWrappedServiceProperties(serviceReference));
-				} catch (IllegalStateException | NullPointerException e) {
-				}
+				updateWrappingServices(serviceReference);
 
 				break;
 			}
@@ -122,69 +138,30 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	}
 
 	private void registerWrappingServices(ServiceReference<?> serviceReference) {
-		String[] classNames = (String[]) serviceReference
-				.getProperty("objectClass");
+		WrappingServiceRegistration wrappingServiceRegistration = new WrappingServiceRegistration(
+				serviceReference);
+		wrappingServiceRegistration.register();
 
-		if (classNames.length == 1) {
-			try {
-				Class<?> serviceClass = serviceReference.getBundle().loadClass(
-						classNames[0]);
+		wrappedServices.addToAll(wrappingServiceRegistration.getServiceWrappers(),
+				serviceReference);
 
-				registerWrappedService(serviceClass, serviceReference);
-
-				wrappingServiceRegistrations.addAll(serviceReference, null);
-			} catch (ClassNotFoundException ex) {
-				ex.printStackTrace();
-			}
-		} else {
-
-			for (String className : classNames) {
-			}
-		}
-
-	}
-
-	private String[] getClassNames(ServiceReference<?> serviceReference) {
-		return (String[]) serviceReference.getProperty("objectClass");
-	}
-
-	private <T> ServiceRegistration<T> registerWrappedService(
-			Class<T> serviceClass, ServiceReference<?> serviceReference) {
-		Map<String, Object> properties = new HashMap<>();
-		for (String propertyKey : serviceReference.getPropertyKeys()) {
-			properties.put(propertyKey, serviceReference.getProperty(propertyKey));
-		}
-
-		@SuppressWarnings("unchecked")
-		CompoundServiceWrapper<T> compoundServiceWrapper = (CompoundServiceWrapper<T>) serviceWrappers
-				.get(serviceClass);
-		@SuppressWarnings("unchecked")
-		T wrappedService = compoundServiceWrapper.wrapService((T) serviceReference
-				.getBundle().getBundleContext().getService(serviceReference),
-				properties);
-
-		ServiceRegistration<T> serviceRegistration = serviceReference
-				.getBundle()
-				.getBundleContext()
-				.registerService(serviceClass, wrappedService,
-						getWrappedServiceProperties(serviceReference));
+		wrappingServiceRegistrations.put(serviceReference,
+				wrappingServiceRegistration);
 	}
 
 	private <T> void unregisterWrappingServices(
 			ServiceReference<T> serviceReference) {
-		try {
-			for (WrappingServiceRegistration<T> wrappingServiceRegistration : wrappingServiceRegistrations
-					.get(serviceReference)) {
-				wrappingServiceRegistration
-						.getServiceWrapper()
-						.getServiceWrapper()
-						.unwrapService(
-								serviceReference.getBundle().getBundleContext()
-										.getService(serviceReference));
-				wrappingServiceRegistration.getServiceRegistration().unregister();
-			}
-		} catch (IllegalStateException | NullPointerException e) {
-		}
+		WrappingServiceRegistration wrappingServiceRegistration = wrappingServiceRegistrations
+				.remove(serviceReference);
+
+		wrappedServices.removeFromAll(
+				wrappingServiceRegistration.getServiceWrappers(), serviceReference);
+
+		wrappingServiceRegistration.unregister();
+	}
+
+	private void updateWrappingServices(ServiceReference<?> serviceReference) {
+		wrappingServiceRegistrations.get(serviceReference).update();
 	}
 
 	@Override

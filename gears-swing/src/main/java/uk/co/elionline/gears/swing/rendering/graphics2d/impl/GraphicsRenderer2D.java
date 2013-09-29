@@ -48,7 +48,7 @@ public class GraphicsRenderer2D implements Renderer2D {
 				}
 
 				@Override
-				public T getData() {
+				public T getExtensionData() {
 					return renderable.getExtensionData(extension.getDataClass());
 				}
 			};

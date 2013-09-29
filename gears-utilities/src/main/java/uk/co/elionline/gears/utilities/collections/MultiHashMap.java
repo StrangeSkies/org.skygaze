@@ -2,7 +2,6 @@ package uk.co.elionline.gears.utilities.collections;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import uk.co.elionline.gears.utilities.Factory;
 
@@ -42,9 +41,19 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 
 	@Override
 	public boolean addToAll(V value) {
+		return addToAll(keySet(), value);
+	}
+
+	@Override
+	public boolean addAllToAll(Collection<? extends V> values) {
+		return addAllToAll(keySet(), values);
+	}
+
+	@Override
+	public boolean addToAll(Collection<? extends K> keys, V value) {
 		boolean added = false;
 
-		for (K key : keySet()) {
+		for (K key : keys) {
 			added = add(key, value) || added;
 		}
 
@@ -52,10 +61,11 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 	}
 
 	@Override
-	public boolean addAllToAll(Collection<? extends V> values) {
+	public boolean addAllToAll(Collection<? extends K> keys,
+			Collection<? extends V> values) {
 		boolean added = false;
 
-		for (K key : keySet()) {
+		for (K key : keys) {
 			added = addAll(key, values) || added;
 		}
 
@@ -90,37 +100,32 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 
 	@Override
 	public boolean removeFromAll(V value) {
-		Iterator<C> valueIterator = values().iterator();
+		return removeFromAll(keySet(), value);
+	}
 
+	@Override
+	public boolean removeAllFromAll(Collection<? extends V> values) {
+		return removeAllFromAll(keySet(), values);
+	}
+
+	@Override
+	public boolean removeFromAll(Collection<? extends K> keys, V value) {
 		boolean removed = false;
 
-		while (valueIterator.hasNext()) {
-			C values = valueIterator.next();
-
-			removed = values.remove(value) || removed;
-
-			if (values.isEmpty()) {
-				valueIterator.remove();
-			}
+		for (K key : keys) {
+			removed = remove(key, value) || removed;
 		}
 
 		return removed;
 	}
 
 	@Override
-	public boolean removeAllFromAll(Collection<? extends V> values) {
-		Iterator<C> valueIterator = values().iterator();
-
+	public boolean removeAllFromAll(Collection<? extends K> keys,
+			Collection<? extends V> values) {
 		boolean removed = false;
 
-		while (valueIterator.hasNext()) {
-			C currentValues = valueIterator.next();
-
-			removed = currentValues.removeAll(values) || removed;
-
-			if (currentValues.isEmpty()) {
-				valueIterator.remove();
-			}
+		for (K key : keys) {
+			removed = removeAll(key, values) || removed;
 		}
 
 		return removed;

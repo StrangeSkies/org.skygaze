@@ -19,9 +19,8 @@ public class GraphicsRenderer2DTransformationExtension implements
 			GraphicsRenderer2DExtensionProcessingContext<TransformationData2D> context) {
 		context.getGraphics2D().setTransform(
 				new AffineTransform(context
-						.getData()
-						.get()
-						.getValue()
+						.getExtensionData()
+						.getTransformationMatrix()
 						.getPreMultiplied(
 								context.getCamera().getTransformation().getValue())
 						.getDoubleData()));

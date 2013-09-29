@@ -1,5 +1,6 @@
 package uk.co.elionline.gears.swing.rendering.graphics2d.impl;
 
+import java.awt.Color;
 import java.util.Collections;
 import java.util.Set;
 
@@ -16,12 +17,13 @@ public class GraphicsRenderer2DColourExtension implements
 	@Override
 	public void process(
 			GraphicsRenderer2DExtensionProcessingContext<ColourData2D> context) {
-		context.getGraphics2D().setColor(context.getData().getColor());
+		context.getGraphics2D().setColor(context.getExtensionData().getColor());
 	}
 
 	@Override
 	public void postProcess(
 			GraphicsRenderer2DExtensionProcessingContext<ColourData2D> context) {
+		context.getGraphics2D().setColor(Color.WHITE);
 	}
 
 	@Override
