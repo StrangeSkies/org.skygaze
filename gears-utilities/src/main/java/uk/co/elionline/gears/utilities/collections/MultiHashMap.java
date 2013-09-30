@@ -138,11 +138,22 @@ public class MultiHashMap<K, V, C extends Collection<V>> extends HashMap<K, C>
 	}
 
 	@Override
-	public C getAllValues() {
+	public C getAll() {
 		C allValues = collectionFactory.create();
 
 		for (C values : values()) {
 			allValues.addAll(values);
+		}
+
+		return allValues;
+	}
+
+	@Override
+	public C getAll(Collection<? extends K> keys) {
+		C allValues = collectionFactory.create();
+
+		for (K key : keys) {
+			allValues.addAll(get(key));
 		}
 
 		return allValues;

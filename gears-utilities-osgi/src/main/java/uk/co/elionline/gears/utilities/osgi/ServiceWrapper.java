@@ -30,8 +30,9 @@ public interface ServiceWrapper<T> {
 	 * creates. For a class which registers itself under multiple services, this
 	 * order will be maintained across each wrapping service. For ServiceWrapper
 	 * services with the same ranking, those with the
-	 * {@link ServiceWrapper#HIDE_SERVICES} property set to true will be selected
-	 * first, otherwise the ordering is arbitrary.
+	 * {@link ServiceWrapper#HIDE_SERVICES} property set to ALWAYS will be
+	 * selected preferentially, then WHEN_WRAPPED, otherwise the ordering is
+	 * arbitrary.
 	 * </p>
 	 * 
 	 * <p>

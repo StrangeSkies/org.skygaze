@@ -2,20 +2,17 @@ package uk.co.elionline.gears.utilities.osgi.internal;
 
 import java.util.Map;
 
-import uk.co.elionline.gears.utilities.Decorator;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
+import uk.co.elionline.gears.utilities.osgi.ServiceWrapper.HideServices;
 
-class ManagedServiceWrapper<T> extends Decorator<ServiceWrapper<T>> implements
-		ServiceWrapper<T>, Comparable<ManagedServiceWrapper<?>> {
-	private final Integer serviceRanking;
-	private final HideServices hideServices;
+class ManagedServiceWrapper<T> {
+	private final ServiceWrapper<T> serviceWrapper;
 
-	public ManagedServiceWrapper(ServiceWrapper<T> serviceWrapper,
-			Integer serviceRanking, HideServices hideServices) {
-		super(serviceWrapper);
+	private Integer serviceRanking;
+	private HideServices hideServices;
 
-		this.serviceRanking = serviceRanking;
-		this.hideServices = hideServices;
+	public ManagedServiceWrapper(ServiceWrapper<T> serviceWrapper) {
+		this.serviceWrapper = serviceWrapper;
 	}
 
 	public Integer getServiceRanking() {
@@ -26,46 +23,24 @@ class ManagedServiceWrapper<T> extends Decorator<ServiceWrapper<T>> implements
 		return hideServices;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-
-		if (!(obj instanceof ManagedServiceWrapper))
-			return false;
-
-		return getComponent().equals(
-				((ManagedServiceWrapper<?>) obj).getComponent());
-	}
-
-	@Override
-	public int compareTo(ManagedServiceWrapper<?> o) {
-		int compare = serviceRanking.compareTo(o.getServiceRanking());
-
-		if (compare == 0) {
-
-		}
-
-		return compare;
-	}
-
-	@Override
 	public T wrapService(T service) {
-		return getComponent().wrapService(service);
+		return serviceWrapper.wrapService(service);
 	}
 
-	@Override
 	public void unwrapService(T service) {
-		getComponent().unwrapService(service);
+		serviceWrapper.unwrapService(service);
 	}
 
-	@Override
 	public boolean wrapServiceProperties(Map<String, Object> serviceProperties) {
-		return getComponent().wrapServiceProperties(serviceProperties);
+		return serviceWrapper.wrapServiceProperties(serviceProperties);
 	}
 
-	@Override
 	public Class<T> getServiceClass() {
-		return getComponent().getServiceClass();
+		return serviceWrapper.getServiceClass();
+	}
+
+	public void update(int serviceRanking, HideServices hideServices) {
+		this.serviceRanking = serviceRanking;
+		this.hideServices = hideServices;
 	}
 }

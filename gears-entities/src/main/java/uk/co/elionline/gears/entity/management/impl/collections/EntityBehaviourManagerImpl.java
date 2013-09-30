@@ -133,7 +133,7 @@ public class EntityBehaviourManagerImpl extends
 
 		if (scheduler == defaultBehaviourProcessor) {
 			behaviours = getAll();
-			behaviours.removeAll(processorBehaviourAssociations.getAllValues());
+			behaviours.removeAll(processorBehaviourAssociations.getAll());
 		} else {
 			behaviours = processorBehaviourAssociations.get(scheduler);
 		}

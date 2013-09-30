@@ -32,5 +32,7 @@ public interface MultiMap<K, V, C extends Collection<V>> extends Map<K, C> {
 
 	public boolean contains(K key, V value);
 
-	public C getAllValues();
+	public C getAll();
+
+	public C getAll(Collection<? extends K> keys);
 }

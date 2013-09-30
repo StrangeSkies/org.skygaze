@@ -1,5 +1,6 @@
 package uk.co.elionline.gears.utilities.osgi.internal;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -9,32 +10,24 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
+import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper.HideServices;
 
 class WrappingServiceRegistration {
 	private final Set<ManagedServiceWrapper<?>> serviceWrappers;
-	private final ServiceReference<?> serviceReference;
 	private final Set<ServiceRegistration<?>> serviceRegistrations;
 
-	public WrappingServiceRegistration(ServiceReference<?> serviceReference) {
-		this.serviceWrappers = new TreeSet<>();
-		this.serviceReference = serviceReference;
+	public WrappingServiceRegistration(Object serviceReference,
+			Collection<? extends ManagedServiceWrapper<?>> serviceWrappers) {
+		this.serviceWrappers = new TreeSet<>(new ManagedServiceWrapperComparator());
+		this.serviceWrappers.addAll(serviceWrappers);
+
 		serviceRegistrations = new HashSet<>();
 
-		try {
-			Set<Class<?>> serviceClasses = new HashSet<>();
-			for (String className : (String[]) serviceReference
-					.getProperty("objectClass")) {
-				serviceClasses.add(serviceReference.getBundle().loadClass(className));
-			}
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
-		}
+		register();
 	}
 
-	public void register() {
-		this.serviceWrappers.clear();
-		this.serviceWrappers.addAll(serviceWrappers);
+	private void register() {
 		serviceRegistrations.clear();
 
 		Set<ServiceReference<?>> hiddenServices;
@@ -84,6 +77,11 @@ class WrappingServiceRegistration {
 
 	}
 
+	public void updateWrapper(ServiceWrapper<?> serviceWrapper) {
+		// TODO Auto-generated method stub
+
+	}
+
 	private Hashtable<String, Object> getProperties(
 			ServiceReference<?> serviceReference) {
 		Hashtable<String, Object> properties = new Hashtable<>();
@@ -96,5 +94,9 @@ class WrappingServiceRegistration {
 
 	public Set<ManagedServiceWrapper<?>> getServiceWrappers() {
 		return serviceWrappers;
+	}
+
+	public boolean isHiding() {
+		return false;
 	}
 }
