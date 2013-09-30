@@ -1,24 +1,31 @@
-package uk.co.elionline.gears.utilities.osgi.internal;
+package uk.co.elionline.gears.utilities.osgi.impl;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper;
 import uk.co.elionline.gears.utilities.osgi.ServiceWrapper.HideServices;
 
-class WrappingServiceRegistration {
+class WrappedServiceSet {
+	private final Object service;
+	private final HashMap<String, Object> properties;
+
 	private final Set<ManagedServiceWrapper<?>> serviceWrappers;
 	private final Set<ServiceRegistration<?>> serviceRegistrations;
 
-	public WrappingServiceRegistration(Object serviceReference,
+	private boolean hiding;
+
+	public WrappedServiceSet(Object service, HashMap<String, Object> properties,
 			Collection<? extends ManagedServiceWrapper<?>> serviceWrappers) {
+		this.service = service;
+		this.properties = properties;
+
 		this.serviceWrappers = new TreeSet<>(new ManagedServiceWrapperComparator());
 		this.serviceWrappers.addAll(serviceWrappers);
 
@@ -28,25 +35,20 @@ class WrappingServiceRegistration {
 	}
 
 	private void register() {
-		serviceRegistrations.clear();
+		Set<WrappedService> wrappedServices = new HashSet<>();
 
-		Set<ServiceReference<?>> hiddenServices;
-
-		Set<ServiceReference<?>> wrappableServiceReferences = new HashSet<>();
-		wrappableServiceReferences.add(serviceReference);
+		wrappedServices.add(new WrappedService(service));
 
 		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers) {
-			for (ServiceReference<?> wrappableServiceReference : wrappableServiceReferences) {
-				Hashtable<String, Object> properties = getProperties(wrappableServiceReference);
+			for (WrappedService wrappedService : wrappedServices) {
+				Hashtable<String, Object> properties = new Hashtable<>(
+						wrappedService.getProperties());
 
 				if (serviceWrapper.wrapServiceProperties(properties)) {
 					properties.put(ServiceWrapperManagerImpl.class.getName(), true);
 
-					BundleContext bundleContext = wrappableServiceReference.getBundle()
-							.getBundleContext();
-
-					Object wrappingService = serviceWrapper.wrapService(bundleContext
-							.getService(wrappableServiceReference));
+					Object wrappingService = serviceWrapper.wrapService(wrappedService
+							.getWrappedService());
 
 					serviceRegistrations.add(bundleContext.registerService(
 							serviceWrapper.getServiceClass(), wrappingService, properties));
@@ -82,21 +84,11 @@ class WrappingServiceRegistration {
 
 	}
 
-	private Hashtable<String, Object> getProperties(
-			ServiceReference<?> serviceReference) {
-		Hashtable<String, Object> properties = new Hashtable<>();
-		for (String propertyKey : serviceReference.getPropertyKeys()) {
-			properties.put(propertyKey, serviceReference.getProperty(propertyKey));
-		}
-
-		return properties;
-	}
-
 	public Set<ManagedServiceWrapper<?>> getServiceWrappers() {
 		return serviceWrappers;
 	}
 
 	public boolean isHiding() {
-		return false;
+		return hiding;
 	}
 }

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.osgi.framework.Constants;
 
-import uk.co.elionline.gears.utilities.osgi.internal.ServiceWrapperManagerRetroactingImpl;
+import uk.co.elionline.gears.utilities.osgi.impl.ServiceWrapperManagerRetroactingImpl;
 
 /**
  * 

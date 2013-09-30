@@ -5,7 +5,7 @@ import java.util.Map;
 import org.osgi.framework.hooks.service.EventListenerHook;
 import org.osgi.framework.hooks.service.FindHook;
 
-import uk.co.elionline.gears.utilities.osgi.internal.ServiceWrapperManagerRetroactingImpl;
+import uk.co.elionline.gears.utilities.osgi.impl.ServiceWrapperManagerRetroactingImpl;
 
 public interface ServiceWrapperManager extends EventListenerHook, FindHook {
 	public void addServiceWrapper(ServiceWrapper<?> serviceWrapper,

@@ -1,4 +1,4 @@
-package uk.co.elionline.gears.utilities.osgi.internal;
+package uk.co.elionline.gears.utilities.osgi.impl;
 
 import java.util.Map;
 
