@@ -1,11 +1,18 @@
 package uk.co.elionline.gears.utilities.osgi.impl;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -33,15 +40,15 @@ import uk.co.elionline.gears.utilities.osgi.ServiceWrapperManager;
 @Component(service = { EventListenerHook.class, FindHook.class })
 public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	private final SetMultiMap<Class<?>, ManagedServiceWrapper<?>> wrappedServiceClasses;
-	private final Map<ServiceWrapper<?>, ManagedServiceWrapper<?>> serviceWrappers;
+	private final Map<ServiceWrapper<?>, ManagedServiceWrapper<?>> managedServiceWrappers;
 
-	private final Map<ServiceReference<?>, WrappedServiceSet> wrappedServices;
+	private final SetMultiMap<ServiceReference<?>, CompoundWrappedService> wrappedServices;
 
 	public ServiceWrapperManagerImpl() {
 		wrappedServiceClasses = new HashSetMultiHashMap<>();
-		serviceWrappers = new HashMap<>();
+		managedServiceWrappers = new HashMap<>();
 
-		wrappedServices = new HashMap<>();
+		wrappedServices = new HashSetMultiHashMap<>();
 	}
 
 	@Override
@@ -70,14 +77,14 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 				serviceWrapper);
 		wrappedServiceClasses.add(serviceWrapper.getServiceClass(),
 				managedServiceWrapper);
-		serviceWrappers.put(serviceWrapper, managedServiceWrapper);
+		managedServiceWrappers.put(serviceWrapper, managedServiceWrapper);
 
 		updateManagedServiceWrapper(serviceWrapper, serviceProperties);
 	}
 
 	private void removeManagedServiceWrapper(ServiceWrapper<?> serviceWrapper) {
 		wrappedServiceClasses.remove(serviceWrapper.getServiceClass(),
-				serviceWrappers.remove(serviceWrapper));
+				managedServiceWrappers.remove(serviceWrapper));
 	}
 
 	private void updateManagedServiceWrapper(ServiceWrapper<?> serviceWrapper,
@@ -108,7 +115,8 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 			hideServices = HideServices.NEVER;
 		}
 
-		serviceWrappers.get(serviceWrapper).update(serviceRanking, hideServices);
+		managedServiceWrappers.get(serviceWrapper).update(serviceRanking,
+				hideServices); // TODO link to WrappedService
 	}
 
 	@Override
@@ -129,13 +137,22 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 				updateWrappingServices(serviceReference);
 				break;
 			}
-			if (wrappedServices.get(serviceReference).isHiding()) {
+			if (wrappedServices.containsKey(serviceReference)) {
 				listeners.clear();
 			}
 		}
 	}
 
-	private void registerWrappingServices(ServiceReference<?> serviceReference) {
+	private Map<String, Object> getProperties(ServiceReference<?> serviceReference) {
+		Map<String, Object> properties = new HashMap<>();
+		for (String propertyKey : serviceReference.getPropertyKeys()) {
+			properties.put(propertyKey, serviceReference.getProperty(propertyKey));
+		}
+
+		return properties;
+	}
+
+	private Set<Class<?>> getClasses(ServiceReference<?> serviceReference) {
 		Set<Class<?>> serviceClasses = new HashSet<>();
 		try {
 			for (String className : (String[]) serviceReference
@@ -146,19 +163,88 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 			ex.printStackTrace();
 		}
 
-		WrappedServiceSet wrappedService = new WrappedServiceSet(serviceReference
-				.getBundle().getBundleContext().getService(serviceReference),
-				wrappedServiceClasses.getAll(serviceClasses));
+		return serviceClasses;
+	}
 
-		wrappedServices.put(serviceReference, wrappedService);
+	private void registerWrappingServices(ServiceReference<?> serviceReference) {
+		Set<Class<?>> serviceClasses = getClasses(serviceReference);
+
+		Set<ManagedServiceWrapper<?>> serviceWrappers = new TreeSet<>(
+				new ManagedServiceWrapperComparator());
+		serviceWrappers.addAll(wrappedServiceClasses.getAll(serviceClasses));
+
+		wrappedServices.add(serviceReference,
+				new CompoundWrappedService(serviceReference.getBundle()
+						.getBundleContext().getService(serviceReference),
+						getProperties(serviceReference)));
+		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers) {
+			for (CompoundWrappedService wrappedService : wrappedServices
+					.get(serviceReference)) {
+				Hashtable<String, Object> properties = new Hashtable<>(
+						wrappedService.getProperties());
+
+				if (serviceWrapper.wrapServiceProperties(properties)) {
+					properties.put(ServiceWrapperManagerImpl.class.getName(), true);
+
+					Object wrappingService = wrapService(
+							wrappedService.getWrappedService(), serviceWrapper,
+							serviceClasses);
+
+					wrappedServices.add(serviceReference, wrappedService);
+				}
+			}
+		}
+
+		for (CompoundWrappedService wrappedService : wrappedServices
+				.get(serviceReference)) {
+			serviceRegistrations.add(bundleContext.registerService(
+					serviceWrapper.getServiceClass(), wrappingService, properties));
+		}
+	}
+
+	private <T> Object wrapService(final Object service,
+			ManagedServiceWrapper<T> serviceWrapper, Set<Class<?>> serviceClasses) {
+		@SuppressWarnings("unchecked")
+		final T wrappingService = serviceWrapper.wrapService((T) service);
+		final Class<T> wrapperClass = serviceWrapper.getServiceClass();
+
+		List<Class<?>> orderedServiceClasses = new ArrayList<>(serviceClasses);
+		orderedServiceClasses.remove(wrapperClass);
+		orderedServiceClasses.add(0, wrapperClass);
+
+		return Proxy.newProxyInstance(null,
+				orderedServiceClasses.toArray(new Class<?>[0]),
+				new InvocationHandler() {
+					@Override
+					public Object invoke(Object object, Method method, Object[] args)
+							throws Throwable {
+						Class<?> declaringClass = method.getDeclaringClass();
+						/* 
+						 * TODO this ^ isn't good enough. Need to be able to change 
+						 * preference to 'wrapperClass' when more than one interface
+						 * contains a method.
+						 * 
+						 * WILL REPLACE WITH commons-proxy
+						 */
+
+						if (declaringClass == Object.class
+								|| declaringClass == wrapperClass) {
+							return method.invoke(wrappingService, args);
+						} else {
+							return method.invoke(service, args);
+						}
+					}
+				});
 	}
 
 	private <T> void unregisterWrappingServices(
 			ServiceReference<T> serviceReference) {
-		WrappedServiceSet wrappingServiceRegistration = wrappedServices
+		Set<CompoundWrappedService> wrappedServiceSet = wrappedServices
 				.remove(serviceReference);
 
-		wrappingServiceRegistration.unregister();
+		for (CompoundWrappedService wrappedService : wrappedServiceSet) {
+			wrappedService.unregister();
+		}
 	}
 
 	private void updateWrappingServices(ServiceReference<?> serviceReference) {
@@ -170,11 +256,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 			boolean allServices, Collection<ServiceReference<?>> references) {
 		Iterator<ServiceReference<?>> iterator = references.iterator();
 		while (iterator.hasNext()) {
-			WrappedServiceSet wrappingServiceRegistration = wrappedServices
-					.get(iterator.next());
-
-			if (wrappingServiceRegistration != null
-					&& wrappingServiceRegistration.isHiding()) {
+			if (wrappedServices.containsKey(iterator.next())) {
 				iterator.remove();
 			}
 		}

@@ -1,0 +1,54 @@
+package uk.co.elionline.gears.utilities.osgi.impl;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import org.osgi.framework.ServiceRegistration;
+
+class CompoundWrappedService {
+	private final Object service;
+	private final Map<String, Object> properties;
+
+	private final CompoundWrappedService parent;
+
+	private final ManagedServiceWrapper<?> wrapper;
+
+	public CompoundWrappedService(Object service, Map<String, Object> properties) {
+		this.service = service;
+		this.properties = properties;
+
+		serviceRegistrations = new ArrayList<>();
+	}
+
+	public void register() {
+
+	}
+
+	public void unregister() {
+		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers) {
+			serviceWrapper.unwrapService(serviceReference.getBundle()
+					.getBundleContext().getService(serviceReference));
+			for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
+				serviceRegistration.unregister();
+			}
+		}
+	}
+
+	public void update(Map<String, Object> properties) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void updateWrapper(ManagedServiceWrapper<?> serviceWrapper) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public Object getWrappedService() {
+		return service;
+	}
+
+	public Map<String, Object> getProperties() {
+		return properties;
+	}
+}

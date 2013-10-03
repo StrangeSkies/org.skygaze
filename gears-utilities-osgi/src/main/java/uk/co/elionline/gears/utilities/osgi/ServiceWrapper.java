@@ -116,27 +116,29 @@ public interface ServiceWrapper<T> {
 	/**
 	 * <p>
 	 * If a property with this key is present on a service wrapper service it
-	 * should be of the type {@link HideWrappedServiceTypes}. Be careful when
-	 * using the value {@link HideWrappedServiceTypes#Always}, as this will act as
-	 * a filter, only registering services for those which are successfully
-	 * wrapped. If no services are matched by
-	 * {@link ServiceWrapper#wrapServiceProperties(Map)} then none will be
-	 * available to any bundles, no matter what service ranking the wrapper has.
-	 * The value {@link HideWrappedServiceTypes#WhenWrapped} on the other hand
-	 * indicates that services will only be hidden in the case that a valid wrap
-	 * will be provided instead, which is often safer.
+	 * should be of the type {@link HideServices}. Be careful when using the value
+	 * {@link HideServices#Always}, as this will act as a filter, only registering
+	 * services for those which are successfully wrapped. If no services are
+	 * matched by {@link ServiceWrapper#wrapServiceProperties(Map)} then none will
+	 * be available to any bundles, no matter what service ranking the wrapper
+	 * has. The value {@link HideServices#WhenWrapped} on the other hand indicates
+	 * that services will only be hidden in the case that a valid wrap will be
+	 * provided instead, which is often safer. {@link HideServices#SILENTLY}
+	 * behaves in the same way as this, with the added stipulation that wrapping
+	 * and unwrapping will be invisible to bundles which are using the services
+	 * being wrapped.
 	 * </p>
 	 * 
 	 * <p>
 	 * Wrappers which maintain state should normally be careful not set this value
-	 * to {@link Boolean#Never}, as they won't be able to guarantee they are not
-	 * subverted, with the wrapped service being manipulated without their
+	 * to {@link HideServices#Never}, as they won't be able to guarantee they are
+	 * not subverted, with the wrapped service being manipulated without their
 	 * knowledge.
 	 * </p>
 	 * 
 	 * <p>
 	 * The default value when none is provided is
-	 * {@link ServiceWrapper#WHEN_WRAPPED}.
+	 * {@link HideServices#WHEN_WRAPPED}.
 	 * </p>
 	 */
 	public static final String HIDE_SERVICES = "hide.services";
@@ -151,18 +153,7 @@ public interface ServiceWrapper<T> {
 	 * 
 	 */
 	public enum HideServices {
-		ALWAYS("alwaysHide"), NEVER("neverHide"), WHEN_WRAPPED("hideWrapped");
-
-		private final String value;
-
-		private HideServices(String value) {
-			this.value = value;
-		}
-
-		@Override
-		public String toString() {
-			return value;
-		}
+		ALWAYS, NEVER, WHEN_WRAPPED, SILENTLY;
 	}
 
 	/**
@@ -191,7 +182,7 @@ public interface ServiceWrapper<T> {
 	 * <p>
 	 * If this property is set to {@link Boolean#TRUE} then wrappers may be
 	 * removed and reapplied to maintain {@link Constants#SERVICE_RANKING} order.
-	 * Otherwise, wrappig services will ignore reorderings unless their raking
+	 * Otherwise, wrapping services will ignore reorderings unless their raking
 	 * drops below that of the service they are wrapping, in which case they will
 	 * be unregistered.
 	 * </p>
