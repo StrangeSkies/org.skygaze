@@ -1,23 +1,25 @@
 package uk.co.elionline.gears.utilities.osgi.impl;
 
-import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.ServiceRegistration;
 
 class CompoundWrappedService {
 	private final Object service;
-	private final Map<String, Object> properties;
+	private final Hashtable<String, Object> properties;
 
 	private final CompoundWrappedService parent;
 
 	private final ManagedServiceWrapper<?> wrapper;
 
-	public CompoundWrappedService(Object service, Map<String, Object> properties) {
+	public CompoundWrappedService(Object service,
+			Hashtable<String, Object> properties) {
 		this.service = service;
 		this.properties = properties;
 
-		serviceRegistrations = new ArrayList<>();
+		wrapper = null;
+		parent = null;
 	}
 
 	public void register() {
@@ -44,11 +46,11 @@ class CompoundWrappedService {
 
 	}
 
-	public Object getWrappedService() {
+	public Object getService() {
 		return service;
 	}
 
-	public Map<String, Object> getProperties() {
+	public Hashtable<String, Object> getProperties() {
 		return properties;
 	}
 }

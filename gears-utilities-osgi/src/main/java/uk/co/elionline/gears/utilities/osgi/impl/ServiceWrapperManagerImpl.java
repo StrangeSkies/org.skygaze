@@ -155,8 +155,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	private Set<Class<?>> getClasses(ServiceReference<?> serviceReference) {
 		Set<Class<?>> serviceClasses = new HashSet<>();
 		try {
-			for (String className : (String[]) serviceReference
-					.getProperty("objectClass")) {
+			for (String className : getClassNames(serviceReference)) {
 				serviceClasses.add(serviceReference.getBundle().loadClass(className));
 			}
 		} catch (ClassNotFoundException ex) {
@@ -166,7 +165,13 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		return serviceClasses;
 	}
 
+	private String[] getClassNames(ServiceReference<?> serviceReference) {
+		return (String[]) serviceReference.getProperty("objectClass");
+	}
+
 	private void registerWrappingServices(ServiceReference<?> serviceReference) {
+		BundleContext context = serviceReference.getBundle().getBundleContext();
+
 		Set<Class<?>> serviceClasses = getClasses(serviceReference);
 
 		Set<ManagedServiceWrapper<?>> serviceWrappers = new TreeSet<>(
@@ -174,8 +179,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		serviceWrappers.addAll(wrappedServiceClasses.getAll(serviceClasses));
 
 		wrappedServices.add(serviceReference,
-				new CompoundWrappedService(serviceReference.getBundle()
-						.getBundleContext().getService(serviceReference),
+				new CompoundWrappedService(context.getService(serviceReference),
 						getProperties(serviceReference)));
 		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers) {
 			for (CompoundWrappedService wrappedService : wrappedServices
@@ -186,9 +190,8 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 				if (serviceWrapper.wrapServiceProperties(properties)) {
 					properties.put(ServiceWrapperManagerImpl.class.getName(), true);
 
-					Object wrappingService = wrapService(
-							wrappedService.getWrappedService(), serviceWrapper,
-							serviceClasses);
+					Object wrappingService = wrapService(wrappedService.getService(),
+							serviceWrapper, serviceClasses);
 
 					wrappedServices.add(serviceReference, wrappedService);
 				}
@@ -197,8 +200,9 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 
 		for (CompoundWrappedService wrappedService : wrappedServices
 				.get(serviceReference)) {
-			serviceRegistrations.add(bundleContext.registerService(
-					serviceWrapper.getServiceClass(), wrappingService, properties));
+			serviceRegistrations.add(context.registerService(
+					getClassNames(serviceReference), wrappedService.getService(),
+					wrappedService.getProperties()));
 		}
 	}
 
@@ -219,8 +223,8 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 					public Object invoke(Object object, Method method, Object[] args)
 							throws Throwable {
 						Class<?> declaringClass = method.getDeclaringClass();
-						/* 
-						 * TODO this ^ isn't good enough. Need to be able to change 
+						/*
+						 * TODO this ^ isn't good enough. Need to be able to change
 						 * preference to 'wrapperClass' when more than one interface
 						 * contains a method.
 						 * 
