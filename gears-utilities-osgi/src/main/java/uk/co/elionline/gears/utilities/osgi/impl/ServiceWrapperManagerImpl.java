@@ -155,8 +155,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	private Set<Class<?>> getClasses(ServiceReference<?> serviceReference) {
 		Set<Class<?>> serviceClasses = new HashSet<>();
 		try {
-			for (String className : (String[]) serviceReference
-					.getProperty("objectClass")) {
+			for (String className : getClassNames(serviceReference)) {
 				serviceClasses.add(serviceReference.getBundle().loadClass(className));
 			}
 		} catch (ClassNotFoundException ex) {
@@ -166,39 +165,69 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		return serviceClasses;
 	}
 
+	private String[] getClassNames(ServiceReference<?> serviceReference) {
+		return (String[]) serviceReference.getProperty("objectClass");
+	}
+
 	private void registerWrappingServices(ServiceReference<?> serviceReference) {
 		Set<Class<?>> serviceClasses = getClasses(serviceReference);
+
+		if (serviceClasses.size() == 1) {
+			registerWrappingServices(serviceReference, serviceClasses.iterator()
+					.next());
+		} else {
+			registerWrappingServices(serviceReference, serviceClasses);
+		}
+	}
+
+	private void registerWrappingServices(ServiceReference<?> serviceReference,
+			Class<?> serviceClass) {
+	}
+
+	private void registerWrappingServices(ServiceReference<?> serviceReference,
+			Set<Class<?>> serviceClasses) {
+		BundleContext bundleContext = serviceReference.getBundle()
+				.getBundleContext();
 
 		Set<ManagedServiceWrapper<?>> serviceWrappers = new TreeSet<>(
 				new ManagedServiceWrapperComparator());
 		serviceWrappers.addAll(wrappedServiceClasses.getAll(serviceClasses));
 
-		wrappedServices.add(serviceReference,
-				new CompoundWrappedService(serviceReference.getBundle()
-						.getBundleContext().getService(serviceReference),
-						getProperties(serviceReference)));
+		wrappedServices.add(serviceReference, new CompoundWrappedService(
+				bundleContext.getService(serviceReference),
+				getProperties(serviceReference)));
 		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers) {
 			for (CompoundWrappedService wrappedService : wrappedServices
 					.get(serviceReference)) {
-				Hashtable<String, Object> properties = new Hashtable<>(
-						wrappedService.getProperties());
+				Hashtable<String, Object> wrappingProperties = wrappedService
+						.getProperties();
 
-				if (serviceWrapper.wrapServiceProperties(properties)) {
-					properties.put(ServiceWrapperManagerImpl.class.getName(), true);
+				if (serviceWrapper.wrapServiceProperties(wrappingProperties)) {
+					wrappingProperties.put(ServiceWrapperManagerImpl.class.getName(),
+							true);
 
-					Object wrappingService = wrapService(
-							wrappedService.getWrappedService(), serviceWrapper,
-							serviceClasses);
+					Object wrappingService = wrapService(wrappedService.getService(),
+							serviceWrapper, serviceClasses);
 
-					wrappedServices.add(serviceReference, wrappedService);
+					wrappedServices.add(serviceReference, new CompoundWrappedService(
+							wrappingService, wrappingProperties, wrappedService,
+							serviceWrapper));
+
+					if (serviceWrapper.getHideServices() == HideServices.WHEN_WRAPPED
+							|| serviceWrapper.getHideServices() == HideServices.SILENTLY) {
+						wrappedServices.remove(serviceReference, wrappedService);
+					}
+				}
+				if (serviceWrapper.getHideServices() == HideServices.ALWAYS) {
+					wrappedServices.remove(serviceReference, wrappedService);
 				}
 			}
 		}
 
 		for (CompoundWrappedService wrappedService : wrappedServices
 				.get(serviceReference)) {
-			serviceRegistrations.add(bundleContext.registerService(
-					serviceWrapper.getServiceClass(), wrappingService, properties));
+			bundleContext.registerService(getClassNames(serviceReference),
+					wrappedService.getService(), wrappedService.getProperties());
 		}
 	}
 
@@ -243,7 +272,10 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 				.remove(serviceReference);
 
 		for (CompoundWrappedService wrappedService : wrappedServiceSet) {
-			wrappedService.unregister();
+			wrappedService.getWrapper().unwrapService(
+					wrappedService.getParent().getService());
+
+			serviceRegistration.unregister();
 		}
 	}
 

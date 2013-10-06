@@ -1,9 +1,7 @@
 package uk.co.elionline.gears.utilities.osgi.impl;
 
-import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Map;
-
-import org.osgi.framework.ServiceRegistration;
 
 class CompoundWrappedService {
 	private final Object service;
@@ -17,38 +15,34 @@ class CompoundWrappedService {
 		this.service = service;
 		this.properties = properties;
 
-		serviceRegistrations = new ArrayList<>();
+		parent = null;
+		wrapper = null;
 	}
 
-	public void register() {
+	public CompoundWrappedService(Object service, Map<String, Object> properties,
+			CompoundWrappedService wrappedService,
+			ManagedServiceWrapper<?> serviceWrapper) {
+		this.service = service;
+		this.properties = properties;
 
+		parent = wrappedService;
+
+		wrapper = serviceWrapper;
 	}
 
-	public void unregister() {
-		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers) {
-			serviceWrapper.unwrapService(serviceReference.getBundle()
-					.getBundleContext().getService(serviceReference));
-			for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
-				serviceRegistration.unregister();
-			}
-		}
+	public CompoundWrappedService getParent() {
+		return parent;
 	}
 
-	public void update(Map<String, Object> properties) {
-		// TODO Auto-generated method stub
-
+	public ManagedServiceWrapper<?> getWrapper() {
+		return wrapper;
 	}
 
-	public void updateWrapper(ManagedServiceWrapper<?> serviceWrapper) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public Object getWrappedService() {
+	public Object getService() {
 		return service;
 	}
 
-	public Map<String, Object> getProperties() {
-		return properties;
+	public Hashtable<String, Object> getProperties() {
+		return new Hashtable<>(properties);
 	}
 }
