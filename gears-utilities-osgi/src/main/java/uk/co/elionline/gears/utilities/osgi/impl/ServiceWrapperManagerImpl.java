@@ -164,6 +164,8 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	}
 
 	private void registerWrappingServices(ServiceReference<?> serviceReference) {
+		BundleContext context = serviceReference.getBundle().getBundleContext();
+
 		Set<Class<?>> serviceClasses = getClasses(serviceReference);
 
 		if (serviceClasses.size() == 1) {
