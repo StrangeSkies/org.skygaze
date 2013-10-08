@@ -36,13 +36,13 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	private final SetMultiMap<Class<?>, ManagedServiceWrapper<?>> wrappedServiceClasses;
 	private final Map<ServiceWrapper<?>, ManagedServiceWrapper<?>> managedServiceWrappers;
 
-	private final SetMultiMap<ServiceReference<?>, CompoundWrappedService> wrappedServices;
+	private final Map<ServiceReference<?>, WrappedService> wrappedServices;
 
 	public ServiceWrapperManagerImpl() {
 		wrappedServiceClasses = new HashSetMultiHashMap<>();
 		managedServiceWrappers = new HashMap<>();
 
-		wrappedServices = new HashSetMultiHashMap<>();
+		wrappedServices = new HashMap<>();
 	}
 
 	@Override
@@ -189,13 +189,13 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 				new ManagedServiceWrapperComparator());
 		serviceWrappers.addAll(wrappedServiceClasses.getAll(serviceClasses));
 
-		CompoundWrappedService baseService = new CompoundWrappedService(
+		WrappedService baseService = new WrappedService(
 				bundleContext.getService(serviceReference),
 				getProperties(serviceReference), serviceClasses);
-		wrappedServices.add(serviceReference, baseService);
+		wrappedServices.put(serviceReference, baseService);
 
 		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers)
-			for (CompoundWrappedService wrappedService : new HashSet<>(
+			for (WrappedService wrappedService : new HashSet<>(
 					wrappedServices.get(serviceReference))) {
 				CompoundWrappedService wrappingService = wrappedService
 						.wrap(serviceWrapper);
@@ -204,8 +204,10 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 					wrappedServices.add(serviceReference, wrappingService);
 			}
 
-		for (CompoundWrappedService wrappedService : wrappedServices
-				.get(serviceReference)) {
+		WrappedService wrappedService = wrappedServices
+				.get(serviceReference);
+		
+		for (CompoundWrappedService wrappedService : ) {
 			bundleContext.registerService(getClassNames(serviceReference),
 					wrappedService.getService(), wrappedService.getProperties());
 		}
