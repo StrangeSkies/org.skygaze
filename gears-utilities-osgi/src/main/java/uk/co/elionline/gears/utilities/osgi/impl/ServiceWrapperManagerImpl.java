@@ -194,23 +194,19 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 				getProperties(serviceReference), serviceClasses);
 		wrappedServices.put(serviceReference, baseService);
 
+		Set<WrappedService> workingSet = new HashSet<>();
+		workingSet.add(baseService);
+
+		CompoundWrappedService wrappingService;
 		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers)
-			for (WrappedService wrappedService : new HashSet<>(
-					wrappedServices.get(serviceReference))) {
-				CompoundWrappedService wrappingService = wrappedService
-						.wrap(serviceWrapper);
+			for (WrappedService wrappedService : new HashSet<>(workingSet))
+				if ((wrappingService = wrappedService.wrap(serviceWrapper)) != null)
+					workingSet.add(wrappingService);
 
-				if (wrappingService != null)
-					wrappedServices.add(serviceReference, wrappingService);
-			}
-
-		WrappedService wrappedService = wrappedServices
-				.get(serviceReference);
-		
-		for (CompoundWrappedService wrappedService : ) {
-			bundleContext.registerService(getClassNames(serviceReference),
-					wrappedService.getService(), wrappedService.getProperties());
-		}
+		for (WrappedService wrappedService : workingSet)
+			if (wrappedService.isVisible())
+				bundleContext.registerService(getClassNames(serviceReference),
+						wrappedService.getService(), wrappedService.getProperties());
 	}
 
 	private <T> void unregisterWrappingServices(
