@@ -1,9 +1,10 @@
 package uk.co.elionline.gears.utilities.osgi.impl;
 
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
-class CompoundWrappedService extends WrappedService {
+public class CompoundWrappedService extends WrappedService {
 	private final WrappedService parent;
 
 	private final ManagedServiceWrapper<?> wrapper;
@@ -11,7 +12,7 @@ class CompoundWrappedService extends WrappedService {
 	CompoundWrappedService(Object service, Map<String, Object> properties,
 			Set<Class<?>> classes, WrappedService wrappedService,
 			ManagedServiceWrapper<?> serviceWrapper) {
-		super(service, properties, classes);
+		super(service, new Hashtable<>(properties));
 
 		parent = wrappedService;
 		wrapper = serviceWrapper;
@@ -23,5 +24,11 @@ class CompoundWrappedService extends WrappedService {
 
 	public ManagedServiceWrapper<?> getWrapper() {
 		return wrapper;
+	}
+
+	@Override
+	public Set<CompoundWrappedService> getWrappedServices() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

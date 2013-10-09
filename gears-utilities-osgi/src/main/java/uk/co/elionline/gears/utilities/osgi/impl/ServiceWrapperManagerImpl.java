@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -36,7 +35,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 	private final SetMultiMap<Class<?>, ManagedServiceWrapper<?>> wrappedServiceClasses;
 	private final Map<ServiceWrapper<?>, ManagedServiceWrapper<?>> managedServiceWrappers;
 
-	private final Map<ServiceReference<?>, WrappedService> wrappedServices;
+	private final Map<ServiceReference<?>, WrappedServiceTree> wrappedServices;
 
 	public ServiceWrapperManagerImpl() {
 		wrappedServiceClasses = new HashSetMultiHashMap<>();
@@ -137,16 +136,44 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		}
 	}
 
-	private Map<String, Object> getProperties(ServiceReference<?> serviceReference) {
-		Map<String, Object> properties = new HashMap<>();
-		for (String propertyKey : serviceReference.getPropertyKeys()) {
-			properties.put(propertyKey, serviceReference.getProperty(propertyKey));
-		}
+	private void registerWrappingServices(ServiceReference<?> serviceReference) {
+		WrappedServiceTree wrappedServiceTree = new WrappedServiceTree(
+				serviceReference,
+				wrappedServiceClasses.getAll(getClasses(serviceReference)));
+		wrappedServiceTree.register();
 
-		return properties;
+		wrappedServiceTree = wrappedServices.put(serviceReference,
+				wrappedServiceTree);
+
+		if (wrappedServiceTree != null)
+			wrappedServiceTree.unregister();
 	}
 
-	private Set<Class<?>> getClasses(ServiceReference<?> serviceReference) {
+	private <T> void unregisterWrappingServices(
+			ServiceReference<T> serviceReference) {
+		WrappedServiceTree wrappedServiceTree = wrappedServices
+				.remove(serviceReference);
+
+		if (wrappedServiceTree != null)
+			wrappedServiceTree.unregister();
+	}
+
+	private void updateWrappingServices(ServiceReference<?> serviceReference) {
+		wrappedServices.get(serviceReference).updateRegistrations();
+	}
+
+	@Override
+	public void find(BundleContext context, String name, String filter,
+			boolean allServices, Collection<ServiceReference<?>> references) {
+		Iterator<ServiceReference<?>> iterator = references.iterator();
+		while (iterator.hasNext()) {
+			if (wrappedServices.containsKey(iterator.next())) {
+				iterator.remove();
+			}
+		}
+	}
+
+	private static Set<Class<?>> getClasses(ServiceReference<?> serviceReference) {
 		Set<Class<?>> serviceClasses = new HashSet<>();
 		try {
 			for (String className : getClassNames(serviceReference)) {
@@ -159,81 +186,7 @@ public class ServiceWrapperManagerImpl implements ServiceWrapperManager {
 		return serviceClasses;
 	}
 
-	private String[] getClassNames(ServiceReference<?> serviceReference) {
+	private static String[] getClassNames(ServiceReference<?> serviceReference) {
 		return (String[]) serviceReference.getProperty("objectClass");
-	}
-
-	private void registerWrappingServices(ServiceReference<?> serviceReference) {
-		BundleContext context = serviceReference.getBundle().getBundleContext();
-
-		Set<Class<?>> serviceClasses = getClasses(serviceReference);
-
-		if (serviceClasses.size() == 1) {
-			registerWrappingServices(serviceReference, serviceClasses.iterator()
-					.next());
-		} else {
-			registerWrappingServices(serviceReference, serviceClasses);
-		}
-	}
-
-	private void registerWrappingServices(ServiceReference<?> serviceReference,
-			Class<?> serviceClass) {
-	}
-
-	private void registerWrappingServices(ServiceReference<?> serviceReference,
-			Set<Class<?>> serviceClasses) {
-		BundleContext bundleContext = serviceReference.getBundle()
-				.getBundleContext();
-
-		Set<ManagedServiceWrapper<?>> serviceWrappers = new TreeSet<>(
-				new ManagedServiceWrapperComparator());
-		serviceWrappers.addAll(wrappedServiceClasses.getAll(serviceClasses));
-
-		WrappedService baseService = new WrappedService(
-				bundleContext.getService(serviceReference),
-				getProperties(serviceReference), serviceClasses);
-		wrappedServices.put(serviceReference, baseService);
-
-		Set<WrappedService> workingSet = new HashSet<>();
-		workingSet.add(baseService);
-
-		CompoundWrappedService wrappingService;
-		for (ManagedServiceWrapper<?> serviceWrapper : serviceWrappers)
-			for (WrappedService wrappedService : new HashSet<>(workingSet))
-				if ((wrappingService = wrappedService.wrap(serviceWrapper)) != null)
-					workingSet.add(wrappingService);
-
-		for (WrappedService wrappedService : workingSet)
-			if (wrappedService.isVisible())
-				bundleContext.registerService(getClassNames(serviceReference),
-						wrappedService.getService(), wrappedService.getProperties());
-	}
-
-	private <T> void unregisterWrappingServices(
-			ServiceReference<T> serviceReference) {
-		Set<CompoundWrappedService> wrappedServiceSet = wrappedServices
-				.remove(serviceReference);
-
-		for (CompoundWrappedService wrappedService : wrappedServiceSet) {
-			wrappedService.getWrapper().unwrapService(
-					wrappedService.getParent().getService());
-
-			serviceRegistration.unregister();
-		}
-	}
-
-	private void updateWrappingServices(ServiceReference<?> serviceReference) {
-		wrappedServices.get(serviceReference).update();
-	}
-
-	@Override
-	public void find(BundleContext context, String name, String filter,
-			boolean allServices, Collection<ServiceReference<?>> references) {
-		Iterator<ServiceReference<?>> iterator = references.iterator();
-		while (iterator.hasNext()) {
-			if (wrappedServices.containsKey(iterator.next())) {
-				iterator.remove();
-			}
-		}
 	}
 }
