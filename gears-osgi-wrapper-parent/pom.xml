@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>uk.co.elionline</groupId>
+		<groupId>uk.co.strangeskies</groupId>
 		<artifactId>gears-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../gears-parent</relativePath>
