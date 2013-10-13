@@ -5,6 +5,7 @@ import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentBuilder;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcess;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcessingContext;
+import uk.co.strangeskies.gears.entity.components.rendering.RenderingComponents2D;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentBuilder;
 import uk.co.strangeskies.gears.rendering.Renderable;
@@ -15,7 +16,7 @@ import uk.co.strangeskies.gears.rendering.rendering2d.Renderer2D;
 import uk.co.strangeskies.gears.rendering.rendering2d.SceneFactory2D;
 import uk.co.strangeskies.gears.utilities.Factory;
 
-public class RenderingComponents2D {
+public class RenderingComponents2DImpl implements RenderingComponents2D {
 	private final StateComponent<Renderable<Data2D>> renderableState;
 
 	private final BehaviourComponent renderingBehaviour;
@@ -26,7 +27,7 @@ public class RenderingComponents2D {
 
 	private final StateComponent<Scene<Data2D>> sceneState;
 
-	public RenderingComponents2D(final Renderer2D renderer,
+	public RenderingComponents2DImpl(final Renderer2D renderer,
 			final SceneFactory2D sceneFactory,
 			BehaviourComponentBuilder behaviourComponentBuilder,
 			StateComponentBuilder stateComponentBuilder) {
@@ -77,22 +78,27 @@ public class RenderingComponents2D {
 				.description("Behaviour for pushing rendering buffer").create();
 	}
 
+	@Override
 	public BehaviourComponent getRenderingBehaviour() {
 		return renderingBehaviour;
 	}
 
+	@Override
 	public BehaviourComponent getBufferingBehaviour() {
 		return bufferingBehaviour;
 	}
 
+	@Override
 	public StateComponent<Renderable<Data2D>> getRenderableState() {
 		return renderableState;
 	}
 
+	@Override
 	public StateComponent<Camera2D> getCameraState() {
 		return cameraState;
 	}
 
+	@Override
 	public StateComponent<Scene<Data2D>> getSceneState() {
 		return sceneState;
 	}

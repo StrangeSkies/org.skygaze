@@ -4,6 +4,7 @@ import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentBuilder;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcess;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcessingContext;
+import uk.co.strangeskies.gears.entity.components.rendering.SceneBufferingComponents;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentBuilder;
 import uk.co.strangeskies.gears.rendering.buffering.SceneBuffer;
@@ -12,7 +13,7 @@ import uk.co.strangeskies.gears.rendering.buffering.impl.SceneBufferImpl;
 import uk.co.strangeskies.gears.rendering.buffering.impl.SceneInterpolatorImpl;
 import uk.co.strangeskies.gears.utilities.Factory;
 
-public class SceneBufferingComponents {
+public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 	private final StateComponent<SceneBuffer> sceneBufferState;
 
 	private final StateComponent<SceneInterpolator> interpolatableSceneBufferState;
@@ -21,7 +22,7 @@ public class SceneBufferingComponents {
 
 	private final BehaviourComponentBuilder behaviourComponentBuilder;
 
-	public SceneBufferingComponents(
+	public SceneBufferingComponentsImpl(
 			BehaviourComponentBuilder behaviourComponentBuilder,
 			StateComponentBuilder stateComponentBuilder) {
 		sceneBufferState = stateComponentBuilder.data(new Factory<SceneBuffer>() {
@@ -63,18 +64,22 @@ public class SceneBufferingComponents {
 		this.behaviourComponentBuilder = behaviourComponentBuilder;
 	}
 
+	@Override
 	public StateComponent<SceneBuffer> getSceneBufferState() {
 		return sceneBufferState;
 	}
 
+	@Override
 	public StateComponent<SceneInterpolator> getInterpolatableSceneBufferState() {
 		return interpolatableSceneBufferState;
 	}
 
+	@Override
 	public BehaviourComponent getBufferingBehaviour() {
 		return bufferingBehaviour;
 	}
 
+	@Override
 	public BehaviourComponent getBufferingBehaviour(final SceneBuffer buffer) {
 		return behaviourComponentBuilder
 				.process(new BehaviourProcess() {

@@ -1,0 +1,67 @@
+<behaviourComponent>
+	<name>Movement</name>
+
+	<description>The behaviour of simple movement</description>
+
+	<process source="script">
+		<language>javascript</language> <!-- optional tag in case extension is non standard or ambiguous -->
+
+		<scriptParameters> <!-- optional -->
+			<parameter>Velocity</parameter>
+			<parameter>Position</parameter>
+		</scriptParameters>
+
+		<sourceFile>uk/co/strangeskies/gears/something/movement.js
+		</sourceFile>
+	</process>
+	<!-- OR -->
+	<process source="script">
+		<language>javascript</language>
+
+		<scriptParameters> <!-- optional -->
+			<parameter>Velocity</parameter>
+			<parameter>Position</parameter>
+		</scriptParameters>
+
+		<source>
+			function process(Set entities, LockedStates locks) {
+			println('do
+			summat with entities on states which are locked...');
+			}
+		</source>
+	</process>
+	<!-- OR -->
+	<process source="class">
+		<name>uk.co.strangeskies.gears.something.Movement</name>
+
+		<constructorParameters> <!-- optional (else default) -->
+			<parameter>Velocity</parameter>
+			<parameter>Position</parameter>
+		</constructorParameters>
+	</process>
+	<!-- OR -->
+	<process source="method">
+		<name>uk.co.strangeskies.gears.something.Movement.movement</name>
+
+		<methodParameters> <!-- optional (else default) -->
+			<parameter>Velocity</parameter>
+			<parameter>Position</parameter>
+		</methodParameters>
+	</process>
+
+	<readDependencies>
+		<dependency>Velocity</dependency>
+	</readDependencies>
+
+	<writeDependencies>
+		<dependency>Position</dependency>
+	</writeDependencies>
+
+	<behaviourDependencies>
+		<dependency>Map Input</dependency>
+	</behaviourDependencies>
+
+	<behaviourDependents>
+		<dependent>Render</dependent>
+	</behaviourDependents>
+</behaviourComponent>

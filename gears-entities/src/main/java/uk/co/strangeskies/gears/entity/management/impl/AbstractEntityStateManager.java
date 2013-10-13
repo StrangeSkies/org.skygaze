@@ -1,5 +1,6 @@
 package uk.co.strangeskies.gears.entity.management.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,6 +30,11 @@ public abstract class AbstractEntityStateManager implements EntityStateManager {
 	}
 
 	@Override
+	public void attachAll(Entity entity, StateComponent<?>... stateComponents) {
+		attachAll(entity, Arrays.asList(stateComponents));
+	}
+
+	@Override
 	public final <D> D attachAndReset(Entity entity,
 			StateComponent<D> stateComponent) {
 		return attachAndSet(entity, stateComponent, stateComponent.create());
@@ -40,6 +46,12 @@ public abstract class AbstractEntityStateManager implements EntityStateManager {
 		for (StateComponent<?> stateComponent : stateComponents) {
 			attachAndReset(entity, stateComponent);
 		}
+	}
+
+	@Override
+	public void attachAndResetAll(Entity entity,
+			StateComponent<?>... stateComponents) {
+		attachAndResetAll(entity, Arrays.asList(stateComponents));
 	}
 
 	protected abstract <D> D attachAndSet(Entity entity, /* ReadOnly */
@@ -58,6 +70,11 @@ public abstract class AbstractEntityStateManager implements EntityStateManager {
 	}
 
 	@Override
+	public boolean detachAll(Entity entity, StateComponent<?>... stateComponents) {
+		return detachAll(entity, Arrays.asList(stateComponents));
+	}
+
+	@Override
 	public boolean hasAll(Entity entity,
 			Collection<? extends StateComponent<?>> stateComponents) {
 		for (StateComponent<?> stateComponent : stateComponents) {
@@ -67,6 +84,11 @@ public abstract class AbstractEntityStateManager implements EntityStateManager {
 		}
 
 		return true;
+	}
+
+	@Override
+	public boolean hasAll(Entity entity, StateComponent<?>... stateComponents) {
+		return hasAll(entity, Arrays.asList(stateComponents));
 	}
 
 	@Override
@@ -92,14 +114,14 @@ public abstract class AbstractEntityStateManager implements EntityStateManager {
 
 	@Override
 	public Set<Entity> getEntitiesWith(
-			Collection<StateComponent<?>> stateComponents) {
+			Collection<? extends StateComponent<?>> stateComponents) {
 		if (stateComponents.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 
 		Set<Entity> entitiesWithState = new HashSet<>();
 
-		Iterator<StateComponent<?>> stateComponentIterator = stateComponents
+		Iterator<? extends StateComponent<?>> stateComponentIterator = stateComponents
 				.iterator();
 
 		entitiesWithState.addAll(getEntitiesWith(stateComponentIterator.next()));
@@ -109,5 +131,10 @@ public abstract class AbstractEntityStateManager implements EntityStateManager {
 		}
 
 		return entitiesWithState;
+	}
+
+	@Override
+	public Set<Entity> getEntitiesWith(StateComponent<?>... stateComponents) {
+		return getEntitiesWith(Arrays.asList(stateComponents));
 	}
 }

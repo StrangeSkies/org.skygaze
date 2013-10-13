@@ -8,14 +8,14 @@ import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.rendering.Colour;
 
-public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
+public class ColourImpl extends CompoundExpression<Colour> implements Colour {
 	private final DoubleValue red;
 	private final DoubleValue green;
 	private final DoubleValue blue;
 
 	private final DoubleValue alpha;
 
-	public ColourIml() {
+	public ColourImpl() {
 		red = new DoubleValue();
 		green = new DoubleValue();
 		blue = new DoubleValue();
@@ -25,7 +25,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 		getDependencies().set(Arrays.asList(red, green, blue, alpha));
 	}
 
-	public ColourIml(int red, int green, int blue, int alpha) {
+	public ColourImpl(int red, int green, int blue, int alpha) {
 		this();
 
 		this.red.setValue(red / 255d);
@@ -35,7 +35,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 		this.alpha.setValue(alpha / 255d);
 	}
 
-	public ColourIml(double red, double green, double blue, double alpha) {
+	public ColourImpl(double red, double green, double blue, double alpha) {
 		this();
 
 		this.red.setValue(red);
@@ -45,16 +45,16 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 		this.alpha.setValue(alpha);
 	}
 
-	public ColourIml(int red, int green, int blue) {
+	public ColourImpl(int red, int green, int blue) {
 		this(red / 255d, green / 255d, blue / 255d, 1);
 	}
 
-	public ColourIml(ColourIml colour) {
+	public ColourImpl(ColourImpl colour) {
 		this(colour.getRed().doubleValue(), colour.getGreen().doubleValue(), colour
 				.getBlue().doubleValue(), colour.getAlpha().doubleValue());
 	}
 
-	public ColourIml(Color colour) {
+	public ColourImpl(Color colour) {
 		this(colour.getRed(), colour.getGreen(), colour.getBlue(), colour
 				.getAlpha());
 	}
@@ -86,32 +86,32 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public final ColourIml get() {
+	public final ColourImpl get() {
 		return getThis();
 	}
 
 	@Override
-	public ColourIml getDecoupledValue() {
+	public ColourImpl getDecoupledValue() {
 		return this;
 	}
 
 	@Override
-	public ColourIml getThis() {
+	public ColourImpl getThis() {
 		return this;
 	}
 
 	@Override
-	public ColourIml copy() {
-		return new ColourIml(this);
+	public ColourImpl copy() {
+		return new ColourImpl(this);
 	}
 
 	@Override
-	protected ColourIml evaluate() {
+	protected ColourImpl evaluate() {
 		return this;
 	}
 
 	@Override
-	public ColourIml set(ColourIml to) {
+	public ColourImpl set(Colour to) {
 		red.setValue(to.getRed());
 		green.setValue(to.getGreen());
 		blue.setValue(to.getBlue());
@@ -121,7 +121,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml multiply(Value<?> value) {
+	public ColourImpl multiply(Value<?> value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -132,7 +132,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml multiply(int value) {
+	public ColourImpl multiply(int value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -143,7 +143,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml multiply(long value) {
+	public ColourImpl multiply(long value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -154,7 +154,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml multiply(float value) {
+	public ColourImpl multiply(float value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -165,7 +165,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml multiply(double value) {
+	public ColourImpl multiply(double value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -176,7 +176,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml divide(Value<?> value) {
+	public ColourImpl divide(Value<?> value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -187,7 +187,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml divide(int value) {
+	public ColourImpl divide(int value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -198,7 +198,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml divide(long value) {
+	public ColourImpl divide(long value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -209,7 +209,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml divide(float value) {
+	public ColourImpl divide(float value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -220,7 +220,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml divide(double value) {
+	public ColourImpl divide(double value) {
 		red.multiply(value);
 		green.multiply(value);
 		blue.multiply(value);
@@ -231,7 +231,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml add(ColourIml value) {
+	public ColourImpl add(Colour value) {
 		red.add(value.getRed());
 		green.add(value.getGreen());
 		blue.add(value.getBlue());
@@ -242,7 +242,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml subtract(ColourIml value) {
+	public ColourImpl subtract(Colour value) {
 		red.subtract(value.getRed());
 		green.subtract(value.getGreen());
 		blue.subtract(value.getBlue());
@@ -253,7 +253,7 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml multiply(ColourIml value) {
+	public ColourImpl multiply(Colour value) {
 		red.multiply(value.getRed());
 		green.multiply(value.getGreen());
 		blue.multiply(value.getBlue());
@@ -264,67 +264,67 @@ public class ColourIml extends CompoundExpression<ColourIml> implements Colour {
 	}
 
 	@Override
-	public ColourIml getMultiplied(Value<?> value) {
+	public ColourImpl getMultiplied(Value<?> value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getMultiplied(int value) {
+	public ColourImpl getMultiplied(int value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getMultiplied(long value) {
+	public ColourImpl getMultiplied(long value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getMultiplied(float value) {
+	public ColourImpl getMultiplied(float value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getMultiplied(double value) {
+	public ColourImpl getMultiplied(double value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getDivided(Value<?> value) {
+	public ColourImpl getDivided(Value<?> value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getDivided(int value) {
+	public ColourImpl getDivided(int value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getDivided(long value) {
+	public ColourImpl getDivided(long value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getDivided(float value) {
+	public ColourImpl getDivided(float value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getDivided(double value) {
+	public ColourImpl getDivided(double value) {
 		return copy().multiply(value);
 	}
 
 	@Override
-	public ColourIml getAdded(ColourIml value) {
+	public ColourImpl getAdded(Colour value) {
 		return copy().add(value);
 	}
 
 	@Override
-	public ColourIml getSubtracted(ColourIml value) {
+	public ColourImpl getSubtracted(Colour value) {
 		return copy().subtract(value);
 	}
 
 	@Override
-	public ColourIml getMultiplied(ColourIml value) {
+	public ColourImpl getMultiplied(Colour value) {
 		return copy().multiply(value);
 	}
 }

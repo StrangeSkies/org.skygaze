@@ -12,15 +12,22 @@ public interface EntityStateManager {
 	public void attachAll(Entity entity,
 			Collection<? extends StateComponent<?>> stateComponents);
 
+	public void attachAll(Entity entity, StateComponent<?>... stateComponents);
+
 	public <D> D attachAndReset(Entity entity, StateComponent<D> stateComponent);
 
 	public void attachAndResetAll(Entity entity,
 			Collection<? extends StateComponent<?>> stateComponents);
 
+	public void attachAndResetAll(Entity entity,
+			StateComponent<?>... stateComponents);
+
 	public boolean detach(Entity entity, StateComponent<?> stateComponent);
 
 	public boolean detachAll(Entity entity,
 			Collection<? extends StateComponent<?>> stateComponents);
+
+	public boolean detachAll(Entity entity, StateComponent<?>... stateComponents);
 
 	public void clear(Entity entity);
 
@@ -41,8 +48,12 @@ public interface EntityStateManager {
 	public boolean hasAll(Entity entity,
 			Collection<? extends StateComponent<?>> stateComponents);
 
+	public boolean hasAll(Entity entity, StateComponent<?>... stateComponents);
+
 	public Set<Entity> getEntitiesWith(StateComponent<?> stateComponent);
 
 	public Set<Entity> getEntitiesWith(
-			Collection<StateComponent<?>> stateComponents);
+			Collection<? extends StateComponent<?>> stateComponents);
+
+	public Set<Entity> getEntitiesWith(StateComponent<?>... stateComponents);
 }

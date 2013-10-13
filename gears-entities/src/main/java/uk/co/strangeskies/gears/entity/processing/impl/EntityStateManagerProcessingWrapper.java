@@ -27,7 +27,12 @@ public class EntityStateManagerProcessingWrapper extends
 
 	@Override
 	public Set<Entity> getEntitiesWith(
-			Collection<StateComponent<?>> stateComponents) {
+			Collection<? extends StateComponent<?>> stateComponents) {
+		return getComponent().getEntitiesWith(stateComponents);
+	}
+
+	@Override
+	public Set<Entity> getEntitiesWith(StateComponent<?>... stateComponents) {
 		return getComponent().getEntitiesWith(stateComponents);
 	}
 
@@ -87,6 +92,12 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
+	public void attachAndResetAll(Entity entity,
+			StateComponent<?>... stateComponents) {
+		getComponent().attachAndResetAll(entity, stateComponents);
+	}
+
+	@Override
 	public <D> D attachAndReset(Entity entity, StateComponent<D> stateComponent) {
 		if (locks.isWriteLockHeldByCurrentThread(stateComponent))
 			throw new IllegalStateException();
@@ -99,6 +110,11 @@ public class EntityStateManagerProcessingWrapper extends
 		for (StateComponent<?> stateComponent : stateComponents)
 			if (locks.isWriteLockHeldByCurrentThread(stateComponent))
 				throw new IllegalStateException();
+		getComponent().attachAll(entity, stateComponents);
+	}
+
+	@Override
+	public void attachAll(Entity entity, StateComponent<?>... stateComponents) {
 		getComponent().attachAll(entity, stateComponents);
 	}
 
@@ -119,6 +135,11 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
+	public boolean detachAll(Entity entity, StateComponent<?>... stateComponents) {
+		return getComponent().detachAll(entity, stateComponents);
+	}
+
+	@Override
 	public void clear(Entity entity) {
 		getComponent().clear(entity);
 	}
@@ -126,6 +147,11 @@ public class EntityStateManagerProcessingWrapper extends
 	@Override
 	public boolean hasAll(Entity entity,
 			Collection<? extends StateComponent<?>> stateComponents) {
+		return getComponent().hasAll(entity, stateComponents);
+	}
+
+	@Override
+	public boolean hasAll(Entity entity, StateComponent<?>... stateComponents) {
 		return getComponent().hasAll(entity, stateComponents);
 	}
 }
