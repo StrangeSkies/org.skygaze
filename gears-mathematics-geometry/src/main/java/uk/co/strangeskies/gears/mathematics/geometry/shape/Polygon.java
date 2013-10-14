@@ -7,7 +7,7 @@ import uk.co.strangeskies.gears.mathematics.logic.BooleanCombinationBehaviour;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 
 public interface Polygon<S extends Polygon<S, V>, V extends Value<V>> extends
-		Shape<S>, /*@ReadOnly*/
+		Shape<S>, /* @ReadOnly */
 		BooleanCombinationBehaviour<CompoundPolygon<V>, Polygon<?, V>> {
 	/**
 	 * Gets the area where anti-clockwise wound polygons are negative.
@@ -28,5 +28,5 @@ public interface Polygon<S extends Polygon<S, V>, V extends Value<V>> extends
 	 * The path described is <em>not</em> guaranteed to not contain degenerate
 	 * edges or self intersections.
 	 */
-	public/*@ReadOnly*/List<Vector2<V>> getVertices()/*@ReadOnly*/;
+	public/* @ReadOnly */List<Vector2<V>> getVertices()/* @ReadOnly */;
 }
