@@ -11,14 +11,9 @@ public class ContiguousSet<T> implements Iterable<T>, Collection<T>,
 	private final Range<T> range;
 	private final Incrementor<T> incrementor;
 
-	protected ContiguousSet(Range<T> range, Incrementor<T> incrementor) {
+	public ContiguousSet(Range<T> range, Incrementor<T> incrementor) {
 		this.range = range;
 		this.incrementor = incrementor;
-	}
-
-	public static <T> ContiguousSet<T> create(Range<T> range,
-			Incrementor<T> incrementor) {
-		return new ContiguousSet<>(range, incrementor);
 	}
 
 	public static <T extends Incrementable<? extends T>> ContiguousSet<T> create(
@@ -97,6 +92,31 @@ public class ContiguousSet<T> implements Iterable<T>, Collection<T>,
 	}
 
 	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+			T on = getRange().getFrom();
+
+			@Override
+			public boolean hasNext() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public T next() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void remove() {
+				// TODO Auto-generated method stub
+
+			}
+		};
+	}
+
+	@Override
 	public NavigableSet<T> descendingSet() {
 		// TODO Auto-generated method stub
 		return null;
@@ -113,9 +133,9 @@ public class ContiguousSet<T> implements Iterable<T>, Collection<T>,
 			boolean toInclusive) {
 		T fromRounded = ceiling(from);
 		T toRounded = floor(to);
-		return new ContiguousSet<>(
-				new Range<T>(from, to, getComparator()).setInclusive(fromInclusive,
-						toInclusive), incrementor);
+		return new ContiguousSet<>(new Range<T>(fromRounded, toRounded,
+				getComparator()).setInclusive(fromInclusive, toInclusive),
+				getIncrementor());
 	}
 
 	@Override
@@ -211,11 +231,5 @@ public class ContiguousSet<T> implements Iterable<T>, Collection<T>,
 	@Override
 	public void clear() {
 		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
