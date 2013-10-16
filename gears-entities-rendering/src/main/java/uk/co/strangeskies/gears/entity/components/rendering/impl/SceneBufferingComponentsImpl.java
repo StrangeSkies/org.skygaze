@@ -25,15 +25,16 @@ public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 	public SceneBufferingComponentsImpl(
 			BehaviourComponentBuilder behaviourComponentBuilder,
 			StateComponentBuilder stateComponentBuilder) {
-		sceneBufferState = stateComponentBuilder.data(new Factory<SceneBuffer>() {
-			@Override
-			public SceneBuffer create() {
-				return new SceneBufferImpl();
-			}
-		}).name("Renderable in 2D")
+		sceneBufferState = stateComponentBuilder.configure()
+				.data(new Factory<SceneBuffer>() {
+					@Override
+					public SceneBuffer create() {
+						return new SceneBufferImpl();
+					}
+				}).name("Renderable in 2D")
 				.description("Data for 2D rendering of entities").create();
 
-		interpolatableSceneBufferState = stateComponentBuilder
+		interpolatableSceneBufferState = stateComponentBuilder.configure()
 				.data(new Factory<SceneInterpolator>() {
 					@Override
 					public SceneInterpolator create() {
@@ -43,6 +44,9 @@ public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 				.description("Data for 2D rendering of entities").create();
 
 		bufferingBehaviour = behaviourComponentBuilder
+				.configure()
+				.name("Buffering")
+				.description("Behaviour for buffering renderable data")
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext context) {
@@ -56,8 +60,6 @@ public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 						}
 					}
 				})
-				.name("Buffering")
-				.description("Behaviour for buffering renderable data")
 				.indirectWriteDependencies(sceneBufferState,
 						interpolatableSceneBufferState).create();
 
@@ -82,6 +84,7 @@ public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 	@Override
 	public BehaviourComponent getBufferingBehaviour(final SceneBuffer buffer) {
 		return behaviourComponentBuilder
+				.configure()
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext context) {

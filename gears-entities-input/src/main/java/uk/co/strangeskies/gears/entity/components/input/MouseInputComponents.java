@@ -9,8 +9,8 @@ import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentBuilder;
 import uk.co.strangeskies.gears.input.MouseInputController;
 import uk.co.strangeskies.gears.input.MouseMovementAdapter;
-import uk.co.strangeskies.gears.input.WindowManagerInputController;
 import uk.co.strangeskies.gears.input.MouseMovementAdapter.MovementType;
+import uk.co.strangeskies.gears.input.WindowManagerInputController;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.MatrixBuilder;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
@@ -29,13 +29,13 @@ public class MouseInputComponents {
 				mouseInputController, windowManagerInputController, matrixBuilder);
 		mouseMovementAdapter.setMovementType(MovementType.Relative);
 
-		cursorState = stateComponentBuilder
-				.data(new CopyFactory<>(new CursorStateData())).name("Cursor State")
+		cursorState = stateComponentBuilder.configure().name("Cursor State")
 				.description("The state of an entity which behaves like a cursor")
-				.create();
+				.data(new CopyFactory<>(new CursorStateData())).create();
 
-		cursorBehaviour = behaviourComponentBuilder
-				.process(new BehaviourProcess() {
+		cursorBehaviour = behaviourComponentBuilder.configure()
+				.name("Cursor Behaviour").description("The behaviour of a cursor")
+				.writeDependencies(cursorState).process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext processingContext) {
 						for (Entity entity : processingContext.getEntities()) {
@@ -51,8 +51,7 @@ public class MouseInputComponents {
 							currentPosition.set(nextPosition);
 						}
 					}
-				}).name("Cursor Behaviour").description("The behaviour of a cursor")
-				.writeDependencies(cursorState).create();
+				}).create();
 	}
 
 	public final StateComponent<CursorStateData> getCursorState() {

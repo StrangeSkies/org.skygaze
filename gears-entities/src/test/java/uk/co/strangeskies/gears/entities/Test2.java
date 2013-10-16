@@ -5,6 +5,7 @@ import uk.co.strangeskies.gears.entity.assembly.Assembler;
 import uk.co.strangeskies.gears.entity.assembly.impl.AssemblerImpl;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentBuilder;
+import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentConfigurator;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcess;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcessingContext;
 import uk.co.strangeskies.gears.entity.behaviour.impl.BehaviourComponentBuilderImpl;
@@ -16,6 +17,7 @@ import uk.co.strangeskies.gears.entity.scheduling.schedulers.PeriodicScheduler;
 import uk.co.strangeskies.gears.entity.scheduling.terminating.schedulers.LinearScheduler;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentBuilder;
+import uk.co.strangeskies.gears.entity.state.StateComponentConfigurator;
 import uk.co.strangeskies.gears.entity.state.impl.StateComponentBuilderImpl;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.impl.MatrixBuilderImpl;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
@@ -49,12 +51,12 @@ public class Test2 {
 		return assembler;
 	}
 
-	public StateComponentBuilder stateBuilder() {
-		return stateComponentBuilder;
+	public StateComponentConfigurator<Object> stateBuilder() {
+		return stateComponentBuilder.configure();
 	}
 
-	public BehaviourComponentBuilder behaviourBuilder() {
-		return behaviourComponentBuilderFactory;
+	public BehaviourComponentConfigurator behaviourBuilder() {
+		return behaviourComponentBuilderFactory.configure();
 	}
 
 	public MatrixBuilderImpl matrices() {

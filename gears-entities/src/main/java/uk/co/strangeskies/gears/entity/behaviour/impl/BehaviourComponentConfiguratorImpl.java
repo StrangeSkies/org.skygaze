@@ -7,6 +7,7 @@ import java.util.Collections;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentConfigurator;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcess;
+import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcessingContext;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 
 public class BehaviourComponentConfiguratorImpl implements
@@ -14,7 +15,7 @@ public class BehaviourComponentConfiguratorImpl implements
 	private String name;
 	private String description;
 
-	private final BehaviourProcess process;
+	private BehaviourProcess process;
 
 	private Collection<? extends BehaviourComponent> behaviourDependencies;
 	private Collection<? extends BehaviourComponent> behaviourDependents;
@@ -25,11 +26,15 @@ public class BehaviourComponentConfiguratorImpl implements
 	private Collection<? extends StateComponent<?>> indirectReadDependencies;
 	private Collection<? extends StateComponent<?>> indirectWriteDependencies;
 
-	public BehaviourComponentConfiguratorImpl(BehaviourProcess process) {
+	public BehaviourComponentConfiguratorImpl() {
 		name = "";
 		description = "";
 
-		this.process = process;
+		process = new BehaviourProcess() {
+			@Override
+			public void process(BehaviourProcessingContext context) {
+			}
+		};
 
 		behaviourDependencies = Collections.emptySet();
 		behaviourDependents = Collections.emptySet();
@@ -144,5 +149,11 @@ public class BehaviourComponentConfiguratorImpl implements
 		return new BehaviourComponentImpl(name, description, process,
 				behaviourDependencies, behaviourDependents, readDependencies,
 				writeDependencies, indirectReadDependencies, indirectWriteDependencies);
+	}
+
+	@Override
+	public BehaviourComponentConfigurator process(BehaviourProcess process) {
+		this.process = process;
+		return this;
 	}
 }

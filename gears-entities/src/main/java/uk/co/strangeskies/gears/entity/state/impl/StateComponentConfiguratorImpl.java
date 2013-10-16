@@ -13,16 +13,21 @@ public class StateComponentConfiguratorImpl<D> implements
 	private String name;
 	private String description;
 
-	private final Factory<? extends D> dataFactory;
+	private Factory<? extends D> dataFactory;
 
 	private Collection<? extends StateComponent<?>> readDependencies;
 	private Collection<? extends StateComponent<?>> writeDependencies;
 
-	public StateComponentConfiguratorImpl(Factory<? extends D> dataFactory) {
+	public StateComponentConfiguratorImpl() {
 		name = "";
 		description = "";
 
-		this.dataFactory = dataFactory;
+		dataFactory = new Factory<D>() {
+			@Override
+			public D create() {
+				return null;
+			}
+		};
 
 		readDependencies = Collections.emptySet();
 		writeDependencies = Collections.emptySet();
@@ -74,5 +79,14 @@ public class StateComponentConfiguratorImpl<D> implements
 	public StateComponent<D> create() {
 		return new StateComponentImpl<>(name, description, dataFactory,
 				readDependencies, writeDependencies);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends D> StateComponentConfigurator<T> data(
+			Factory<? extends T> dataFactory) {
+		this.dataFactory = dataFactory;
+
+		return (StateComponentConfigurator<T>) this;
 	}
 }

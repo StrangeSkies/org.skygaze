@@ -31,7 +31,7 @@ public class RenderingComponents2DImpl implements RenderingComponents2D {
 			final SceneFactory2D sceneFactory,
 			BehaviourComponentBuilder behaviourComponentBuilder,
 			StateComponentBuilder stateComponentBuilder) {
-		renderableState = stateComponentBuilder
+		renderableState = stateComponentBuilder.configure()
 				.data(new Factory<Renderable<Data2D>>() {
 					@Override
 					public Renderable<Data2D> create() {
@@ -40,22 +40,25 @@ public class RenderingComponents2DImpl implements RenderingComponents2D {
 				}).name("Renderable in 2D")
 				.description("Data for 2D rendering of entities").create();
 
-		cameraState = stateComponentBuilder.data(new Factory<Camera2D>() {
-			@Override
-			public Camera2D create() {
-				return sceneFactory.createCamera();
-			}
-		}).name("Camera in 2D").description("Camera for 2D scenes").create();
+		cameraState = stateComponentBuilder.configure()
+				.data(new Factory<Camera2D>() {
+					@Override
+					public Camera2D create() {
+						return sceneFactory.createCamera();
+					}
+				}).name("Camera in 2D").description("Camera for 2D scenes").create();
 
-		sceneState = stateComponentBuilder.data(new Factory<Scene<Data2D>>() {
-			@Override
-			public Scene<Data2D> create() {
-				return sceneFactory.createScene();
-			}
-		}).name("Scene in 2D").description("Scene for 2D renderables and cameras")
-				.create();
+		sceneState = stateComponentBuilder.configure()
+				.data(new Factory<Scene<Data2D>>() {
+					@Override
+					public Scene<Data2D> create() {
+						return sceneFactory.createScene();
+					}
+				}).name("Scene in 2D")
+				.description("Scene for 2D renderables and cameras").create();
 
 		renderingBehaviour = behaviourComponentBuilder
+				.configure()
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext processingContext) {
@@ -68,7 +71,7 @@ public class RenderingComponents2DImpl implements RenderingComponents2D {
 				}).name("Rendering").description("Behaviour for rendering entities")
 				.readDependencies(cameraState).create();
 
-		bufferingBehaviour = behaviourComponentBuilder
+		bufferingBehaviour = behaviourComponentBuilder.configure()
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext processingContext) {

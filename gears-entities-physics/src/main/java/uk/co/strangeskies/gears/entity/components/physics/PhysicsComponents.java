@@ -21,18 +21,18 @@ public class PhysicsComponents {
 	public PhysicsComponents(Factory<PhysicsSpace> physicsSpaceFactory,
 			BehaviourComponentBuilder behaviourComponentBuilder,
 			StateComponentBuilder stateComponentBuilder) {
-		physicsBodyState = stateComponentBuilder
-				.data(new CopyFactory<>(new PhysicsBody()))
-				.name("Physics Body State")
+		physicsBodyState = stateComponentBuilder.configure()
+				.data(new CopyFactory<>(new PhysicsBody())).name("Physics Body State")
 				.description("The state of a body which can physically interact")
 				.create();
 
-		physicsSpaceState = stateComponentBuilder.data(physicsSpaceFactory)
-				.name("Physics Space State")
+		physicsSpaceState = stateComponentBuilder.configure()
+				.data(physicsSpaceFactory).name("Physics Space State")
 				.description("The state of a self contained physics space")
 				.writeDependencies(physicsBodyState).create();
 
 		physicsBehaviour = behaviourComponentBuilder
+				.configure()
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext processingContext) {

@@ -46,4 +46,6 @@ public interface BehaviourComponentConfigurator extends
 
 	public BehaviourComponentConfigurator indirectWriteDependencies(
 			StateComponent<?>... writeDependencies);
+
+	public BehaviourComponentConfigurator process(BehaviourProcess process);
 }

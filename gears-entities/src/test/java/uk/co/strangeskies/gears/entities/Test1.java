@@ -11,6 +11,7 @@ import uk.co.strangeskies.gears.entity.assembly.Variable;
 import uk.co.strangeskies.gears.entity.assembly.impl.AssemblerImpl;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentBuilder;
+import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentConfigurator;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcess;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcessingContext;
 import uk.co.strangeskies.gears.entity.behaviour.impl.BehaviourComponentBuilderImpl;
@@ -23,6 +24,7 @@ import uk.co.strangeskies.gears.entity.scheduling.schedulers.PeriodicScheduler;
 import uk.co.strangeskies.gears.entity.scheduling.terminating.schedulers.LinearScheduler;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentBuilder;
+import uk.co.strangeskies.gears.entity.state.StateComponentConfigurator;
 import uk.co.strangeskies.gears.entity.state.impl.StateComponentBuilderImpl;
 import uk.co.strangeskies.gears.mathematics.expressions.IdentityExpression;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.impl.MatrixBuilderImpl;
@@ -58,12 +60,12 @@ public class Test1 {
 		return assembler;
 	}
 
-	public StateComponentBuilder stateBuilder() {
-		return stateComponentBuilder;
+	public StateComponentConfigurator<Object> stateBuilder() {
+		return stateComponentBuilder.configure();
 	}
 
-	public BehaviourComponentBuilder behaviourBuilder() {
-		return behaviourComponentBuilderFactory;
+	public BehaviourComponentConfigurator behaviourBuilder() {
+		return behaviourComponentBuilderFactory.configure();
 	}
 
 	public MatrixBuilderImpl matrices() {
@@ -76,23 +78,25 @@ public class Test1 {
 		entities().behaviour().setDefaultScheduler(scheduler);
 
 		final StateComponent<Vector2<DoubleValue>> position = stateBuilder()
-				.data(new CopyFactory<>(matrices().doubles().vector2()))
-				.name("Position").description("Position of entity").create();
+				.name("Position").description("Position of entity")
+				.data(new CopyFactory<>(matrices().doubles().vector2())).create();
 
 		final StateComponent<Vector2<DoubleValue>> velocity = stateBuilder()
-				.data(new CopyFactory<>(matrices().doubles().vector2()))
 				.name("Velocity").description("Velocity of entity")
+				.data(new CopyFactory<>(matrices().doubles().vector2()))
 				.readDependencies(position).create();
 
 		final StateComponent<IdentityExpression<String>> parrot = stateBuilder()
+				.name("Parrot").description("A parrot which knows a word")
 				.data(new Factory<IdentityExpression<String>>() {
 					@Override
 					public IdentityExpression<String> create() {
 						return new IdentityExpression<>("");
 					}
-				}).name("Parrot").description("A parrot which knows a word").create();
+				}).create();
 
-		final BehaviourComponent movement = behaviourBuilder()
+		final BehaviourComponent movement = behaviourBuilder().name("Movement")
+				.description("Moves entity by velocity")
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext context) {
@@ -103,12 +107,11 @@ public class Test1 {
 									state.getData(entity, velocity)));
 						}
 					}
-				}).name("Movement").description("Moves entity by velocity")
-				.readDependencies(velocity).writeDependencies(position).create();
+				}).readDependencies(velocity).writeDependencies(position).create();
 		entities().behaviour().addUniversal(movement);
 
-		final BehaviourComponent parrotting = behaviourBuilder()
-				.process(new BehaviourProcess() {
+		final BehaviourComponent parrotting = behaviourBuilder().name("Parrotting")
+				.description("Parrot makes a noise").process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext context) {
 						for (Entity entity : context.getEntities()) {
@@ -117,8 +120,7 @@ public class Test1 {
 							System.out.println(state.getData(entity, parrot).get());
 						}
 					}
-				}).name("Parrotting").description("Parrot makes a noise")
-				.readDependencies(parrot).create();
+				}).readDependencies(parrot).create();
 		entities().behaviour().addUniversal(parrotting);
 
 		final Assemblage assemblage1 = assembler().create();
