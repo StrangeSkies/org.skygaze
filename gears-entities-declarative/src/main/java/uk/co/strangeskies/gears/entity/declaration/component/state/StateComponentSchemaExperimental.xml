@@ -1,21 +1,36 @@
 <?xml version="1.1"?>
+
 <modelSchema>
 
 	<!-- factory = "true|false|initialise" -->
 
-	<model name="set" type="java.util.Set" implementation="require">
-		<sequence>
-			<element method="add"></element>
-		</sequence>
+	<model name="set">
+		<initialiser class="java.util.Set">
+			<sequence>
+				<element callMethod="add" />
+			</sequence>
+		</initialiser>
 	</model>
 
-	<model name="pooFactory" type="uk.co.strangeskies.gears.utilities.Factory"
-		implementation="provide">
-		<element method="create">() => { return new poo(); }</element>
+	<model name="integer">
+		<initialiser class="java.lang.Integer">
+
+		</initialiser>
 	</model>
 
-	<model name="stateComponent"
-		type="uk.co.strangeskies.gears.entity.state.StateComponent"
+	<model name="pooFactory">
+		<provider class="uk.co.strangeskies.gears.utilities.Factory">
+			<element provideMethod="create">() => { return new poo(); }</element>
+		</provider>
+	</model>
+
+	<model name="weeFactory">
+		<provider class="uk.co.strangeskies.gears.utilities.Factory">
+			<element provideReturnValue="create" model="wee" />
+		</provider>
+	</model>
+
+	<model name="stateComponent" type="uk.co.strangeskies.gears.entity.state.StateComponent"
 		builder="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator::create">
 
 		<element name="readDependencies" model="set">
@@ -31,8 +46,7 @@
 
 				<element name="name" type="string" maxOccurs="1" minOccurs="1" />
 
-				<element name="description" type="string" maxOccurs="1"
-					minOccurs="0" />
+				<element name="description" type="string" maxOccurs="1" minOccurs="0" />
 
 				<element name="readDependencies" maxOccurs="1" minOccurs="0"
 					type="dependencies" />
@@ -43,11 +57,9 @@
 				<element name="data" maxOccurs="1" minOccurs="1">
 					<complexType>
 						<sequence>
-							<element name="type" type="string" maxOccurs="1"
-								minOccurs="1" />
+							<element name="type" type="string" maxOccurs="1" minOccurs="1" />
 
-							<element type="factory" name="factory" maxOccurs="1"
-								minOccurs="1" />
+							<element type="factory" name="factory" maxOccurs="1" minOccurs="1" />
 						</sequence>
 					</complexType>
 				</element>
@@ -58,11 +70,9 @@
 							<element name="property" minOccurs="1" maxOccurs="unbounded">
 								<complexType>
 									<sequence>
-										<element name="name" type="string" maxOccurs="1"
-											minOccurs="1" />
+										<element name="name" type="string" maxOccurs="1" minOccurs="1" />
 
-										<element name="type" type="string" maxOccurs="1"
-											minOccurs="1" />
+										<element name="type" type="string" maxOccurs="1" minOccurs="1" />
 
 										<element name="factory" type="factory" minOccurs="0" />
 									</sequence>
