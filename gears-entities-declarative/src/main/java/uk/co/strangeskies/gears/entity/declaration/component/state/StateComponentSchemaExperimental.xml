@@ -1,15 +1,19 @@
 <?xml version="1.1"?>
+
 <modelSchema>
 
 	<factory
 		class="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator"
 		factoryClass="uk.co.strangeskies.gears.entity.state.StateComponentFactory" />
 
+<<<<<<< HEAD
 	<factory
 		class="uk.co.strangeskies.gears.entity.state.BehaviourComponentConfigurator"
 		factoryClass="uk.co.strangeskies.gears.entity.state.BehaviourComponentFactory"
 		method="create" />
 
+=======
+>>>>>>> branch 'master' of ssh://eliasvasylenko@git.code.sf.net/p/gears-engine/code
 	<model name="set">
 		<initialiser class="java.util.Set">
 			<sequence>
@@ -22,6 +26,7 @@
 		<initialiser class="java.lang.Integer">
 
 		</initialiser>
+<<<<<<< HEAD
 	</model>
 
 	<model name="pooFactory">
@@ -34,13 +39,32 @@
 		<provider class="uk.co.strangeskies.gears.utilities.Factory">
 			<element provideReturnValue="create" model="wee" />
 		</provider>
+=======
+>>>>>>> branch 'master' of ssh://eliasvasylenko@git.code.sf.net/p/gears-engine/code
 	</model>
 
+<<<<<<< HEAD
 	<model name="stateComponent"
 		class="uk.co.strangeskies.gears.entity.state.StateComponent">
 		<builder
 			class="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator"
 			method="create">
+=======
+	<model name="pooFactory">
+		<provider class="uk.co.strangeskies.gears.utilities.Factory">
+			<element provideMethod="create">() => { return new poo(); }</element>
+		</provider>
+	</model>
+
+	<model name="weeFactory">
+		<provider class="uk.co.strangeskies.gears.utilities.Factory">
+			<element provideReturnValue="create" model="wee" />
+		</provider>
+	</model>
+
+	<model name="stateComponent" type="uk.co.strangeskies.gears.entity.state.StateComponent"
+		builder="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator::create">
+>>>>>>> branch 'master' of ssh://eliasvasylenko@git.code.sf.net/p/gears-engine/code
 
 			<element name="name" type="string" maxOccurs="1" minOccurs="1" />
 
@@ -93,6 +117,54 @@
 		</builder>
 	</model>
 
+<<<<<<< HEAD
 	<element type="stateComponent" />
+=======
+	<element name="stateComponent">
+		<complexType>
+			<sequence>
+
+				<element name="name" type="string" maxOccurs="1" minOccurs="1" />
+
+				<element name="description" type="string" maxOccurs="1" minOccurs="0" />
+
+				<element name="readDependencies" maxOccurs="1" minOccurs="0"
+					type="dependencies" />
+
+				<element name="writeDependencies" maxOccurs="1" minOccurs="0"
+					type="dependencies" />
+
+				<element name="data" maxOccurs="1" minOccurs="1">
+					<complexType>
+						<sequence>
+							<element name="type" type="string" maxOccurs="1" minOccurs="1" />
+
+							<element type="factory" name="factory" maxOccurs="1" minOccurs="1" />
+						</sequence>
+					</complexType>
+				</element>
+
+				<element name="properties" maxOccurs="1" minOccurs="1">
+					<complexType>
+						<sequence>
+							<element name="property" minOccurs="1" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="name" type="string" maxOccurs="1" minOccurs="1" />
+
+										<element name="type" type="string" maxOccurs="1" minOccurs="1" />
+
+										<element name="factory" type="factory" minOccurs="0" />
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+
+			</sequence>
+		</complexType>
+	</element>
+>>>>>>> branch 'master' of ssh://eliasvasylenko@git.code.sf.net/p/gears-engine/code
 
 </modelSchema>
