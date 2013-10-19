@@ -1,79 +1,72 @@
 <?xml version="1.1"?>
 <modelSchema>
 
-	<!-- factory = "true|false|initialise" -->
+	<factory
+		class="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator"
+		factoryClass="uk.co.strangeskies.gears.entity.state.StateComponentFactory" />
 
-	<model name="set" type="java.util.Set" implementation="require">
-		<sequence>
-			<element method="add"></element>
-		</sequence>
-	</model>
-
-	<model name="pooFactory" type="uk.co.strangeskies.gears.utilities.Factory"
-		implementation="provide">
-		<element method="create">() => { return new poo(); }</element>
-	</model>
+	<factory
+		class="uk.co.strangeskies.gears.entity.state.BehaviourComponentConfigurator"
+		factoryClass="uk.co.strangeskies.gears.entity.state.BehaviourComponentFactory"
+		method="create" />
 
 	<model name="stateComponent"
-		type="uk.co.strangeskies.gears.entity.state.StateComponent"
-		builder="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator::create">
+		class="uk.co.strangeskies.gears.entity.state.StateComponent">
+		<builder
+			class="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator"
+			method="create">
 
-		<element name="readDependencies" model="set">
-			<sequence>
-				<element name="dependency" model="string" />
-			</sequence>
-		</element>
+			<element name="name" type="string" maxOccurs="1" minOccurs="1" />
+
+			<element name="description" type="string" maxOccurs="1"
+				minOccurs="0" />
+
+			<initialiser name="readDependencies" class="java.util.Set">
+				<sequence min="1" max="0">
+					<methodCall name="add">
+						<element name="dependency" model="string" />
+					</methodCall>
+				</sequence>
+			</initialiser>
+
+			<element name="readDependencies" maxOccurs="1" minOccurs="0"
+				type="dependencies" />
+
+			<element name="writeDependencies" maxOccurs="1" minOccurs="0"
+				type="dependencies" />
+
+			<element name="data" maxOccurs="1" minOccurs="1">
+				<sequence>
+					<element name="type" type="string" maxOccurs="1" minOccurs="1" />
+
+					<element type="factory" name="factory" maxOccurs="1"
+						minOccurs="1" />
+				</sequence>
+			</element>
+
+			<element name="properties" maxOccurs="1" minOccurs="1">
+				<complexType>
+					<sequence>
+						<element name="property" minOccurs="1" maxOccurs="unbounded">
+							<complexType>
+								<sequence>
+									<element name="name" type="string" maxOccurs="1"
+										minOccurs="1" />
+
+									<element name="type" type="string" maxOccurs="1"
+										minOccurs="1" />
+
+									<element name="factory" type="factory" minOccurs="0" />
+								</sequence>
+							</complexType>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+
+		</builder>
 	</model>
 
-	<element name="stateComponent">
-		<complexType>
-			<sequence>
-
-				<element name="name" type="string" maxOccurs="1" minOccurs="1" />
-
-				<element name="description" type="string" maxOccurs="1"
-					minOccurs="0" />
-
-				<element name="readDependencies" maxOccurs="1" minOccurs="0"
-					type="dependencies" />
-
-				<element name="writeDependencies" maxOccurs="1" minOccurs="0"
-					type="dependencies" />
-
-				<element name="data" maxOccurs="1" minOccurs="1">
-					<complexType>
-						<sequence>
-							<element name="type" type="string" maxOccurs="1"
-								minOccurs="1" />
-
-							<element type="factory" name="factory" maxOccurs="1"
-								minOccurs="1" />
-						</sequence>
-					</complexType>
-				</element>
-
-				<element name="properties" maxOccurs="1" minOccurs="1">
-					<complexType>
-						<sequence>
-							<element name="property" minOccurs="1" maxOccurs="unbounded">
-								<complexType>
-									<sequence>
-										<element name="name" type="string" maxOccurs="1"
-											minOccurs="1" />
-
-										<element name="type" type="string" maxOccurs="1"
-											minOccurs="1" />
-
-										<element name="factory" type="factory" minOccurs="0" />
-									</sequence>
-								</complexType>
-							</element>
-						</sequence>
-					</complexType>
-				</element>
-
-			</sequence>
-		</complexType>
-	</element>
+	<element type="stateComponent" />
 
 </modelSchema>
