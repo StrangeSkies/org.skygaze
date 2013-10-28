@@ -1,0 +1,8 @@
+description = 'Gears Rendering 3D'
+
+dependencies {
+	compile project(':gears-utilities')
+	compile project(':gears-mathematics')
+	compile project(':gears-mathematics-geometry')
+	compile project(':gears-rendering')
+}

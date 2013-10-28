@@ -1,0 +1,7 @@
+description = 'Gears Declarative Entities'
+
+dependencies {
+	compile project(':gears-utilities')
+	compile project(':gears-mathematics')
+	compile project(':gears-entities')
+}

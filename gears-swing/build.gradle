@@ -1,0 +1,10 @@
+description = 'Gears Swing'
+
+dependencies {
+	compile project(':gears-utilities')
+	compile project(':gears-input')
+	compile project(':gears-rendering')
+	compile project(':gears-rendering-2d')
+	compile project(':gears-mathematics')
+	compile project(':gears-mathematics-geometry')
+}

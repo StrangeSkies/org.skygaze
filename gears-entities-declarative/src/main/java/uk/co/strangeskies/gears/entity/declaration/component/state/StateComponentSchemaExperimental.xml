@@ -10,29 +10,12 @@
 		factoryClass="uk.co.strangeskies.gears.entity.state.BehaviourComponentFactory"
 		method="create" />
 
-	<model name="set">
-		<initialiser class="java.util.Set">
-			<sequence>
-				<element callMethod="add" />
-			</sequence>
-		</initialiser>
-	</model>
-
 	<model name="integer">
-		<initialiser class="java.lang.Integer">
-
-		</initialiser>
 	</model>
 
 	<model name="pooFactory">
 		<provider class="uk.co.strangeskies.gears.utilities.Factory">
 			<element provideMethod="create">() => { return new poo(); }</element>
-		</provider>
-	</model>
-
-	<model name="weeFactory">
-		<provider class="uk.co.strangeskies.gears.utilities.Factory">
-			<element provideReturnValue="create" model="wee" />
 		</provider>
 	</model>
 
@@ -47,13 +30,12 @@
 			<element name="description" type="string" maxOccurs="1"
 				minOccurs="0" />
 
-			<initialiser name="readDependencies" class="java.util.Set">
-				<sequence min="1" max="0">
-					<methodCall name="add">
-						<element name="dependency" model="string" />
-					</methodCall>
+			<element name="readDependencies" requiredClass="java.util.Set"
+				buildMethod="toArray">
+				<sequence min="1" max="unbounded" outIterable="this">
+					<element inMethod="add" name="dependency" model="string" />
 				</sequence>
-			</initialiser>
+			</element>
 
 			<element name="readDependencies" maxOccurs="1" minOccurs="0"
 				type="dependencies" />

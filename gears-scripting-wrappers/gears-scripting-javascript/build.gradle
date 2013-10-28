@@ -1,0 +1,7 @@
+
+
+description = 'Gears Scripting - Javascript'
+
+dependencies {
+    compile group: 'com.sun.phobos', name: 'phobos-js', version:'0.6.2'
+}
