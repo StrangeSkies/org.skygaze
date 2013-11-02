@@ -1,80 +1,66 @@
 <?xml version="1.1"?>
 <modelSchema>
 
-	<factory
-		class="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator"
-		factoryClass="uk.co.strangeskies.gears.entity.state.StateComponentFactory" />
-
-	<factory
-		class="uk.co.strangeskies.gears.entity.state.BehaviourComponentConfigurator"
-		factoryClass="uk.co.strangeskies.gears.entity.state.BehaviourComponentFactory"
-		method="create" />
-
-	<model name="integer">
+	<model name="data">
+		<data type="string" />
 	</model>
 
-	<model name="pooFactory">
-		<provider class="uk.co.strangeskies.gears.utilities.Factory">
-			<element provideMethod="create">() => { return new poo(); }</element>
-		</provider>
+	<model name="mappyMap" occurences="0..1" class="java.util.Map">
+		<element name="element" occurences="1.." in="put" iterable="true" out="elementSet">
+			<element name="elementKey" model="data" out="key" />
+			<element name="elementValue" model="data" out="value" />
+		</element>
 	</model>
 
-	<model name="stateComponent"
-		class="uk.co.strangeskies.gears.entity.state.StateComponent">
-		<builder
-			class="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator"
-			method="create">
+	<model name="script" factoryClass="uk.co.strangeskies.gears.entity.declaration.ScriptDeclaration">
+		<choice>
+			<group>
+				<property name="language" optional="true" />
+				<property name="file" type="file" />
+			</group>
 
-			<element name="name" type="string" maxOccurs="1" minOccurs="1" />
+			<group>
+				<property name="language" />
+				<data />
+			</group>
+		</choice>
 
-			<element name="description" type="string" maxOccurs="1"
-				minOccurs="0" />
-
-			<element name="readDependencies" requiredClass="java.util.Set"
-				buildMethod="toArray">
-				<sequence min="1" max="unbounded" outIterable="this">
-					<element inMethod="add" name="dependency" model="string" />
-				</sequence>
-			</element>
-
-			<element name="readDependencies" maxOccurs="1" minOccurs="0"
-				type="dependencies" />
-
-			<element name="writeDependencies" maxOccurs="1" minOccurs="0"
-				type="dependencies" />
-
-			<element name="data" maxOccurs="1" minOccurs="1">
-				<sequence>
-					<element name="type" type="string" maxOccurs="1" minOccurs="1" />
-
-					<element type="factory" name="factory" maxOccurs="1"
-						minOccurs="1" />
-				</sequence>
-			</element>
-
-			<element name="properties" maxOccurs="1" minOccurs="1">
-				<complexType>
-					<sequence>
-						<element name="property" minOccurs="1" maxOccurs="unbounded">
-							<complexType>
-								<sequence>
-									<element name="name" type="string" maxOccurs="1"
-										minOccurs="1" />
-
-									<element name="type" type="string" maxOccurs="1"
-										minOccurs="1" />
-
-									<element name="factory" type="factory" minOccurs="0" />
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-
-		</builder>
+		<property name="purpose" optional="true">
+			<restriction>
+				<enumeration value="implementation" />
+				<enumeration value="factory" />
+			</restriction>
+		</property>
 	</model>
 
-	<element type="stateComponent" />
+	<model name="dependencies" class="java.util.Set">
+		<element name="dependency" model="dependency" in="add" iterable="true" out="this" occurences="1.." />
+	</model>
+
+	<model name="stateComponent" class="uk.co.strangeskies.gears.entity.state.StateComponent" factoryClass="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator">
+		<element name="name" model="data" />
+
+		<element name="description" model="data" />
+
+		<element name="readDependencies" model="dependencies" occurences="0..1" />
+
+		<element name="writeDependencies" model="dependencies" occurences="0..1" />
+
+		<element name="data">
+			<element name="type" model="string" />
+
+			<element name="factory" class="uk.co.strangeskies.gears.utilities.Factory" model="userDefined" />
+		</element>
+
+		<element name="properties">
+			<element name="property" occurences="0..">
+				<element name="name" model="string" />
+
+				<element name="type" model="string" />
+
+				<element name="factory" model="factory" occurences="0..1" />
+			</element>
+		</element>
+	</model>
 
 </modelSchema>

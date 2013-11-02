@@ -3,7 +3,6 @@ package uk.co.strangeskies.gears.swing.input.impl;
 import java.awt.AWTEvent;
 import java.awt.AWTException;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
@@ -11,11 +10,13 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 import javax.swing.event.ChangeEvent;
@@ -29,12 +30,14 @@ public class KeyRepeatSuppressor {
 		private boolean consumeKeyReleased;
 
 		private final Robot robot;
-		private int fakeKeyCode;
+		private final Queue<Integer> fakeKeyCodes;
 		private final ArrayList<Integer> keyCodes;
 
-		public Listener(Robot robot) throws AWTException {
+		public Listener(Robot robot) {
 			consumeKeyTyped = false;
 			consumeKeyReleased = false;
+
+			fakeKeyCodes = new ArrayDeque<>();
 
 			keyCodes = new ArrayList<Integer>();
 			keyCodes.add(KeyEvent.VK_0);
@@ -102,30 +105,23 @@ public class KeyRepeatSuppressor {
 		public synchronized void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();
 
-			if (fakeKeyCode == keyCode
+			if ((!fakeKeyCodes.isEmpty() && fakeKeyCodes.peek().equals(keyCode))
 					|| (suppressKeyRepeats && keysDown.contains(keyCode))) {
 				e.consume();
-				consumeKeyTyped = true;
 				consumeKeyReleased = true;
+				consumeKeyTyped = true;
 			} else {
 				keysDown.add(keyCode);
 
 				if (suppressKeyRepeats) {
 					Iterator<Integer> alphabetIterator = keyCodes.iterator();
 					Integer unheldKey = alphabetIterator.next();
-					while (keysDown.contains(unheldKey) || unheldKey.equals(keyCode)) {
+					while (keysDown.contains(unheldKey)) {
 						unheldKey = alphabetIterator.next();
 					}
-					final int finalUnheldKey = unheldKey;
-					EventQueue.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							fakeKeyCode = finalUnheldKey;
-						}
-					});
-
-					robot.keyPress(finalUnheldKey);
-					robot.keyRelease(finalUnheldKey);
+					fakeKeyCodes.add(unheldKey);
+					robot.keyPress(unheldKey);
+					robot.keyRelease(unheldKey);
 				}
 
 				if (logKeysPressed) {
@@ -133,21 +129,6 @@ public class KeyRepeatSuppressor {
 				}
 
 				notifyKeyPressed(e);
-			}
-		}
-
-		@Override
-		public synchronized void keyReleased(KeyEvent e) {
-			int keyCode = e.getKeyCode();
-
-			if (fakeKeyCode == keyCode && consumeKeyReleased) {
-				e.consume();
-				consumeKeyReleased = false;
-				fakeKeyCode = KeyEvent.VK_UNDEFINED;
-			} else {
-				keysDown.remove(keyCode);
-
-				notifyKeyReleased(e);
 			}
 		}
 
@@ -160,6 +141,22 @@ public class KeyRepeatSuppressor {
 				keysTyped.append(e.getKeyChar());
 
 				notifyKeyTyped(e);
+			}
+		}
+
+		@Override
+		public synchronized void keyReleased(KeyEvent e) {
+			int keyCode = e.getKeyCode();
+
+			if (!fakeKeyCodes.isEmpty() && fakeKeyCodes.peek().equals(keyCode)
+					&& consumeKeyReleased) {
+				e.consume();
+				consumeKeyReleased = false;
+				fakeKeyCodes.poll();
+			} else {
+				keysDown.remove(keyCode);
+
+				notifyKeyReleased(e);
 			}
 		}
 
@@ -196,8 +193,7 @@ public class KeyRepeatSuppressor {
 	}
 
 	public KeyRepeatSuppressor(boolean suppressKeyRepeats,
-			boolean logKeysPressed, boolean logKeysTyped, Robot robot)
-			throws AWTException {
+			boolean logKeysPressed, boolean logKeysTyped, Robot robot) {
 		listener = new Listener(robot);
 
 		keysDown = new HashSet<Integer>();
