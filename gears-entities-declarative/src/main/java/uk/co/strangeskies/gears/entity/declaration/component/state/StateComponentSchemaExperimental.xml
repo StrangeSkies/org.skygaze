@@ -6,13 +6,15 @@
 	</model>
 
 	<model name="mappyMap" occurences="0..1" class="java.util.Map">
-		<element name="element" occurences="1.." in="put" iterable="true" out="elementSet">
+		<element name="element" occurences="1.." in="put" iterable="true"
+			out="elementSet">
 			<element name="elementKey" model="data" out="key" />
 			<element name="elementValue" model="data" out="value" />
 		</element>
 	</model>
 
-	<model name="script" factoryClass="uk.co.strangeskies.gears.entity.declaration.ScriptDeclaration">
+	<model name="script"
+		factoryClass="uk.co.strangeskies.gears.entity.declaration.ScriptDeclaration">
 		<choice>
 			<group>
 				<property name="language" optional="true" />
@@ -34,10 +36,12 @@
 	</model>
 
 	<model name="dependencies" class="java.util.Set">
-		<element name="dependency" model="dependency" in="add" iterable="true" out="this" occurences="1.." />
+		<element name="dependency" model="dependency" in="add" iterable="true"
+			out="this" occurences="1.." />
 	</model>
 
-	<model name="stateComponent" class="uk.co.strangeskies.gears.entity.state.StateComponent" factoryClass="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator">
+	<model name="stateComponent" class="uk.co.strangeskies.gears.entity.state.StateComponent"
+		factoryClass="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator">
 		<element name="name" model="data" />
 
 		<element name="description" model="data" />
@@ -49,7 +53,8 @@
 		<element name="data">
 			<element name="type" model="string" />
 
-			<element name="factory" class="uk.co.strangeskies.gears.utilities.Factory" model="userDefined" />
+			<element name="factory" class="uk.co.strangeskies.gears.utilities.Factory"
+				model="userDefined" />
 		</element>
 
 		<element name="properties">

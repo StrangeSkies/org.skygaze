@@ -18,7 +18,7 @@
 
 		<factory>
 			<script language="javascript">
-				{whatevs}
+				{whatevs, yo}
 			</script>
 		</factory>
 	</data>
