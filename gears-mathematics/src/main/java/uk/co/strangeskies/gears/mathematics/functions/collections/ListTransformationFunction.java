@@ -1,6 +1,7 @@
 package uk.co.strangeskies.gears.mathematics.functions.collections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,5 +23,12 @@ public class ListTransformationFunction<T, F> extends
 	public static <X, Y> List<X> applyTo(Collection<? extends Y> collection,
 			Function<? extends X, ? super Y> function) {
 		return new ListTransformationFunction<X, Y>(function).applyTo(collection);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <X, Y> X[] applyTo(Y[] collection,
+			Function<? extends X, ? super Y> function) {
+		return (X[]) new ListTransformationFunction<X, Y>(function).applyTo(
+				Arrays.asList(collection)).toArray();
 	}
 }
