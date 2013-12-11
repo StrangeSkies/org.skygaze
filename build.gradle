@@ -11,6 +11,7 @@ def javaProjects() {
 configure(javaProjects()) {
 	apply plugin: 'java'
 	apply plugin: 'osgi'
+	apply plugin: 'maven-publish'
 
 	sourceCompatibility = 1.7
 	targetCompatibility = 1.7
@@ -25,4 +26,12 @@ configure(javaProjects()) {
 		compile group: 'org.osgi', name: 'org.osgi.core', version:'5.+'
 		compile group: 'org.osgi', name: 'org.osgi.enterprise', version:'5.+'
 	}
+
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        from components.java
+      }
+    }
+  }
 }
