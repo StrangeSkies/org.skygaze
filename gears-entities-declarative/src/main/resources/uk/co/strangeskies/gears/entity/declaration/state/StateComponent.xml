@@ -1,0 +1,66 @@
+<?xml version="1.1"?>
+<modelSchema xmlns="modabi.strangeskies.co.uk" namespace="entity.gears.strangeskies.co.uk">
+
+	<root id="stateComponent" model="stateComponent" />
+
+	<models>
+		<model name="data">
+			<data type="string" />
+		</model>
+
+		<model name="script" factoryClass=".declaration.ScriptDeclaration">
+			<choice>
+				<group>
+					<property name="language" optional="true" />
+					<property name="file" type="file" />
+				</group>
+
+				<group>
+					<property name="language" />
+					<data />
+				</group>
+			</choice>
+
+			<property name="purpose" optional="true">
+				<restriction>
+					<enumeration value="implementation" />
+					<enumeration value="factory" />
+				</restriction>
+			</property>
+		</model>
+
+		<model name="dependencies" class="java.util.Set">
+			<element name="dependency" model="dependency" in="add"
+				isIterableOut="true" out="this" occurences="1.." />
+		</model>
+
+		<model name="stateComponent" class=".state.StateComponent"
+			factoryClass=".state.StateComponentConfigurator">
+			<element name="name" model="data" />
+
+			<element name="description" model="data" />
+
+			<element name="readDependencies" model="dependencies" occurences="0..1" />
+
+			<element name="writeDependencies" model="dependencies" occurences="0..1" />
+
+			<element name="data">
+				<element name="type" model="string" />
+
+				<element name="factory" class="uk.co.strangeskies.gears.utilities.Factory"
+					model="userDefined" />
+			</element>
+
+			<element name="properties">
+				<element name="property" occurences="0..">
+					<element name="name" model="string" />
+
+					<element name="type" model="string" />
+
+					<element name="factory" model="factory" occurences="0..1" />
+				</element>
+			</element>
+		</model>
+	</models>
+
+</modelSchema>
