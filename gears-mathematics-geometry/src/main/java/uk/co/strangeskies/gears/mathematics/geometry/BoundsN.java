@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class BoundsN<V extends Value<V>> extends Bounds<BoundsN<V>, V> {
 	public BoundsN(Bounds<?, V> other) {

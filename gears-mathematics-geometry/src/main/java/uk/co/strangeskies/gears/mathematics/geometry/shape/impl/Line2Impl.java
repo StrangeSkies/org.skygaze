@@ -2,14 +2,16 @@ package uk.co.strangeskies.gears.mathematics.geometry.shape.impl;
 
 import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
 import uk.co.strangeskies.gears.mathematics.geometry.Bounds2;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix.Order;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.Vector2Impl;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.Line2;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.Shape;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Line2Impl<V extends Value<V>> extends CompoundExpression<Line2<V>>
 		implements Line2<V> {
@@ -17,8 +19,8 @@ public class Line2Impl<V extends Value<V>> extends CompoundExpression<Line2<V>>
 	private final Vector2<V> b;
 
 	public Line2Impl(Factory<V> valueFactory) {
-		a = new Vector2Impl<>(valueFactory);
-		b = new Vector2Impl<>(valueFactory);
+		a = new Vector2Impl<>(Order.ColumnMajor, Orientation.Column, valueFactory);
+		b = new Vector2Impl<>(Order.ColumnMajor, Orientation.Column, valueFactory);
 	}
 
 	public Line2Impl(Vector2<V> a, Vector2<V> b) {

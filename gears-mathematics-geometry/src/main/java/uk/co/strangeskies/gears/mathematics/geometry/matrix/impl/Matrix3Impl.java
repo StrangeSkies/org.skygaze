@@ -7,16 +7,12 @@ import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix3;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector3;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.Vector3Impl;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Matrix3Impl<V extends Value<V>> extends MatrixSImpl<Matrix3<V>, V>
 		implements Matrix3<V> {
 	public Matrix3Impl(Order order, Factory<V> valueFactory) {
 		super(3, order, valueFactory);
-	}
-
-	public Matrix3Impl(Factory<V> valueFactory) {
-		super(3, valueFactory);
 	}
 
 	public Matrix3Impl(Order order, List<? extends List<? extends V>> values) {
@@ -25,15 +21,9 @@ public class Matrix3Impl<V extends Value<V>> extends MatrixSImpl<Matrix3<V>, V>
 		assertDimensions(this, 3);
 	}
 
-	public Matrix3Impl(List<? extends List<? extends V>> values) {
-		super(values);
-
-		assertDimensions(this, 3);
-	}
-
 	@Override
 	public Matrix3<V> copy() {
-		return new Matrix3Impl<V>(getData2());
+		return new Matrix3Impl<V>(getOrder(), getData2());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -74,7 +64,8 @@ public class Matrix3Impl<V extends Value<V>> extends MatrixSImpl<Matrix3<V>, V>
 
 	@Override
 	public final Vector3<V> getMajorVector(int index) {
-		return new Vector3Impl<V>(getData2().get(index));
+		return new Vector3Impl<V>(getOrder(),
+				getOrder().getAssociatedOrientation(), getData2().get(index));
 	}
 
 	@Override
@@ -83,6 +74,7 @@ public class Matrix3Impl<V extends Value<V>> extends MatrixSImpl<Matrix3<V>, V>
 		for (List<V> elements : getData2()) {
 			minorElements.add(elements.get(index));
 		}
-		return new Vector3Impl<V>(minorElements);
+		return new Vector3Impl<V>(getOrder(), getOrder().getAssociatedOrientation()
+				.getOther(), minorElements);
 	}
 }

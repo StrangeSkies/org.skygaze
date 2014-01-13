@@ -6,7 +6,7 @@ import uk.co.strangeskies.gears.mathematics.Range;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.Vector3Impl;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Bounds3<V extends Value<V>> extends Bounds<Bounds3<V>, V> {
 	public Bounds3(Bounds<?, V> other) {

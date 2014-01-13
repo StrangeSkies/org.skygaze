@@ -4,21 +4,13 @@ import java.util.List;
 
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorR;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class VectorRImpl<V extends Value<V>> extends VectorImpl<VectorR<V>, V>
 		implements VectorR<V> {
 	public VectorRImpl(int size, Order order, Orientation orientation,
 			Factory<V> valueFactory) {
 		super(size, order, orientation, valueFactory);
-	}
-
-	public VectorRImpl(int size, Factory<V> valueFactory) {
-		super(size, valueFactory);
-	}
-
-	public VectorRImpl(List<? extends V> other) {
-		super(other);
 	}
 
 	public VectorRImpl(Order order, Orientation orientation,
@@ -38,6 +30,6 @@ public class VectorRImpl<V extends Value<V>> extends VectorImpl<VectorR<V>, V>
 
 	@Override
 	public VectorR<V> copy() {
-		return new VectorRImpl<>(getData());
+		return new VectorRImpl<>(getOrder(), getOrientation(), getData());
 	}
 }

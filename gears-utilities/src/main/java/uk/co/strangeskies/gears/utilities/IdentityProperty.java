@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.utilities;
 
-public class IdentityProperty<T> implements Property<T, T> {
+public class IdentityProperty<T> implements SimpleProperty<T> {
 	private T value;
 
 	public IdentityProperty() {

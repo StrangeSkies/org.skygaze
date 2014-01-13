@@ -3,19 +3,18 @@ package uk.co.strangeskies.gears.rendering.buffering.impl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 import uk.co.strangeskies.gears.mathematics.Interpolate;
 import uk.co.strangeskies.gears.mathematics.InterpolationOperation;
 import uk.co.strangeskies.gears.mathematics.expressions.DecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.DecouplingExpressionEvaluationFunction;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.DoubleBuffer;
-import uk.co.strangeskies.gears.mathematics.functions.CopyFunction;
-import uk.co.strangeskies.gears.mathematics.functions.Function;
-import uk.co.strangeskies.gears.mathematics.functions.FunctionComposition;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.rendering.buffering.SceneInterpolator;
 import uk.co.strangeskies.gears.utilities.IdentityComparator;
 import uk.co.strangeskies.gears.utilities.Self;
+import uk.co.strangeskies.gears.utilities.functions.CopyFunction;
 
 public class SceneInterpolatorImpl extends SceneBufferImpl implements
 		SceneInterpolator {
@@ -52,14 +51,14 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	}
 
 	@Override
-	public <I, T> Interpolate<I, T> bufferInterpolation(
+	public <T, I> Interpolate<T, I> bufferInterpolation(
 			DoubleBuffer<? extends T, ? extends T> interpolation,
-			InterpolationOperation<? extends I, ? super T> operation) {
-		DoubleBuffer<T, ?> from = bufferResult(interpolation);
+			InterpolationOperation<? super T, ? extends I> operation) {
+		DoubleBuffer<?, T> from = bufferResult(interpolation);
 
-		DoubleBuffer<T, ?> to = bufferResult(interpolation.getBackExpression());
+		DoubleBuffer<?, T> to = bufferResult(interpolation.getBackExpression());
 
-		Interpolate<I, T> interpolate = new Interpolate<>(from, to, getDelta(),
+		Interpolate<T, I> interpolate = new Interpolate<>(from, to, getDelta(),
 				operation);
 
 		registerInterpolation(interpolation, to, from);
@@ -68,16 +67,16 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	}
 
 	@Override
-	public <I, T, F> Interpolate<I, T> bufferInterpolation(
+	public <F, T, I> Interpolate<T, I> bufferInterpolation(
 			DoubleBuffer<? extends F, ? extends F> interpolation,
-			InterpolationOperation<? extends I, ? super T> operation,
-			Function<? extends T, ? super F> function) {
-		DoubleBuffer<? extends T, ?> from = bufferResult(interpolation, function);
+			InterpolationOperation<? super T, ? extends I> operation,
+			Function<? super F, ? extends T> function) {
+		DoubleBuffer<?, ? extends T> from = bufferResult(interpolation, function);
 
-		DoubleBuffer<? extends T, ?> to = bufferResult(
+		DoubleBuffer<?, ? extends T> to = bufferResult(
 				interpolation.getBackExpression(), function);
 
-		Interpolate<I, T> interpolate = new Interpolate<>(from, to, getDelta(),
+		Interpolate<T, I> interpolate = new Interpolate<>(from, to, getDelta(),
 				operation);
 
 		registerInterpolation(interpolation, to, from);
@@ -86,16 +85,16 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	}
 
 	@Override
-	public <I, T extends Self<? extends T>, F> Interpolate<I, T> bufferDecoupledInterpolation(
-			DoubleBuffer<T, ? extends DecouplingExpression<? extends T>> interpolation,
-			InterpolationOperation<? extends I, ? super T> operation) {
-		DoubleBuffer<T, ?> from = bufferResult(interpolation,
+	public <F, T extends Self<? extends T>, I> Interpolate<T, I> bufferDecoupledInterpolation(
+			DoubleBuffer<? extends DecouplingExpression<? extends T>, T> interpolation,
+			InterpolationOperation<? super T, ? extends I> operation) {
+		DoubleBuffer<?, T> from = bufferResult(interpolation,
 				new CopyFunction<T, T>());
 
-		DoubleBuffer<T, ?> to = bufferResult(interpolation.getBackExpression(),
-				new DecouplingExpressionEvaluationFunction<T>());
+		DoubleBuffer<?, T> to = bufferResult(interpolation.getBackExpression(),
+				f -> f.getDecoupledValue());
 
-		Interpolate<I, T> interpolate = new Interpolate<>(from, to, getDelta(),
+		Interpolate<T, I> interpolate = new Interpolate<>(from, to, getDelta(),
 				operation);
 
 		registerInterpolation(interpolation, to, from);
@@ -104,17 +103,18 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	}
 
 	@Override
-	public <I, T, F extends Self<? extends F>> Interpolate<I, T> bufferDecoupledInterpolation(
-			DoubleBuffer<F, ? extends DecouplingExpression<? extends F>> interpolation,
-			InterpolationOperation<? extends I, ? super T> operation,
-			Function<? extends T, ? super F> function) {
-		DoubleBuffer<? extends T, ?> from = bufferResult(interpolation, function);
+	public <F extends Self<? extends F>, T, I> Interpolate<T, I> bufferDecoupledInterpolation(
+			DoubleBuffer<? extends DecouplingExpression<? extends F>, F> interpolation,
+			InterpolationOperation<? super T, ? extends I> operation,
+			Function<? super F, ? extends T> function) {
+		DoubleBuffer<?, ? extends T> from = bufferResult(interpolation, function);
 
-		DoubleBuffer<? extends T, ?> to = bufferResult(
-				interpolation.getBackExpression(), new FunctionComposition<>(
-						new DecouplingExpressionEvaluationFunction<F>(), function));
+		DoubleBuffer<?, ? extends T> to = bufferResult(
+				interpolation.getBackExpression(),
+				function
+						.<DecouplingExpression<? extends F>> compose(new DecouplingExpressionEvaluationFunction<F>()));
 
-		Interpolate<I, T> interpolate = new Interpolate<>(from, to, getDelta(),
+		Interpolate<T, I> interpolate = new Interpolate<>(from, to, getDelta(),
 				operation);
 
 		registerInterpolation(interpolation, to, from);

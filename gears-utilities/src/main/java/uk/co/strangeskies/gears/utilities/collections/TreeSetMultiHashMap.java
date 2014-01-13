@@ -3,7 +3,7 @@ package uk.co.strangeskies.gears.utilities.collections;
 import java.util.Set;
 import java.util.TreeSet;
 
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class TreeSetMultiHashMap<K, V> extends MultiHashMap<K, V, Set<V>>
 		implements SetMultiMap<K, V> {

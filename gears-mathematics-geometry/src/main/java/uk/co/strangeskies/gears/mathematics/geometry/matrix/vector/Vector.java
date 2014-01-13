@@ -15,15 +15,27 @@ public interface Vector<S extends Vector<S, V>, V extends Value<V>> extends
 			public Order getAssociatedOrder() {
 				return Order.RowMajor;
 			}
+
+			@Override
+			public Orientation getOther() {
+				return Column;
+			}
 		},
 		Column {
 			@Override
 			public Order getAssociatedOrder() {
 				return Order.RowMajor;
 			}
+
+			@Override
+			public Orientation getOther() {
+				return Row;
+			}
 		};
 
 		public abstract Order getAssociatedOrder();
+
+		public abstract Orientation getOther();
 	}
 
 	public S transpose();

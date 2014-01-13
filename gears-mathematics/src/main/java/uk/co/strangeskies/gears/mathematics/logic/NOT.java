@@ -4,7 +4,7 @@ import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.expressions.UnaryOperationExpression;
 
 public class NOT<O> extends
-		UnaryOperationExpression<O, NOTable<?, ? extends O>> {
+		UnaryOperationExpression<NOTable<?, ? extends O>, O> {
 	public NOT(Expression<? extends NOTable<?, ? extends O>> operand) {
 		super(operand, new NOTOperation<O>());
 	}

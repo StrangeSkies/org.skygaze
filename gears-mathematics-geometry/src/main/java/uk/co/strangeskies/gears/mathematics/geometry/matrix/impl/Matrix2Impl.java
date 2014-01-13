@@ -7,16 +7,12 @@ import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.Vector2Impl;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Matrix2Impl<V extends Value<V>> extends MatrixSImpl<Matrix2<V>, V>
 		implements Matrix2<V> {
 	public Matrix2Impl(Order order, Factory<V> valueFactory) {
 		super(2, order, valueFactory);
-	}
-
-	public Matrix2Impl(Factory<V> valueFactory) {
-		super(2, valueFactory);
 	}
 
 	public Matrix2Impl(Order order, List<? extends List<? extends V>> values) {
@@ -25,15 +21,9 @@ public class Matrix2Impl<V extends Value<V>> extends MatrixSImpl<Matrix2<V>, V>
 		assertDimensions(this, 2);
 	}
 
-	public Matrix2Impl(List<? extends List<? extends V>> values) {
-		super(values);
-
-		assertDimensions(this, 2);
-	}
-
 	@Override
 	public Matrix2<V> copy() {
-		return new Matrix2Impl<V>(getData2());
+		return new Matrix2Impl<V>(getOrder(), getData2());
 	}
 
 	@Override
@@ -124,7 +114,8 @@ public class Matrix2Impl<V extends Value<V>> extends MatrixSImpl<Matrix2<V>, V>
 
 	@Override
 	public final Vector2Impl<V> getMajorVector(int index) {
-		return new Vector2Impl<V>(getData2().get(index));
+		return new Vector2Impl<V>(getOrder(),
+				getOrder().getAssociatedOrientation(), getData2().get(index));
 	}
 
 	@Override
@@ -133,6 +124,7 @@ public class Matrix2Impl<V extends Value<V>> extends MatrixSImpl<Matrix2<V>, V>
 		for (List<V> elements : getData2()) {
 			minorElements.add(elements.get(index));
 		}
-		return new Vector2Impl<V>(minorElements);
+		return new Vector2Impl<V>(getOrder(), getOrder().getOther()
+				.getAssociatedOrientation(), minorElements);
 	}
 }

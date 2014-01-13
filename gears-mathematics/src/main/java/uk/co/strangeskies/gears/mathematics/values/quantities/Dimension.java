@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.mathematics.values.Fraction;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Dimension {
 	private final Map<QuantityType, /*@ReadOnly*/Fraction> quantityTypepowers;

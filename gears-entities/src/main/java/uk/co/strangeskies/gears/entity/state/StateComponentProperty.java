@@ -1,16 +1,17 @@
 package uk.co.strangeskies.gears.entity.state;
 
-import uk.co.strangeskies.gears.mathematics.functions.Function;
+import java.util.function.Function;
+
 import uk.co.strangeskies.gears.utilities.Property;
 
 public class StateComponentProperty<D, T> {
 	private final String name;
 
 	private final Class<T> propertyClass;
-	private final Function<Property<T, ? super T>, D> propertyFunction;
+	private final Function<D, Property<T, ? super T>> propertyFunction;
 
 	public StateComponentProperty(String name, Class<T> propertyClass,
-			Function<Property<T, ? super T>, D> propertyFunction) {
+			Function<D, Property<T, ? super T>> propertyFunction) {
 		this.name = name;
 		this.propertyClass = propertyClass;
 		this.propertyFunction = propertyFunction;
@@ -25,6 +26,6 @@ public class StateComponentProperty<D, T> {
 	}
 
 	public final Property<T, ? super T> getPropertyForData(D input) {
-		return propertyFunction.applyTo(input);
+		return propertyFunction.apply(input);
 	}
 }

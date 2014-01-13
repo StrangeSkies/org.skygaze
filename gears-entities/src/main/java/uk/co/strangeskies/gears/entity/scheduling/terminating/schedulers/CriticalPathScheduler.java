@@ -2,9 +2,9 @@ package uk.co.strangeskies.gears.entity.scheduling.terminating.schedulers;
 
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.scheduling.ScheduleProcessingContext;
-import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
+import uk.co.strangeskies.gears.entity.scheduling.terminating.TerminatingScheduler;
 
-public class CriticalPathScheduler implements Scheduler {
+public class CriticalPathScheduler implements TerminatingScheduler {
 	@Override
 	public boolean process(ScheduleProcessingContext processingContext) {
 		for (BehaviourComponent behaviour : processingContext.getBehaviours()) {
@@ -19,10 +19,5 @@ public class CriticalPathScheduler implements Scheduler {
 		}
 
 		return true;
-	}
-
-	@Override
-	public boolean stopProcessing() {
-		return false;
 	}
 }

@@ -6,10 +6,10 @@ import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorH;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public abstract class VectorHImpl<S extends VectorH<S, V>, V extends Value<V>>
-		extends /*@ReadOnly*/VectorImpl<S, V> implements VectorH<S, V> {
+		extends /* @ReadOnly */VectorImpl<S, V> implements VectorH<S, V> {
 	private Type type;
 
 	public VectorHImpl(Type type, int size, Order order, Orientation orientation,
@@ -19,21 +19,9 @@ public abstract class VectorHImpl<S extends VectorH<S, V>, V extends Value<V>>
 		this.type = type;
 	}
 
-	public VectorHImpl(Type type, int size, Factory<V> valueFactory) {
-		super(size, valueFactory);
-
-		this.type = type;
-	}
-
 	public VectorHImpl(Type type, Order order, Orientation orientation,
 			List<? extends V> values) {
 		super(order, orientation, values);
-
-		this.type = type;
-	}
-
-	public VectorHImpl(Type type, List<? extends V> values) {
-		super(values);
 
 		this.type = type;
 	}

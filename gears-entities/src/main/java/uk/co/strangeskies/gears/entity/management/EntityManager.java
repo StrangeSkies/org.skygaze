@@ -3,11 +3,11 @@ package uk.co.strangeskies.gears.entity.management;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.Entity;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 /**
- * Naming convention suggest 'entities' for instances of {@link EntityManager},
- * as it is semantically consistent with the state() and behaviour() methods in
+ * Naming convention suggest 'entity' for instances of {@link EntityManager}, as
+ * it is semantically consistent with the state() and behaviour() methods in
  * that it is a description of the domain of operations.
  * 
  * @author Elias N Vasylenko

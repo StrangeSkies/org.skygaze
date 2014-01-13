@@ -1,18 +1,12 @@
 package uk.co.strangeskies.gears.mathematics;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import java.util.function.BiFunction;
 
-public class Multiply<O extends Multipliable<?, ? super T>, T> extends
-		BinaryOperationExpression<O, Multipliable<? extends O, ? super T>, T> {
-	public Multiply(
-			Expression<? extends Multipliable<? extends O, ? super T>> firstOperand,
-			Expression<? extends T> secondOperand) {
-		super(firstOperand, secondOperand, new MultiplicationOperation<O, T>());
-	}
-
+public class Multiply<O extends Multipliable<?, ? super T>, T>
+		implements BiFunction<Multipliable<? extends O, ? super T>, T, O> {
 	@Override
-	public String toString() {
-		return "(" + getFirstOperand() + " * " + getSecondOperand() + ")";
+	public O apply(Multipliable<? extends O, ? super T> firstOperand,
+			T secondOperand) {
+		return firstOperand.getMultiplied(secondOperand);
 	}
 }

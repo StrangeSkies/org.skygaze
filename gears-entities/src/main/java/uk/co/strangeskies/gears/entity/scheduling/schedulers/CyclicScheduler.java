@@ -2,13 +2,14 @@ package uk.co.strangeskies.gears.entity.scheduling.schedulers;
 
 import uk.co.strangeskies.gears.entity.scheduling.ScheduleProcessingContext;
 import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
+import uk.co.strangeskies.gears.entity.scheduling.terminating.TerminatingScheduler;
 
 public class CyclicScheduler implements Scheduler {
 	private boolean stopped;
 
-	private final Scheduler scheduler;
+	private final TerminatingScheduler scheduler;
 
-	public CyclicScheduler(Scheduler scheduler) {
+	public CyclicScheduler(TerminatingScheduler scheduler) {
 		this.scheduler = scheduler;
 		stopped = true;
 	}

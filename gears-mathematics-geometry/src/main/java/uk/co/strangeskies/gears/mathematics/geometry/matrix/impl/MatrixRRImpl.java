@@ -7,7 +7,7 @@ import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.VectorNImpl;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class MatrixRRImpl<V extends Value<V>> extends
 		MatrixImpl<MatrixRR<V>, V> implements MatrixRR<V> {
@@ -16,16 +16,8 @@ public class MatrixRRImpl<V extends Value<V>> extends
 		super(rows, columns, order, valueFactory);
 	}
 
-	public MatrixRRImpl(int rows, int columns, Factory<V> valueFactory) {
-		super(rows, columns, valueFactory);
-	}
-
-	public MatrixRRImpl(List<? extends List<? extends V>> values) {
-		super(values);
-	}
-
 	public MatrixRRImpl(Order order, List<? extends List<? extends V>> values) {
-		super(values);
+		super(order, values);
 	}
 
 	@Override
@@ -40,7 +32,7 @@ public class MatrixRRImpl<V extends Value<V>> extends
 
 	@Override
 	public MatrixRR<V> copy() {
-		return new MatrixRRImpl<V>(getData2());
+		return new MatrixRRImpl<V>(getOrder(), getData2());
 	}
 
 	@Override

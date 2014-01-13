@@ -1,16 +1,10 @@
 package uk.co.strangeskies.gears.mathematics;
 
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
-import uk.co.strangeskies.gears.mathematics.expressions.UnaryOperationExpression;
+import java.util.function.Function;
 
-public class Negate<O> extends
-		UnaryOperationExpression<O, Negatable<?, ? extends O>> {
-	public Negate(Expression<? extends Negatable<?, ? extends O>> operand) {
-		super(operand, new NegationOperation<O>());
-	}
-
+public class Negate<O> implements Function<Negatable<?, ? extends O>, O> {
 	@Override
-	public String toString() {
-		return "¬" + getOperand();
+	public O apply(Negatable<?, ? extends O> firstOperand) {
+		return firstOperand.getNegated();
 	}
 }

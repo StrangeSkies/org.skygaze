@@ -1,9 +1,8 @@
 package uk.co.strangeskies.gears.mathematics.logic;
 
-import uk.co.strangeskies.gears.mathematics.functions.UnaryOperation;
+import java.util.function.Function;
 
-public class NOTOperation<O> implements
-		UnaryOperation<O, NOTable<?, ? extends O>> {
+public class NOTOperation<O> implements Function<NOTable<?, ? extends O>, O> {
 	@Override
 	public O apply(NOTable<?, ? extends O> firstOperand) {
 		return firstOperand.getNot();

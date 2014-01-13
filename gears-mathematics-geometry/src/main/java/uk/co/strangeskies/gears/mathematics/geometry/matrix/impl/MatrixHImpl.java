@@ -2,22 +2,23 @@ package uk.co.strangeskies.gears.mathematics.geometry.matrix.impl;
 
 import java.util.List;
 
-import uk.co.strangeskies.gears.mathematics.functions.collections.ListTransformOnceView;
-import uk.co.strangeskies.gears.mathematics.functions.collections.ListTransformationFunction;
-import uk.co.strangeskies.gears.mathematics.functions.collections.SubListFunction;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.MatrixH;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.MatrixNN;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.MatrixS;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorH;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorH.Type;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.VectorHNImpl;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
 import uk.co.strangeskies.gears.utilities.collections.SubList;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
+import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformOnceView;
+import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformationFunction;
+import uk.co.strangeskies.gears.utilities.functions.collections.SubListFunction;
 
 public abstract class MatrixHImpl<S extends MatrixH<S, V>, V extends Value<V>>
-		extends /*@ReadOnly*/MatrixImpl<S, V> implements MatrixH<S, V> {
+		extends /* @ReadOnly */MatrixImpl<S, V> implements MatrixH<S, V> {
 	public MatrixHImpl(int size, Order order, Factory<V> valueFactory) {
 		super(size + 1, size, order, valueFactory);
 
@@ -26,20 +27,8 @@ public abstract class MatrixHImpl<S extends MatrixH<S, V>, V extends Value<V>>
 		}
 	}
 
-	public MatrixHImpl(int size, Factory<V> valueFactory) {
-		super(size + 1, size, valueFactory);
-
-		for (int i = 0; i < getProjectedDimensions(); i++) {
-			getElement(i, i).setValue(1);
-		}
-	}
-
 	public MatrixHImpl(Order order, List<? extends List<? extends V>> values) {
 		super(order, values);
-	}
-
-	public MatrixHImpl(List<? extends List<? extends V>> values) {
-		super(values);
 	}
 
 	@Override
@@ -83,7 +72,7 @@ public abstract class MatrixHImpl<S extends MatrixH<S, V>, V extends Value<V>>
 	}
 
 	protected List<List<V>> getTransformationData2() {
-		return ListTransformationFunction.applyTo(
+		return ListTransformationFunction.apply(
 				getData2().subList(0, getProjectedDimensions()),
 				new SubListFunction<V>(0, getProjectedDimensions()));
 	}
@@ -123,8 +112,8 @@ public abstract class MatrixHImpl<S extends MatrixH<S, V>, V extends Value<V>>
 	@Override
 	public VectorH<?, V> getColumnVector(int column) {
 		return new VectorHNImpl<V>(column == getDimensions() - 1 ? Type.Absolute
-				: Type.Relative, getColumnVectorData(column).subList(0,
-				getProjectedDimensions()));
+				: Type.Relative, getOrder(), Orientation.Column, getColumnVectorData(
+				column).subList(0, getProjectedDimensions()));
 	}
 
 	@Override

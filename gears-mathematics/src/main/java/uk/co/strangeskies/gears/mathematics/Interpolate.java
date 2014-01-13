@@ -4,11 +4,11 @@ import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.expressions.TrinaryOperationExpression;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 
-public class Interpolate<I, T> extends
-		TrinaryOperationExpression<I, T, T, Value<?>> {
+public class Interpolate<T, I> extends
+		TrinaryOperationExpression<T, T, Value<?>, I> {
 	public Interpolate(Expression<? extends T> from, Expression<? extends T> to,
 			Expression<? extends Value<?>> delta,
-			InterpolationOperation<? extends I, ? super T> interpolation) {
+			InterpolationOperation<? super T, ? extends I> interpolation) {
 		super(from, to, delta, interpolation);
 	}
 }

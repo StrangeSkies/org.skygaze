@@ -8,7 +8,7 @@ import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.utilities.flowcontrol.StripedReadWriteLockRelease;
 
 public interface BehaviourProcessingContext {
-	public EntityManager entities();
+	public EntityManager entity();
 
 	public StripedReadWriteLockRelease<StateComponent<?>> getLockReleases();
 

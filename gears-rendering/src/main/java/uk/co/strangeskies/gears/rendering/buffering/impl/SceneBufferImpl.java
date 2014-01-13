@@ -1,6 +1,7 @@
 package uk.co.strangeskies.gears.rendering.buffering.impl;
 
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import uk.co.strangeskies.gears.mathematics.expressions.DecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
@@ -12,7 +13,6 @@ import uk.co.strangeskies.gears.mathematics.expressions.collections.DoubleBuffer
 import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionResultBuffer;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionResultTransformationBuffer;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.OperationApplicationBuffer;
-import uk.co.strangeskies.gears.mathematics.functions.Function;
 import uk.co.strangeskies.gears.rendering.buffering.SceneBuffer;
 import uk.co.strangeskies.gears.utilities.Copyable;
 import uk.co.strangeskies.gears.utilities.IdentityComparator;
@@ -54,9 +54,9 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public <B, T> OperationApplicationBuffer<B, T> buffer(T item,
-			Function<B, T> function) {
-		OperationApplicationBuffer<B, T> buffer = new OperationApplicationBuffer<B, T>(
+	public <T, B> OperationApplicationBuffer<T, B> buffer(T item,
+			Function<T, B> function) {
+		OperationApplicationBuffer<T, B> buffer = new OperationApplicationBuffer<>(
 				item, function);
 
 		registerBuffer(buffer);
@@ -67,7 +67,7 @@ public class SceneBufferImpl implements SceneBuffer {
 	@Override
 	public <T> ExpressionResultBuffer<T> bufferResult(
 			Expression<? extends T> expression) {
-		ExpressionResultBuffer<T> buffer = new ExpressionResultBuffer<T>(expression);
+		ExpressionResultBuffer<T> buffer = new ExpressionResultBuffer<>(expression);
 
 		registerBuffer(buffer);
 
@@ -75,9 +75,9 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public <T, F> ExpressionResultTransformationBuffer<T, F> bufferResult(
-			Expression<? extends F> expression, Function<T, ? super F> function) {
-		ExpressionResultTransformationBuffer<T, F> buffer = new ExpressionResultTransformationBuffer<T, F>(
+	public <F, T> ExpressionResultTransformationBuffer<F, T> bufferResult(
+			Expression<? extends F> expression, Function<? super F, T> function) {
+		ExpressionResultTransformationBuffer<F, T> buffer = new ExpressionResultTransformationBuffer<>(
 				expression, function);
 
 		registerBuffer(buffer);
@@ -88,7 +88,7 @@ public class SceneBufferImpl implements SceneBuffer {
 	@Override
 	public <T extends Self<? extends T>> DecoupledExpressionResultBuffer<T> bufferDecoupledResult(
 			DecouplingExpression<? extends T> expression) {
-		DecoupledExpressionResultBuffer<T> buffer = new DecoupledExpressionResultBuffer<T>(
+		DecoupledExpressionResultBuffer<T> buffer = new DecoupledExpressionResultBuffer<>(
 				expression);
 
 		registerBuffer(buffer);
@@ -97,10 +97,10 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public <T, F extends Self<? extends F>> DecoupledExpressionResultTransformationBuffer<T, F> bufferDecoupledResult(
+	public <F extends Self<? extends F>, T> DecoupledExpressionResultTransformationBuffer<F, T> bufferDecoupledResult(
 			DecouplingExpression<? extends F> expression,
-			Function<T, ? super F> function) {
-		DecoupledExpressionResultTransformationBuffer<T, F> buffer = new DecoupledExpressionResultTransformationBuffer<T, F>(
+			Function<? super F, T> function) {
+		DecoupledExpressionResultTransformationBuffer<F, T> buffer = new DecoupledExpressionResultTransformationBuffer<>(
 				expression, function);
 
 		registerBuffer(buffer);

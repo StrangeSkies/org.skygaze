@@ -1,6 +1,5 @@
 package uk.co.strangeskies.gears.entity.behaviour;
 
-import java.util.Collection;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.state.StateComponent;
@@ -19,14 +18,6 @@ public interface BehaviourComponent extends Named, Described {
 	 */
 	public Set<BehaviourComponent> getBehaviourDependencies();
 
-	public void addBehaviourDependency(BehaviourComponent behaviourDependency);
-
-	public void addBehaviourDependencies(
-			BehaviourComponent... behaviourDependencies);
-
-	public void addBehaviourDependencies(
-			Collection<BehaviourComponent> behaviourDependencies);
-
 	/**
 	 * Get the set of behaviours which should not be processed until this
 	 * behaviour completes, if they are present in the same execution DAG. (e.g.
@@ -35,13 +26,6 @@ public interface BehaviourComponent extends Named, Described {
 	 * @return
 	 */
 	public Set<BehaviourComponent> getBehaviourDependents();
-
-	public void addBehaviourDependent(BehaviourComponent behaviourDependent);
-
-	public void addBehaviourDependents(BehaviourComponent... behaviourDependents);
-
-	public void addBehaviourDependents(
-			Collection<BehaviourComponent> behaviourDependents);
 
 	/**
 	 * Get the set of state components which this behaviour component needs read
@@ -59,7 +43,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getIndirectStateDependencies();
+	public Set<StateComponent<?>> getOptionalStateDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component needs read
@@ -67,7 +51,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getStateReadDependencies();
+	public Set<StateComponent<?>> getReadDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component does not
@@ -77,7 +61,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getIndirectStateReadDependencies();
+	public Set<StateComponent<?>> getOptionalReadDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component needs write
@@ -85,7 +69,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getStateWriteDependencies();
+	public Set<StateComponent<?>> getWriteDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component does not
@@ -95,5 +79,5 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getIndirectStateWriteDependencies();
+	public Set<StateComponent<?>> getOptionalWriteDependencies();
 }

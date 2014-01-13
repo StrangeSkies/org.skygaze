@@ -13,9 +13,9 @@ configure(javaProjects()) {
 	apply plugin: 'osgi'
 	apply plugin: 'maven-publish'
 
-	sourceCompatibility = 1.7
-	targetCompatibility = 1.7
-
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	
 	repositories {
 		mavenCentral()
 		mavenLocal()

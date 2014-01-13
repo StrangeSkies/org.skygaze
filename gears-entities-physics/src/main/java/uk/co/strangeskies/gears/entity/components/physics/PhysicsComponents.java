@@ -9,8 +9,8 @@ import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentBuilder;
 import uk.co.strangeskies.gears.physics.PhysicsBody;
 import uk.co.strangeskies.gears.physics.PhysicsSpace;
-import uk.co.strangeskies.gears.utilities.CopyFactory;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.CopyFactory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class PhysicsComponents {
 	private final StateComponent<PhysicsBody> physicsBodyState;
@@ -37,7 +37,7 @@ public class PhysicsComponents {
 					@Override
 					public void process(BehaviourProcessingContext processingContext) {
 						for (Entity entity : processingContext.getEntities()) {
-							processingContext.entities().state()
+							processingContext.entity().state()
 									.getData(entity, getPhysicsBodyState());
 						}
 					}

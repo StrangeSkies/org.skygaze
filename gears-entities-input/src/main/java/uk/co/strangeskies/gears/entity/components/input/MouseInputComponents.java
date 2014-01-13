@@ -14,7 +14,7 @@ import uk.co.strangeskies.gears.input.WindowManagerInputController;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.MatrixBuilder;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
-import uk.co.strangeskies.gears.utilities.CopyFactory;
+import uk.co.strangeskies.gears.utilities.factory.CopyFactory;
 
 public class MouseInputComponents {
 	private final StateComponent<CursorStateData> cursorState;
@@ -39,7 +39,7 @@ public class MouseInputComponents {
 					@Override
 					public void process(BehaviourProcessingContext processingContext) {
 						for (Entity entity : processingContext.getEntities()) {
-							CursorStateData cursorStateData = processingContext.entities()
+							CursorStateData cursorStateData = processingContext.entity()
 									.state().getData(entity, getCursorState());
 
 							Vector2<IntValue> nextPosition = mouseMovementAdapter

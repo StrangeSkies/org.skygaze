@@ -7,23 +7,13 @@ import java.util.List;
 
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Vector2Impl<V extends Value<V>> extends VectorImpl<Vector2<V>, V>
 		implements Vector2<V> {
 	public Vector2Impl(Order order, Orientation orientation,
 			Factory<V> valueFactory) {
 		super(2, order, orientation, valueFactory);
-	}
-
-	public Vector2Impl(Factory<V> valueFactory) {
-		super(2, valueFactory);
-	}
-
-	public Vector2Impl(List<? extends V> other) {
-		super(other);
-
-		assertDimensions(this, 2);
 	}
 
 	public Vector2Impl(Order order, Orientation orientation,
@@ -35,7 +25,7 @@ public class Vector2Impl<V extends Value<V>> extends VectorImpl<Vector2<V>, V>
 
 	@Override
 	public final Vector2<V> copy() {
-		return new Vector2Impl<V>(getData());
+		return new Vector2Impl<V>(getOrder(), getOrientation(), getData());
 	}
 
 	@Override

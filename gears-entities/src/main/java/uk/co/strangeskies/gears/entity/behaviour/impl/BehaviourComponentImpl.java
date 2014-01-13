@@ -1,6 +1,5 @@
 package uk.co.strangeskies.gears.entity.behaviour.impl;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,8 +20,8 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	private final Set<StateComponent<?>> readDependencies;
 	private final Set<StateComponent<?>> writeDependencies;
 
-	private final Set<StateComponent<?>> indirectReadDependencies;
-	private final Set<StateComponent<?>> indirectWriteDependencies;
+	private final Set<StateComponent<?>> optionalReadDependencies;
+	private final Set<StateComponent<?>> optionalWriteDependencies;
 
 	public BehaviourComponentImpl(String name, String description,
 			BehaviourProcess process) {
@@ -37,8 +36,8 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 		this.readDependencies = new HashSet<>();
 		this.writeDependencies = new HashSet<>();
 
-		this.indirectReadDependencies = new HashSet<>();
-		this.indirectWriteDependencies = new HashSet<>();
+		this.optionalReadDependencies = new HashSet<>();
+		this.optionalWriteDependencies = new HashSet<>();
 	}
 
 	public BehaviourComponentImpl(String name, String description,
@@ -49,30 +48,6 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 
 		this.behaviourDependencies.addAll(behaviourDependencies);
 		this.behaviourDependents.addAll(behaviourDependents);
-
-		// Add all indirect behaviour dependencies and dependents
-		for (BehaviourComponent dependency : behaviourDependencies) {
-			this.behaviourDependencies.addAll(dependency.getBehaviourDependencies());
-		}
-		for (BehaviourComponent dependent : behaviourDependents) {
-			this.behaviourDependents.addAll(dependent.getBehaviourDependents());
-		}
-
-		// Throw an exception if we detect a cycle
-		if (this.behaviourDependencies.contains(this)
-				|| this.behaviourDependents.contains(this)) {
-			throw new IllegalArgumentException("Dependency graph cycle detected");
-		}
-
-		// Add reciprocals of all new direct and indirect dependencies
-		for (BehaviourComponent dependency : behaviourDependencies) {
-			dependency.getBehaviourDependents().addAll(behaviourDependents);
-			dependency.getBehaviourDependents().add(this);
-		}
-		for (BehaviourComponent dependent : behaviourDependents) {
-			dependent.getBehaviourDependencies().addAll(behaviourDependencies);
-			dependent.getBehaviourDependencies().add(this);
-		}
 	}
 
 	public BehaviourComponentImpl(String name, String description,
@@ -88,10 +63,10 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 
 		// Add all indirect read and write dependencies
 		for (StateComponent<?> readDependency : readDependencies) {
-			indirectReadDependencies.addAll(readDependency.getReadDependencies());
+			optionalReadDependencies.addAll(readDependency.getReadDependencies());
 		}
 		for (StateComponent<?> writeDependency : writeDependencies) {
-			indirectWriteDependencies.addAll(writeDependency.getWriteDependencies());
+			optionalWriteDependencies.addAll(writeDependency.getWriteDependencies());
 		}
 	}
 
@@ -126,21 +101,21 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 			Collection<? extends BehaviourComponent> behaviourDependents,
 			Collection<? extends StateComponent<?>> readDependencies,
 			Collection<? extends StateComponent<?>> writeDependencies,
-			Collection<? extends StateComponent<?>> indirectReadDependencies,
-			Collection<? extends StateComponent<?>> indirectWriteDependencies) {
+			Collection<? extends StateComponent<?>> optionalReadDependencies,
+			Collection<? extends StateComponent<?>> optionalWriteDependencies) {
 		this(name, description, process, behaviourDependencies,
 				behaviourDependents, readDependencies, writeDependencies);
 
 		// Add all explicitly added indirect read and write dependencies
-		for (StateComponent<?> readDependency : indirectReadDependencies) {
-			if (this.indirectReadDependencies.add(readDependency)) {
-				this.indirectReadDependencies.addAll(readDependency
+		for (StateComponent<?> readDependency : optionalReadDependencies) {
+			if (this.optionalReadDependencies.add(readDependency)) {
+				this.optionalReadDependencies.addAll(readDependency
 						.getReadDependencies());
 			}
 		}
-		for (StateComponent<?> writeDependency : indirectWriteDependencies) {
-			if (this.indirectWriteDependencies.add(writeDependency)) {
-				this.indirectWriteDependencies.addAll(writeDependency
+		for (StateComponent<?> writeDependency : optionalWriteDependencies) {
+			if (this.optionalWriteDependencies.add(writeDependency)) {
+				this.optionalWriteDependencies.addAll(writeDependency
 						.getWriteDependencies());
 			}
 		}
@@ -183,43 +158,6 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 		return Collections.unmodifiableSet(behaviourDependencies);
 	}
 
-	@Override
-	public final void addBehaviourDependency(
-			BehaviourComponent behaviourDependency) {
-		addBehaviourDependencies(behaviourDependency);
-	}
-
-	@Override
-	public final void addBehaviourDependencies(
-			BehaviourComponent... behaviourDependencies) {
-		addBehaviourDependencies(Arrays.asList(behaviourDependencies));
-	}
-
-	@Override
-	public final void addBehaviourDependencies(
-			Collection<BehaviourComponent> behaviourDependencies) {
-		Set<BehaviourComponent> newIndirectBehaviourDependencies = new HashSet<>();
-		newIndirectBehaviourDependencies.addAll(behaviourDependencies);
-
-		// Add all indirect behaviour dependencies
-		for (BehaviourComponent dependency : behaviourDependencies) {
-			newIndirectBehaviourDependencies.addAll(dependency
-					.getBehaviourDependencies());
-		}
-
-		// Throw an exception if we detect a cycle
-		if (newIndirectBehaviourDependencies.contains(this)) {
-			throw new IllegalArgumentException("Dependency graph cycle detected");
-		}
-
-		// Add reciprocals of all new direct and indirect dependencies
-		for (BehaviourComponent dependency : behaviourDependencies) {
-			dependency.getBehaviourDependents().addAll(behaviourDependents);
-		}
-
-		this.behaviourDependencies.addAll(newIndirectBehaviourDependencies);
-	}
-
 	/**
 	 * Get the set of behaviours which should not be processed until this
 	 * behaviour completes, if they are present in the same execution DAG. (e.g.
@@ -230,41 +168,6 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	@Override
 	public final Set<BehaviourComponent> getBehaviourDependents() {
 		return Collections.unmodifiableSet(behaviourDependents);
-	}
-
-	@Override
-	public final void addBehaviourDependent(BehaviourComponent behaviourDependent) {
-		addBehaviourDependents(behaviourDependent);
-	}
-
-	@Override
-	public final void addBehaviourDependents(
-			BehaviourComponent... behaviourDependents) {
-		addBehaviourDependents(Arrays.asList(behaviourDependents));
-	}
-
-	@Override
-	public final void addBehaviourDependents(
-			Collection<BehaviourComponent> behaviourDependents) {
-		Set<BehaviourComponent> newIndirectBehaviourDependents = new HashSet<>();
-		newIndirectBehaviourDependents.addAll(behaviourDependents);
-
-		// Add all indirect behaviour dependencies
-		for (BehaviourComponent dependent : behaviourDependents) {
-			newIndirectBehaviourDependents.addAll(dependent.getBehaviourDependents());
-		}
-
-		// Throw an exception if we detect a cycle
-		if (newIndirectBehaviourDependents.contains(this)) {
-			throw new IllegalArgumentException("Dependency graph cycle detected");
-		}
-
-		// Add reciprocals of all new direct and indirect dependencies
-		for (BehaviourComponent dependent : behaviourDependents) {
-			dependent.getBehaviourDependencies().addAll(behaviourDependencies);
-		}
-
-		this.behaviourDependents.addAll(newIndirectBehaviourDependents);
 	}
 
 	/**
@@ -290,11 +193,11 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getIndirectStateDependencies() {
+	public final Set<StateComponent<?>> getOptionalStateDependencies() {
 		Set<StateComponent<?>> stateDependencies = new HashSet<>(readDependencies);
 		stateDependencies.addAll(writeDependencies);
-		stateDependencies.addAll(indirectReadDependencies);
-		stateDependencies.addAll(indirectWriteDependencies);
+		stateDependencies.addAll(optionalReadDependencies);
+		stateDependencies.addAll(optionalWriteDependencies);
 
 		return stateDependencies;
 	}
@@ -306,7 +209,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getStateReadDependencies() {
+	public final Set<StateComponent<?>> getReadDependencies() {
 		return Collections.unmodifiableSet(readDependencies);
 	}
 
@@ -319,9 +222,9 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getIndirectStateReadDependencies() {
+	public final Set<StateComponent<?>> getOptionalReadDependencies() {
 		Set<StateComponent<?>> stateDependencies = new HashSet<>(readDependencies);
-		stateDependencies.addAll(indirectReadDependencies);
+		stateDependencies.addAll(optionalReadDependencies);
 
 		return stateDependencies;
 	}
@@ -333,7 +236,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getStateWriteDependencies() {
+	public final Set<StateComponent<?>> getWriteDependencies() {
 		return Collections.unmodifiableSet(writeDependencies);
 	}
 
@@ -346,9 +249,9 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getIndirectStateWriteDependencies() {
+	public final Set<StateComponent<?>> getOptionalWriteDependencies() {
 		Set<StateComponent<?>> stateDependencies = new HashSet<>(writeDependencies);
-		stateDependencies.addAll(indirectWriteDependencies);
+		stateDependencies.addAll(optionalWriteDependencies);
 
 		return stateDependencies;
 	}

@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
@@ -14,18 +16,10 @@ import uk.co.strangeskies.gears.mathematics.expressions.ConditionalExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.expressions.IdentityExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.ListExpressionView;
-import uk.co.strangeskies.gears.mathematics.functions.AssignmentOperation;
-import uk.co.strangeskies.gears.mathematics.functions.BinaryOperation;
-import uk.co.strangeskies.gears.mathematics.functions.Function;
-import uk.co.strangeskies.gears.mathematics.functions.UnaryOperation;
-import uk.co.strangeskies.gears.mathematics.functions.collections.ListTransformOnceView;
-import uk.co.strangeskies.gears.mathematics.functions.collections.ListTransformationView;
 import uk.co.strangeskies.gears.mathematics.geometry.DimensionalityException;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.impl.MatrixImpl;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.strangeskies.gears.mathematics.logic.BooleanValue;
 import uk.co.strangeskies.gears.mathematics.values.DoubleArrayListView;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValueFactory;
@@ -39,9 +33,12 @@ import uk.co.strangeskies.gears.mathematics.values.LongArrayListView;
 import uk.co.strangeskies.gears.mathematics.values.LongValue;
 import uk.co.strangeskies.gears.mathematics.values.LongValueFactory;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
 import uk.co.strangeskies.gears.utilities.Self;
 import uk.co.strangeskies.gears.utilities.collections.NullPointerInCollectionException;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
+import uk.co.strangeskies.gears.utilities.functions.AssignmentOperation;
+import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformOnceView;
+import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformationView;
 
 /**
  * 
@@ -56,8 +53,6 @@ import uk.co.strangeskies.gears.utilities.collections.NullPointerInCollectionExc
  */
 public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 		extends CompoundExpression<S> implements Vector<S, V> {
-	private static Orientation defaultOrientation = Orientation.Column;
-
 	private List<V> data;
 
 	private WeakReference<List<List<V>>> data2Reference;
@@ -99,10 +94,6 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 		finalise();
 	}
 
-	public VectorImpl(int size, Factory<V> valueFactory) {
-		this(size, getDefaultOrder(), getDefaultOrientation(), valueFactory);
-	}
-
 	public VectorImpl(Order order, Orientation orientation,
 			List<? extends V> values) {
 		this(order, orientation);
@@ -123,10 +114,6 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 		}
 
 		finalise();
-	}
-
-	public VectorImpl(List<? extends V> values) {
-		this(getDefaultOrder(), getDefaultOrientation(), values);
 	}
 
 	@Override
@@ -311,7 +298,7 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public S add(Matrix<?, ?> other) {
 		operateOnData2(other.getOrder(), other.getData2(),
-				new BinaryOperation<V, V, Value<?>>() {
+				new BiFunction<V, Value<?>, V>() {
 					@Override
 					public V apply(V firstOperand, Value<?> secondOperand) {
 						return firstOperand.add(secondOperand);
@@ -329,7 +316,7 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public S subtract(Matrix<?, ?> other) {
 		operateOnData2(other.getOrder(), other.getData2(),
-				new BinaryOperation<V, V, Value<?>>() {
+				new BiFunction<V, Value<?>, V>() {
 					@Override
 					public V apply(V firstOperand, Value<?> secondOperand) {
 						return firstOperand.subtract(secondOperand);
@@ -400,22 +387,6 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public final S getThis() {
 		return (S) this;
-	}
-
-	public static Orientation getDefaultOrientation() {
-		return defaultOrientation;
-	}
-
-	public static void setDefaultOrientation(Orientation defaultOrientation) {
-		VectorImpl.defaultOrientation = defaultOrientation;
-	}
-
-	public static Order getDefaultOrder() {
-		return MatrixImpl.getDefaultOrder();
-	}
-
-	public static void setDefaultOrder(Order defaultOrder) {
-		MatrixImpl.setDefaultOrder(defaultOrder);
 	}
 
 	@Override
@@ -930,7 +901,7 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 
 	@Override
 	public final <I> S operateOnData(Order order, List<? extends I> itemList,
-			BinaryOperation<? extends V, ? super V, ? super I> operator) {
+			BiFunction<? super V, ? super I, ? extends V> operator) {
 		try {
 			if (operator == null || order == null || itemList == null) {
 				throw new NullPointerException();
@@ -957,14 +928,14 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 
 	@Override
 	public final <I> S operateOnData(List<? extends I> itemList,
-			BinaryOperation<? extends V, ? super V, ? super I> operator) {
+			BiFunction<? super V, ? super I, ? extends V> operator) {
 		return operateOnData(getOrder(), itemList, operator);
 	}
 
 	@Override
 	public final <I> S operateOnData2(Order order,
 			List<? extends List<? extends I>> itemList,
-			BinaryOperation<? extends V, ? super V, ? super I> operator) {
+			BiFunction<? super V, ? super I, ? extends V> operator) {
 
 		try {
 			if (operator == null || order == null || itemList == null) {
@@ -1030,12 +1001,12 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 
 	@Override
 	public final <I> S operateOnData2(List<? extends List<? extends I>> itemList,
-			BinaryOperation<? extends V, ? super V, ? super I> operator) {
+			BiFunction<? super V, ? super I, ? extends V> operator) {
 		return operateOnData2(getOrder(), itemList, operator);
 	}
 
 	@Override
-	public final S operateOnData(UnaryOperation<? extends V, ? super V> operator) {
+	public final S operateOnData(Function<? super V, ? extends V> operator) {
 		try {
 			if (operator == null) {
 				throw new NullPointerException();
@@ -1082,14 +1053,14 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	public final S setData2(final boolean setByReference, Order order,
 			List<? extends List<? extends V>> to) {
 		if (setByReference) {
-			return operateOnData2(order, to, new BinaryOperation<V, V, V>() {
+			return operateOnData2(order, to, new BiFunction<V, V, V>() {
 				@Override
 				public V apply(V firstOperand, V secondOperand) {
 					return secondOperand;
 				}
 			});
 		} else {
-			return operateOnData2(order, to, new BinaryOperation<V, V, V>() {
+			return operateOnData2(order, to, new BiFunction<V, V, V>() {
 				@Override
 				public V apply(V firstOperand, V secondOperand) {
 					return firstOperand.setValue(secondOperand);
@@ -1108,7 +1079,7 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	public final S setData(final boolean setByReference, Order order,
 			List<? extends V> to) {
 		if (setByReference) {
-			return operateOnData(order, to, new BinaryOperation<V, V, V>() {
+			return operateOnData(order, to, new BiFunction<V, V, V>() {
 				@Override
 				public V apply(V firstOperand, V secondOperand) {
 					if (secondOperand == null) {
@@ -1119,7 +1090,7 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 				}
 			});
 		} else {
-			return operateOnData(order, to, new BinaryOperation<V, V, V>() {
+			return operateOnData(order, to, new BiFunction<V, V, V>() {
 				@Override
 				public V apply(V firstOperand, V secondOperand) {
 					if (secondOperand == null) {
@@ -1235,9 +1206,9 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public final S setData2(Order order, int[]... to) {
 		return setData2(order, new ListTransformationView<>(Arrays.asList(to),
-				new Function<List<IntValue>, int[]>() {
+				new Function<int[], List<IntValue>>() {
 					@Override
-					public List<IntValue> applyTo(int[] input) {
+					public List<IntValue> apply(int[] input) {
 						return new IntArrayListView<>(input, IntValueFactory.instance());
 					};
 				}));
@@ -1246,9 +1217,9 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public final S setData2(Order order, long[]... to) {
 		return setData2(order, new ListTransformationView<>(Arrays.asList(to),
-				new Function<List<LongValue>, long[]>() {
+				new Function<long[], List<LongValue>>() {
 					@Override
-					public List<LongValue> applyTo(long[] input) {
+					public List<LongValue> apply(long[] input) {
 						return new LongArrayListView<>(input, LongValueFactory.instance());
 					};
 				}));
@@ -1257,9 +1228,9 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public final S setData2(Order order, float[]... to) {
 		return setData2(order, new ListTransformationView<>(Arrays.asList(to),
-				new Function<List<FloatValue>, float[]>() {
+				new Function<float[], List<FloatValue>>() {
 					@Override
-					public List<FloatValue> applyTo(float[] input) {
+					public List<FloatValue> apply(float[] input) {
 						return new FloatArrayListView<>(input, FloatValueFactory.instance());
 					};
 				}));
@@ -1268,9 +1239,9 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public final S setData2(Order order, double[]... to) {
 		return setData2(order, new ListTransformationView<>(Arrays.asList(to),
-				new Function<List<DoubleValue>, double[]>() {
+				new Function<double[], List<DoubleValue>>() {
 					@Override
-					public List<DoubleValue> applyTo(double[] input) {
+					public List<DoubleValue> apply(double[] input) {
 						return new DoubleArrayListView<>(input, DoubleValueFactory
 								.instance());
 					};
@@ -1303,9 +1274,9 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 			Vector<?, V>... to) {
 		return setData2(copyByReference, order,
 				new ListTransformationView<>(Arrays.asList(to),
-						new Function<List<? extends V>, Vector<?, V>>() {
+						new Function<Vector<?, V>, List<? extends V>>() {
 							@Override
-							public List<? extends V> applyTo(Vector<?, V> input) {
+							public List<? extends V> apply(Vector<?, V> input) {
 								return input.getData();
 							}
 						}));
@@ -1320,9 +1291,9 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public final S setData2(Order order, Vector<?, ?>... values) {
 		return setData2(order, new ListTransformationView<>(Arrays.asList(values),
-				new Function<List<? extends Value<?>>, Vector<?, ?>>() {
+				new Function<Vector<?, ?>, List<? extends Value<?>>>() {
 					@Override
-					public List<? extends Value<?>> applyTo(Vector<?, ?> input) {
+					public List<? extends Value<?>> apply(Vector<?, ?> input) {
 						return input.getData();
 					}
 				}));
@@ -1389,7 +1360,8 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 
 	@Override
 	public Vector2<IntValue> getDimensions2() {
-		Vector2<IntValue> dimensions = new Vector2Impl<IntValue>(IntValue.factory());
+		Vector2<IntValue> dimensions = new Vector2Impl<IntValue>(Order.ColumnMajor,
+				Orientation.Column, IntValue.factory());
 
 		if (getOrientation() == Orientation.Column) {
 			return dimensions.setData(1, getDimensions());
@@ -1544,12 +1516,13 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 			throw new ArrayIndexOutOfBoundsException(index);
 		}
 
-		return new VectorNImpl<V>(data);
+		return new VectorNImpl<V>(getOrder(), getOrientation(), data);
 	}
 
 	@Override
 	public final VectorNImpl<V> getMinorVector(int index) {
-		return new VectorNImpl<V>(Arrays.asList(data.get(index)));
+		return new VectorNImpl<V>(getOrder(), getOrientation().getOther(),
+				Arrays.asList(data.get(index)));
 	}
 
 	@Override
@@ -1605,15 +1578,16 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 		List<List<V>> data2 = data2Reference.get();
 
 		if (data2 == null) {
-			Expression</*@ReadOnly*/BooleanValue> isOrientationAlignedWithOrder = new BinaryOperationExpression</*@ReadOnly*/BooleanValue, Order, Orientation>(
-					getOrderExpression(),
-					getOrientationExpression(),
-					new BinaryOperation</*@ReadOnly*/BooleanValue, Order, Orientation>() {
+			Expression</* @ReadOnly */Boolean> isOrientationAlignedWithOrder = new BinaryOperationExpression</*
+																																																				 * @
+																																																				 * ReadOnly
+																																																				 */Order, Orientation, Boolean>(
+					getOrderExpression(), getOrientationExpression(),
+					new BiFunction</* @ReadOnly */Order, Orientation, Boolean>() {
 						@Override
-						public/*@ReadOnly*/BooleanValue apply(Order firstOperand,
+						public/* @ReadOnly */Boolean apply(Order firstOperand,
 								Orientation secondOperand) {
-							return new BooleanValue(firstOperand == secondOperand
-									.getAssociatedOrder());
+							return firstOperand == secondOperand.getAssociatedOrder();
 						}
 					});
 
@@ -1633,9 +1607,9 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 			};
 
 			List<? extends List<V>> notAligned = new ListTransformOnceView<>(data,
-					new Function<List<V>, V>() {
+					new Function<V, List<V>>() {
 						@Override
-						public List<V> applyTo(final V input) {
+						public List<V> apply(final V input) {
 							return new AbstractList<V>() {
 								@Override
 								public V get(int index) {

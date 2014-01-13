@@ -4,7 +4,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class ArrayListMultiHashMap<K, V> extends MultiHashMap<K, V, List<V>>
 		implements ListMultiMap<K, V> {

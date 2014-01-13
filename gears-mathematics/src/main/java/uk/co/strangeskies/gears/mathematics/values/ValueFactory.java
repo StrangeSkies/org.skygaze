@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.mathematics.values;
 
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public abstract class ValueFactory<V extends Value<V>> implements Factory<V> {
 	public V get(int value) {

@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.utilities.flowcontrol;
 
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class FactoryFutureMap<K extends Factory<? extends V>, V> extends
 		StoredFutureMap<K, V> {

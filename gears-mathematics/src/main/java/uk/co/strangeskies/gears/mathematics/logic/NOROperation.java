@@ -1,9 +1,9 @@
 package uk.co.strangeskies.gears.mathematics.logic;
 
-import uk.co.strangeskies.gears.mathematics.functions.BinaryOperation;
+import java.util.function.BiFunction;
 
 public class NOROperation<O extends NORable<?, ? super T>, T> implements
-		BinaryOperation<O, NORable<? extends O, ? super T>, T> {
+		BiFunction<NORable<? extends O, ? super T>, T, O> {
 	@Override
 	public O apply(NORable<? extends O, ? super T> firstOperand, T secondOperand) {
 		return firstOperand.getNor(secondOperand);

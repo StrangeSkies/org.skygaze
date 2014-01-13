@@ -4,23 +4,13 @@ import java.util.List;
 
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector4;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Vector4Impl<V extends Value<V>> extends VectorImpl<Vector4<V>, V>
 		implements Vector4<V> {
 	public Vector4Impl(Order order, Orientation orientation,
 			Factory<V> valueFactory) {
 		super(4, order, orientation, valueFactory);
-	}
-
-	public Vector4Impl(Factory<V> valueFactory) {
-		super(4, valueFactory);
-	}
-
-	public Vector4Impl(List<? extends V> other) {
-		super(other);
-
-		assertDimensions(this, 4);
 	}
 
 	public Vector4Impl(Order order, Orientation orientation,
@@ -32,7 +22,7 @@ public class Vector4Impl<V extends Value<V>> extends VectorImpl<Vector4<V>, V>
 
 	@Override
 	public Vector4<V> copy() {
-		return new Vector4Impl<V>(getData());
+		return new Vector4Impl<V>(getOrder(), getOrientation(), getData());
 	}
 
 	@Override

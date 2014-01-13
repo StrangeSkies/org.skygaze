@@ -8,7 +8,7 @@ import java.util.Map;
 
 import uk.co.strangeskies.gears.mathematics.values.Fraction;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Unit {
 	private final String name;

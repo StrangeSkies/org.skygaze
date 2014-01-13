@@ -3,9 +3,9 @@ package uk.co.strangeskies.gears.mathematics.values.quantities;
 import java.util.List;
 import java.util.Map;
 
-import uk.co.strangeskies.gears.mathematics.functions.collections.ListTransformOnceView;
-import uk.co.strangeskies.gears.mathematics.functions.collections.UnmodifiableMapFunction;
 import uk.co.strangeskies.gears.mathematics.values.Fraction;
+import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformOnceView;
+import uk.co.strangeskies.gears.utilities.functions.collections.UnmodifiableMapFunction;
 
 public class QuantityType {
 	private final String name;

@@ -6,7 +6,7 @@ import java.util.Collections;
 
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentConfigurator;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class StateComponentConfiguratorImpl<D> implements
 		StateComponentConfigurator<D> {

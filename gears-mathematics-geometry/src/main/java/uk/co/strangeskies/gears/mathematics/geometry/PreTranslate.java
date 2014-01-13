@@ -1,20 +1,14 @@
 package uk.co.strangeskies.gears.mathematics.geometry;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import java.util.function.BiFunction;
+
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
 
-public class PreTranslate<O>
-		extends
-		BinaryOperationExpression<O, NonCommutativelyTranslatable<? extends O>, Vector<?, ?>> {
-	public PreTranslate(
-			Expression<? extends NonCommutativelyTranslatable<? extends O>> firstOperand,
-			Expression<? extends Vector<?, ?>> secondOperand) {
-		super(firstOperand, secondOperand, new PreTranslationOperation<O>());
-	}
-
+public class PreTranslate<O> implements
+		BiFunction<NonCommutativelyTranslatable<? extends O>, Vector<?, ?>, O> {
 	@Override
-	public String toString() {
-		return "(" + getFirstOperand() + " * " + getSecondOperand() + ")";
+	public O apply(NonCommutativelyTranslatable<? extends O> firstOperand,
+			Vector<?, ?> secondOperand) {
+		return firstOperand.getPreTranslated(secondOperand);
 	}
 }

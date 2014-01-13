@@ -5,7 +5,7 @@ import java.util.List;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorH2;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class VectorH2Impl<V extends Value<V>> extends
 		VectorHImpl<VectorH2<V>, V> implements VectorH2<V> {
@@ -14,17 +14,9 @@ public class VectorH2Impl<V extends Value<V>> extends
 		super(type, 2, order, orientation, valueFactory);
 	}
 
-	public VectorH2Impl(Type type, int size, Factory<V> valueFactory) {
-		super(type, 2, valueFactory);
-	}
-
 	public VectorH2Impl(Type type, Order order, Orientation orientation,
 			List<? extends V> values) {
 		super(type, order, orientation, values);
-	}
-
-	public VectorH2Impl(Type type, List<? extends V> values) {
-		super(type, values);
 	}
 
 	@Override
@@ -36,14 +28,16 @@ public class VectorH2Impl<V extends Value<V>> extends
 
 	@Override
 	public Vector2<V> getMutableVector() {
-		Vector2<V> mutableVector = new Vector2Impl<V>(getData().subList(0, 2));
+		Vector2<V> mutableVector = new Vector2Impl<V>(getOrder(), getOrientation(),
+				getData().subList(0, 2));
 
 		return mutableVector;
 	}
 
 	@Override
 	public VectorH2<V> copy() {
-		return new VectorH2Impl<>(getType(), getData());
+		return new VectorH2Impl<>(getType(), getOrder(), getOrientation(),
+				getData());
 	}
 
 	@Override

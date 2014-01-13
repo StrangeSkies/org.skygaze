@@ -7,7 +7,7 @@ import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorH;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 
 public interface MatrixH<S extends MatrixH<S, V>, V extends Value<V>> extends
-		NonCommutativelyTranslatable<S>, /*@ReadOnly*/MatrixS<S, V> {
+		NonCommutativelyTranslatable<S>, MatrixS<S, V> {
 	public int getProjectedDimensions();
 
 	public MatrixNN<V> getMutableMatrix();

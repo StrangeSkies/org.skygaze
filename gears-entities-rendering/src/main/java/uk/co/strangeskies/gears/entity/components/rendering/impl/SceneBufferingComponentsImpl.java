@@ -11,7 +11,7 @@ import uk.co.strangeskies.gears.rendering.buffering.SceneBuffer;
 import uk.co.strangeskies.gears.rendering.buffering.SceneInterpolator;
 import uk.co.strangeskies.gears.rendering.buffering.impl.SceneBufferImpl;
 import uk.co.strangeskies.gears.rendering.buffering.impl.SceneInterpolatorImpl;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 	private final StateComponent<SceneBuffer> sceneBufferState;
@@ -50,17 +50,17 @@ public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 				.process(new BehaviourProcess() {
 					@Override
 					public void process(BehaviourProcessingContext context) {
-						for (SceneBuffer buffer : context.entities().state()
+						for (SceneBuffer buffer : context.entity().state()
 								.getAllData(sceneBufferState)) {
 							buffer.push();
 						}
-						for (SceneBuffer buffer : context.entities().state()
+						for (SceneBuffer buffer : context.entity().state()
 								.getAllData(interpolatableSceneBufferState)) {
 							buffer.push();
 						}
 					}
 				})
-				.indirectWriteDependencies(sceneBufferState,
+				.optionalWriteDependencies(sceneBufferState,
 						interpolatableSceneBufferState).create();
 
 		this.behaviourComponentBuilder = behaviourComponentBuilder;

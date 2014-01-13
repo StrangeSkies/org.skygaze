@@ -14,7 +14,7 @@ import uk.co.strangeskies.gears.rendering.rendering2d.Camera2D;
 import uk.co.strangeskies.gears.rendering.rendering2d.Data2D;
 import uk.co.strangeskies.gears.rendering.rendering2d.Renderer2D;
 import uk.co.strangeskies.gears.rendering.rendering2d.SceneFactory2D;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class RenderingComponents2DImpl implements RenderingComponents2D {
 	private final StateComponent<Renderable<Data2D>> renderableState;
@@ -63,7 +63,7 @@ public class RenderingComponents2DImpl implements RenderingComponents2D {
 					@Override
 					public void process(BehaviourProcessingContext processingContext) {
 						for (Entity entity : processingContext.getEntities()) {
-							Camera2D data = processingContext.entities().state()
+							Camera2D data = processingContext.entity().state()
 									.getData(entity, cameraState);
 							renderer.render(data);
 						}

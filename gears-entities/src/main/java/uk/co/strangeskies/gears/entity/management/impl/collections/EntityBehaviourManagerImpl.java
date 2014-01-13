@@ -6,18 +6,14 @@ import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
-import uk.co.strangeskies.gears.entity.management.impl.AbstractEntityBehaviourManager;
+import uk.co.strangeskies.gears.entity.management.EntityBehaviourManager;
 import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
 import uk.co.strangeskies.gears.utilities.collections.HashSetMultiHashMap;
 import uk.co.strangeskies.gears.utilities.collections.SetMultiMap;
 
-public class EntityBehaviourManagerImpl extends
-		AbstractEntityBehaviourManager {
+public class EntityBehaviourManagerImpl implements EntityBehaviourManager {
 	private final SetMultiMap<BehaviourComponent, Entity> entityBehaviours;
 	private final Set<BehaviourComponent> universalBehaviours;
-
-	private final SetMultiMap<BehaviourComponent, BehaviourComponent> dependencies;
-	private final SetMultiMap<BehaviourComponent, BehaviourComponent> dependents;
 
 	private Scheduler defaultBehaviourProcessor;
 	private final SetMultiMap<Scheduler, BehaviourComponent> processorBehaviourAssociations;
@@ -25,9 +21,6 @@ public class EntityBehaviourManagerImpl extends
 	public EntityBehaviourManagerImpl() {
 		entityBehaviours = new HashSetMultiHashMap<>();
 		universalBehaviours = new HashSet<>();
-
-		dependencies = new HashSetMultiHashMap<>();
-		dependents = new HashSetMultiHashMap<>();
 
 		processorBehaviourAssociations = new HashSetMultiHashMap<>();
 	}
@@ -87,26 +80,6 @@ public class EntityBehaviourManagerImpl extends
 		behaviours.addAll(entityBehaviours.keySet());
 
 		return behaviours;
-	}
-
-	@Override
-	public Set<BehaviourComponent> getDependencies(BehaviourComponent behaviour) {
-		return getDependencies().get(behaviour);
-	}
-
-	@Override
-	public Set<BehaviourComponent> getDependents(BehaviourComponent behaviour) {
-		return getDependents().get(behaviour);
-	}
-
-	@Override
-	public SetMultiMap<BehaviourComponent, BehaviourComponent> getDependencies() {
-		return dependencies;
-	}
-
-	@Override
-	public SetMultiMap<BehaviourComponent, BehaviourComponent> getDependents() {
-		return dependents;
 	}
 
 	@Override

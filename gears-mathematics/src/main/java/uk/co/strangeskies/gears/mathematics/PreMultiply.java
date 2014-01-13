@@ -1,19 +1,14 @@
 package uk.co.strangeskies.gears.mathematics;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import java.util.function.BiFunction;
 
 public class PreMultiply<O extends NonCommutativelyMultipliable<?, ? super T>, T>
-		extends
-		BinaryOperationExpression<O, NonCommutativelyMultipliable<? extends O, ? super T>, T> {
-	public PreMultiply(
-			Expression<? extends NonCommutativelyMultipliable<? extends O, ? super T>> firstOperand,
-			Expression<? extends T> secondOperand) {
-		super(firstOperand, secondOperand, new PreMultiplicationOperation<O, T>());
-	}
-
+		implements
+		BiFunction<NonCommutativelyMultipliable<? extends O, ? super T>, T, O> {
 	@Override
-	public String toString() {
-		return "(" + getFirstOperand() + " * " + getSecondOperand() + ")";
+	public O apply(
+			NonCommutativelyMultipliable<? extends O, ? super T> firstOperand,
+			T secondOperand) {
+		return firstOperand.getPreMultiplied(secondOperand);
 	}
 }

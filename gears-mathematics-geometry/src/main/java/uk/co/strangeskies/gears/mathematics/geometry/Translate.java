@@ -1,19 +1,14 @@
 package uk.co.strangeskies.gears.mathematics.geometry;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import java.util.function.BiFunction;
+
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
 
-public class Translate<O> extends
-		BinaryOperationExpression<O, Translatable<? extends O>, Vector<?, ?>> {
-	public Translate(
-			Expression<? extends Translatable<? extends O>> firstOperand,
-			Expression<? extends Vector<?, ?>> secondOperand) {
-		super(firstOperand, secondOperand, new TranslationOperation<O>());
-	}
-
+public class Translate<O> implements
+		BiFunction<Translatable<? extends O>, Vector<?, ?>, O> {
 	@Override
-	public String toString() {
-		return "(" + getFirstOperand() + " * " + getSecondOperand() + ")";
+	public O apply(Translatable<? extends O> firstOperand,
+			Vector<?, ?> secondOperand) {
+		return firstOperand.getTranslated(secondOperand);
 	}
 }

@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.Entity;
-import uk.co.strangeskies.gears.entity.management.impl.AbstractEntityStateManager;
+import uk.co.strangeskies.gears.entity.management.EntityStateManager;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 
-public class EntityStateManagerImpl extends AbstractEntityStateManager {
+public class EntityStateManagerImpl implements EntityStateManager {
 	private final Map<StateComponent<?>, Map<Entity, Object>> entityStateData;
 
 	public EntityStateManagerImpl() {
@@ -19,8 +19,8 @@ public class EntityStateManagerImpl extends AbstractEntityStateManager {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <D> D attachAndSet(Entity entity,
-			StateComponent<D> stateComponent, D stateData) {
+	public synchronized <D> D attachAndReset(Entity entity,
+			StateComponent<D> stateComponent) {
 		Map<Entity, Object> entityData = entityStateData.get(stateComponent);
 
 		if (entityData == null) {
@@ -28,11 +28,10 @@ public class EntityStateManagerImpl extends AbstractEntityStateManager {
 			entityStateData.put(stateComponent, entityData);
 		}
 
-		stateData = (D) entityData.put(entity, stateData);
-
-		return stateData;
+		return (D) entityData.put(entity, stateComponent.create());
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public synchronized boolean detach(Entity entity,
 			StateComponent<?> stateComponent) {

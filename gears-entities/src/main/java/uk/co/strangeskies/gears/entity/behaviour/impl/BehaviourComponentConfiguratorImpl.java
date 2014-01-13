@@ -23,8 +23,8 @@ public class BehaviourComponentConfiguratorImpl implements
 	private Collection<? extends StateComponent<?>> readDependencies;
 	private Collection<? extends StateComponent<?>> writeDependencies;
 
-	private Collection<? extends StateComponent<?>> indirectReadDependencies;
-	private Collection<? extends StateComponent<?>> indirectWriteDependencies;
+	private Collection<? extends StateComponent<?>> optionalReadDependencies;
+	private Collection<? extends StateComponent<?>> optionalWriteDependencies;
 
 	public BehaviourComponentConfiguratorImpl() {
 		name = "";
@@ -42,8 +42,8 @@ public class BehaviourComponentConfiguratorImpl implements
 		readDependencies = Collections.emptySet();
 		writeDependencies = Collections.emptySet();
 
-		indirectReadDependencies = Collections.emptySet();
-		indirectWriteDependencies = Collections.emptySet();
+		optionalReadDependencies = Collections.emptySet();
+		optionalWriteDependencies = Collections.emptySet();
 	}
 
 	@Override
@@ -117,38 +117,38 @@ public class BehaviourComponentConfiguratorImpl implements
 	}
 
 	@Override
-	public BehaviourComponentConfigurator indirectReadDependencies(
+	public BehaviourComponentConfigurator optionalReadDependencies(
 			Collection<? extends StateComponent<?>> readDependencies) {
-		this.indirectReadDependencies = readDependencies;
+		this.optionalReadDependencies = readDependencies;
 
 		return this;
 	}
 
 	@Override
-	public BehaviourComponentConfigurator indirectReadDependencies(
+	public BehaviourComponentConfigurator optionalReadDependencies(
 			StateComponent<?>... readDependencies) {
-		return indirectReadDependencies(Arrays.asList(readDependencies));
+		return optionalReadDependencies(Arrays.asList(readDependencies));
 	}
 
 	@Override
-	public BehaviourComponentConfigurator indirectWriteDependencies(
+	public BehaviourComponentConfigurator optionalWriteDependencies(
 			Collection<? extends StateComponent<?>> writeDependencies) {
-		this.indirectWriteDependencies = writeDependencies;
+		this.optionalWriteDependencies = writeDependencies;
 
 		return this;
 	}
 
 	@Override
-	public BehaviourComponentConfigurator indirectWriteDependencies(
+	public BehaviourComponentConfigurator optionalWriteDependencies(
 			StateComponent<?>... writeDependencies) {
-		return indirectWriteDependencies(Arrays.asList(writeDependencies));
+		return optionalWriteDependencies(Arrays.asList(writeDependencies));
 	}
 
 	@Override
 	public BehaviourComponent create() {
 		return new BehaviourComponentImpl(name, description, process,
 				behaviourDependencies, behaviourDependents, readDependencies,
-				writeDependencies, indirectReadDependencies, indirectWriteDependencies);
+				writeDependencies, optionalReadDependencies, optionalWriteDependencies);
 	}
 
 	@Override

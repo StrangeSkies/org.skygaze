@@ -5,21 +5,13 @@ import java.util.List;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.MatrixNN;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.VectorNImpl;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class MatrixNNImpl<V extends Value<V>> extends
 		MatrixImpl<MatrixNN<V>, V> implements MatrixNN<V> {
 	public MatrixNNImpl(int rows, int columns, Order order,
 			Factory<V> valueFactory) {
 		super(rows, columns, order, valueFactory);
-	}
-
-	public MatrixNNImpl(int rows, int columns, Factory<V> valueFactory) {
-		super(rows, columns, valueFactory);
-	}
-
-	public MatrixNNImpl(List<? extends List<? extends V>> values) {
-		super(values);
 	}
 
 	public MatrixNNImpl(Order order, List<? extends List<? extends V>> values) {
@@ -38,7 +30,7 @@ public class MatrixNNImpl<V extends Value<V>> extends
 
 	@Override
 	public MatrixNN<V> copy() {
-		return new MatrixNNImpl<V>(getData2());
+		return new MatrixNNImpl<V>(getOrder(), getData2());
 	}
 
 	@SuppressWarnings("unchecked")

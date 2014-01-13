@@ -9,6 +9,8 @@ import java.util.Queue;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.assembly.Assemblage;
+import uk.co.strangeskies.gears.entity.assembly.AssemblageView;
+import uk.co.strangeskies.gears.entity.assembly.CollapsedAssemblageView;
 import uk.co.strangeskies.gears.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.gears.entity.assembly.Variable;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
@@ -110,7 +112,7 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Assemblage overrideSubassemblage(Assemblage subassemblageMatch) {
+	public AssemblageView overrideSubassemblage(AssemblageView subassemblageMatch) {
 		Assemblage overriddenAssemblage = getSubassemblage(subassemblageMatch);
 		Assemblage overridingAssemblage = new AssemblageImpl();
 		overridingAssemblage.getComposition().add(overriddenAssemblage);
@@ -121,7 +123,8 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Set<Assemblage> overrideSubassemblages(Assemblage subassemblageMatch) {
+	public Set<Assemblage> overrideSubassemblages(
+			AssemblageView subassemblageMatch) {
 		Set<Assemblage> overridingAssemblages = new HashSet<>();
 
 		Set<Assemblage> subassemblages = getSubassemblages(subassemblageMatch);
@@ -136,13 +139,13 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public void revertOverrides(Assemblage subassemblageMatch) {
+	public void revertOverrides(AssemblageView subassemblageMatch) {
 		overriddenSubassemblages.keySet().removeAll(
 				getSubassemblages(subassemblageMatch));
 	}
 
 	@Override
-	public Assemblage getSubassemblage(Assemblage subassemblageMatch) {
+	public Assemblage getSubassemblage(AssemblageView subassemblageMatch) {
 		Set<Assemblage> subassemblages = getSubassemblages(subassemblageMatch);
 		if (subassemblages.size() != 1)
 			throw new IllegalArgumentException();
@@ -151,7 +154,7 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Set<Assemblage> getSubassemblages(Assemblage subassemblageMatch) {
+	public Set<Assemblage> getSubassemblages(AssemblageView subassemblageMatch) {
 		Set<Assemblage> subassemblages = new HashSet<>();
 		for (Assemblage subassemblage : this.subassemblages)
 			if (isComposedFrom(subassemblage, subassemblageMatch))
@@ -160,11 +163,12 @@ public class AssemblageImpl implements Assemblage {
 		return subassemblages;
 	}
 
-	public boolean isComposedFrom(Assemblage base) {
+	public boolean isComposedFrom(AssemblageView base) {
 		return isComposedFrom(this, base);
 	}
 
-	public static boolean isComposedFrom(Assemblage assemblage, Assemblage base) {
+	public static boolean isComposedFrom(AssemblageView assemblage,
+			AssemblageView base) {
 		if (assemblage == base) {
 			return true;
 		}
@@ -189,7 +193,7 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Assemblage getCollapsedCompositionView() {
+	public CollapsedAssemblageView getCollapsedCompositionView() {
 		return new CollapsedCompositionAssemblageView(this);
 	}
 }

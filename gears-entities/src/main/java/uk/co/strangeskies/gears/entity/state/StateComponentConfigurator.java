@@ -2,7 +2,7 @@ package uk.co.strangeskies.gears.entity.state;
 
 import java.util.Collection;
 
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 /**
  * Implementations of this interface should always return a reference to the

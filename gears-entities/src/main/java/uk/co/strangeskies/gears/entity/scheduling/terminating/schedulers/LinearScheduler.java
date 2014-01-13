@@ -1,55 +1,37 @@
 package uk.co.strangeskies.gears.entity.scheduling.terminating.schedulers;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.scheduling.ScheduleProcessingContext;
-import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
-import uk.co.strangeskies.gears.utilities.collections.HashSetMultiHashMap;
+import uk.co.strangeskies.gears.entity.scheduling.terminating.TerminatingScheduler;
+import uk.co.strangeskies.gears.mathematics.graph.Graph;
+import uk.co.strangeskies.gears.mathematics.graph.build.GraphBuilder;
+import uk.co.strangeskies.gears.mathematics.graph.build.GraphConfigurator;
+import uk.co.strangeskies.gears.mathematics.graph.impl.GraphBuilderImpl;
 
-public class LinearScheduler implements Scheduler {
+public class LinearScheduler implements TerminatingScheduler {
+	private GraphBuilder graphBuilder;
+
 	public LinearScheduler() {
-		super();
+		setGraphBuilder(new GraphBuilderImpl());
+	}
+
+	public void setGraphBuilder(GraphBuilder builder) {
+		graphBuilder = builder;
+	}
+
+	public GraphConfigurator<Object, Object> buildGraph() {
+		return graphBuilder.configure();
 	}
 
 	@Override
 	public synchronized boolean process(
 			ScheduleProcessingContext processingContext) {
-		Set<BehaviourComponent> remainingBehaviours = new HashSet<>(
-				processingContext.getBehaviours());
-		HashSetMultiHashMap<BehaviourComponent, BehaviourComponent> remainingDependencies = new HashSetMultiHashMap<>();
-
-		for (BehaviourComponent behaviour : remainingBehaviours) {
-			Set<BehaviourComponent> dependencies = new HashSet<>(
-					behaviour.getBehaviourDependencies());
-			dependencies.retainAll(remainingBehaviours);
-			remainingDependencies.addAll(behaviour, dependencies);
-		}
-
-		while (!remainingBehaviours.isEmpty()) {
-			Set<BehaviourComponent> readyBehaviours = new HashSet<>(
-					remainingBehaviours);
-			readyBehaviours.removeAll(remainingDependencies.keySet());
-			for (BehaviourComponent behaviour : readyBehaviours) {
-				boolean done = false;
-				do {
-					try {
-						processingContext.processBehaviour(behaviour);
-						done = true;
-					} catch (InterruptedException e) {
-					}
-				} while (!done);
-			}
-			remainingDependencies.removeAllFromAll(readyBehaviours);
-			remainingBehaviours.removeAll(readyBehaviours);
-		}
+		Graph<BehaviourComponent, ?> behaviourGraph = buildGraph()
+				.vertices(processingContext.getBehaviours())
+				.edgeRule(v -> v.getBehaviourDependents(),
+						v -> v.getBehaviourDependencies()).edgeRuleAsymmetric().acyclic()
+				.unmodifiableStructure().create();
 
 		return true;
-	}
-
-	@Override
-	public boolean stopProcessing() {
-		return false;
 	}
 }

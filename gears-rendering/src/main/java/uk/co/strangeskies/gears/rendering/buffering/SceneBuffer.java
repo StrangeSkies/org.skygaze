@@ -1,5 +1,7 @@
 package uk.co.strangeskies.gears.rendering.buffering;
 
+import java.util.function.Function;
+
 import uk.co.strangeskies.gears.mathematics.expressions.DecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.DecoupledExpressionResultBuffer;
@@ -8,7 +10,6 @@ import uk.co.strangeskies.gears.mathematics.expressions.collections.DoubleBuffer
 import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionResultBuffer;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionResultTransformationBuffer;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.OperationApplicationBuffer;
-import uk.co.strangeskies.gears.mathematics.functions.Function;
 import uk.co.strangeskies.gears.utilities.Copyable;
 import uk.co.strangeskies.gears.utilities.Self;
 
@@ -23,19 +24,19 @@ public interface SceneBuffer {
 
 	public <T extends Cloneable> DoubleBuffer<T, T> buffer(T item);
 
-	public <B, T> OperationApplicationBuffer<B, T> buffer(T item,
-			Function<B, T> function);
+	public <T, B> OperationApplicationBuffer<T, B> buffer(T item,
+			Function<T, B> function);
 
 	public <T> ExpressionResultBuffer<T> bufferResult(
 			Expression<? extends T> expression);
 
-	public <T, F> ExpressionResultTransformationBuffer<T, F> bufferResult(
-			Expression<? extends F> expression, Function<T, ? super F> function);
+	public <F, T> ExpressionResultTransformationBuffer<F, T> bufferResult(
+			Expression<? extends F> expression, Function<? super F, T> function);
 
 	public <T extends Self<? extends T>> DecoupledExpressionResultBuffer<T> bufferDecoupledResult(
 			DecouplingExpression<? extends T> expression);
 
-	public <T, F extends Self<? extends F>> DecoupledExpressionResultTransformationBuffer<T, F> bufferDecoupledResult(
+	public <F extends Self<? extends F>, T> DecoupledExpressionResultTransformationBuffer<F, T> bufferDecoupledResult(
 			DecouplingExpression<? extends F> expression,
-			Function<T, ? super F> function);
+			Function<? super F, T> function);
 }

@@ -1,36 +1,92 @@
 package uk.co.strangeskies.gears.entity.management;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
-import uk.co.strangeskies.gears.utilities.collections.SetMultiMap;
 
 public interface EntityBehaviourManager {
 	public boolean attach(Entity entity, BehaviourComponent behaviourComponent);
 
-	public boolean attachAll(Entity entity,
-			Collection<? extends BehaviourComponent> behaviourComponents);
+	public default boolean attachAll(Entity entity,
+			Collection<? extends BehaviourComponent> behaviourComponents) {
+		boolean changed = false;
+
+		for (BehaviourComponent behaviourComponent : behaviourComponents) {
+			changed = attach(entity, behaviourComponent) || changed;
+		}
+
+		return changed;
+	}
+
+	public default boolean attachAll(Entity entity,
+			BehaviourComponent... behaviourComponents) {
+		return attachAll(entity, Arrays.asList(behaviourComponents));
+	}
 
 	public boolean detach(Entity entity, BehaviourComponent behaviourComponent);
 
-	public boolean detachAll(Entity entity,
-			Collection<? extends BehaviourComponent> behaviourComponents);
+	public default boolean detachAll(Entity entity,
+			Collection<? extends BehaviourComponent> behaviourComponents) {
+		boolean changed = false;
+
+		for (BehaviourComponent behaviourComponent : behaviourComponents) {
+			changed = detach(entity, behaviourComponent) || changed;
+		}
+
+		return changed;
+	}
+
+	public default boolean detachAll(Entity entity,
+			BehaviourComponent... behaviourComponents) {
+		return detachAll(entity, Arrays.asList(behaviourComponents));
+	}
 
 	public void clear(Entity entity);
 
-	public boolean has(Entity entity, BehaviourComponent behaviourComponent);
+	public default boolean has(Entity entity,
+			BehaviourComponent behaviourComponent) {
+		return isUniversal(behaviourComponent)
+				|| hasExplicitly(entity, behaviourComponent);
+	}
 
-	public boolean hasAll(Entity entity,
-			Collection<? extends BehaviourComponent> behaviourComponents);
+	public default boolean hasAll(Entity entity,
+			Collection<? extends BehaviourComponent> behaviourComponents) {
+		for (BehaviourComponent behaviourComponent : behaviourComponents) {
+			if (!has(entity, behaviourComponent)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public default boolean hasAll(Entity entity,
+			BehaviourComponent... behaviourComponents) {
+		return hasAll(entity, Arrays.asList(behaviourComponents));
+	}
 
 	public boolean hasExplicitly(Entity entity,
 			BehaviourComponent behaviourComponent);
 
-	public boolean hasAllExplicitly(Entity entity,
-			Collection<? extends BehaviourComponent> behaviourComponents);
+	public default boolean hasAllExplicitly(Entity entity,
+			Collection<? extends BehaviourComponent> behaviourComponents) {
+		for (BehaviourComponent behaviourComponent : behaviourComponents) {
+			if (!hasExplicitly(entity, behaviourComponent)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public default boolean hasAllExplicitly(Entity entity,
+			BehaviourComponent... behaviourComponents) {
+		return hasAllExplicitly(entity, Arrays.asList(behaviourComponents));
+	}
 
 	/**
 	 * Get the set of all entities which currently have the given behaviour
@@ -53,14 +109,6 @@ public interface EntityBehaviourManager {
 	public boolean isUniversal(BehaviourComponent behaviourComponent);
 
 	public Set<BehaviourComponent> getAll();
-
-	public Set<BehaviourComponent> getDependencies(BehaviourComponent behaviour);
-
-	public Set<BehaviourComponent> getDependents(BehaviourComponent behaviour);
-
-	public SetMultiMap<BehaviourComponent, BehaviourComponent> getDependencies();
-
-	public SetMultiMap<BehaviourComponent, BehaviourComponent> getDependents();
 
 	public void setDefaultScheduler(Scheduler scheduler);
 

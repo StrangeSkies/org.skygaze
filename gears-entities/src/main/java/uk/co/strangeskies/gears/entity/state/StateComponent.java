@@ -3,8 +3,8 @@ package uk.co.strangeskies.gears.entity.state;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.utilities.Described;
-import uk.co.strangeskies.gears.utilities.Factory;
 import uk.co.strangeskies.gears.utilities.Named;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public interface StateComponent<D> extends Named, Described, Factory<D> {
 	/**

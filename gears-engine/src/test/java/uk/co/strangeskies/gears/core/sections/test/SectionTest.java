@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.core.sections.test;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

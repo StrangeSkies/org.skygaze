@@ -1,18 +1,12 @@
 package uk.co.strangeskies.gears.mathematics;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import java.util.function.BiFunction;
 
-public class Subtract<O extends Subtractable<?, ? super T>, T> extends
-		BinaryOperationExpression<O, Subtractable<? extends O, ? super T>, T> {
-	public Subtract(
-			Expression<? extends Subtractable<? extends O, ? super T>> firstOperand,
-			Expression<? extends T> secondOperand) {
-		super(firstOperand, secondOperand, new SubtractionOperation<O, T>());
-	}
-
+public class Subtract<O extends Subtractable<?, ? super T>, T> implements
+		BiFunction<Subtractable<? extends O, ? super T>, T, O> {
 	@Override
-	public String toString() {
-		return "(" + getFirstOperand() + " - " + getSecondOperand() + ")";
+	public O apply(Subtractable<? extends O, ? super T> firstOperand,
+			T secondOperand) {
+		return firstOperand.getSubtracted(secondOperand);
 	}
 }

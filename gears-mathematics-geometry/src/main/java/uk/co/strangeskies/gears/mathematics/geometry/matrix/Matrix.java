@@ -1,7 +1,10 @@
 package uk.co.strangeskies.gears.mathematics.geometry.matrix;
 
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
+import checkers.oigj.quals.ReadOnly;
 import uk.co.strangeskies.gears.mathematics.Addable;
 import uk.co.strangeskies.gears.mathematics.Negatable;
 import uk.co.strangeskies.gears.mathematics.NonCommutativelyMultipliable;
@@ -9,28 +12,31 @@ import uk.co.strangeskies.gears.mathematics.Scalable;
 import uk.co.strangeskies.gears.mathematics.Subtractable;
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.expressions.Variable;
-import uk.co.strangeskies.gears.mathematics.functions.AssignmentOperation;
-import uk.co.strangeskies.gears.mathematics.functions.BinaryOperation;
-import uk.co.strangeskies.gears.mathematics.functions.UnaryOperation;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.utilities.Copyable;
 import uk.co.strangeskies.gears.utilities.Property;
 import uk.co.strangeskies.gears.utilities.Self;
+import uk.co.strangeskies.gears.utilities.functions.AssignmentOperation;
 
 public interface Matrix<S extends Matrix<S, V>, V extends Value<V>> extends
 		Self<S>, Copyable<S>, Comparable<Matrix<?, ?>>, Variable<S>,
 		Addable<S, Matrix<?, ?>>, Scalable<S>, Subtractable<S, Matrix<?, ?>>,
 		Negatable<S, S>, NonCommutativelyMultipliable<S, Matrix<?, ?>>,
 		Property<S, Matrix<?, ?>> {
-	public enum Order {
+	public static enum Order {
 		RowMajor {
 			@Override
 			public Orientation getAssociatedOrientation() {
 				return Orientation.Row;
+			}
+
+			@Override
+			public Order getOther() {
+				return ColumnMajor;
 			}
 		},
 		ColumnMajor {
@@ -38,9 +44,16 @@ public interface Matrix<S extends Matrix<S, V>, V extends Value<V>> extends
 			public Orientation getAssociatedOrientation() {
 				return Orientation.Column;
 			}
+
+			@Override
+			public Order getOther() {
+				return RowMajor;
+			}
 		};
 
 		public abstract Orientation getAssociatedOrientation();
+
+		public abstract Order getOther();
 	}
 
 	public Order getOrder();
@@ -157,20 +170,20 @@ public interface Matrix<S extends Matrix<S, V>, V extends Value<V>> extends
 
 	public double[][] getDoubleData2();
 
-	public S operateOnData(UnaryOperation<? extends V, ? super V> operator);
+	public S operateOnData(Function<? super V, ? extends V> operator);
 
 	public <I> S operateOnData(Order order, List<? extends I> itemList,
-			BinaryOperation<? extends V, ? super V, ? super I> operator);
+			BiFunction<? super V, ? super I, ? extends V> operator);
 
 	public <I> S operateOnData(List<? extends I> itemList,
-			BinaryOperation<? extends V, ? super V, ? super I> operator);
+			BiFunction<? super V, ? super I, ? extends V> operator);
 
 	public <I> S operateOnData2(Order order,
 			List<? extends List<? extends I>> itemList,
-			BinaryOperation<? extends V, ? super V, ? super I> operator);
+			BiFunction<? super V, ? super I, ? extends V> operator);
 
 	public <I> S operateOnData2(List<? extends List<? extends I>> itemList,
-			BinaryOperation<? extends V, ? super V, ? super I> operator);
+			BiFunction<? super V, ? super I, ? extends V> operator);
 
 	public <I> S setData(Order order, List<? extends I> itemList,
 			AssignmentOperation<V, ? super I> operator);
@@ -189,18 +202,18 @@ public interface Matrix<S extends Matrix<S, V>, V extends Value<V>> extends
 
 	public S setData(Number... to);
 
-	public S setData(Order order, /*@ReadOnly*/Value<?>... to);
+	public S setData(Order order, @ReadOnly Value<?>... to);
 
-	public S setData(/*@ReadOnly*/Value<?>... to);
+	public S setData(@ReadOnly Value<?>... to);
 
 	public S setData2(Order order,
-			List<? extends List<? extends /*@ReadOnly*/Value<?>>> to);
+			List<? extends List<? extends @ReadOnly Value<?>>> to);
 
-	public S setData2(List<? extends List<? extends /*@ReadOnly*/Value<?>>> to);
+	public S setData2(List<? extends List<? extends @ReadOnly Value<?>>> to);
 
-	public S setData(Order order, List<? extends /*@ReadOnly*/Value<?>> to);
+	public S setData(Order order, List<? extends @ReadOnly Value<?>> to);
 
-	public S setData(List<? extends /*@ReadOnly*/Value<?>> to);
+	public S setData(List<? extends @ReadOnly Value<?>> to);
 
 	public S setData(boolean setByReference, Order order,
 			@SuppressWarnings("unchecked") V... to);

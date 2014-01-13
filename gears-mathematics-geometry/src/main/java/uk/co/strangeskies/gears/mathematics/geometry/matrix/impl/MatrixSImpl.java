@@ -4,7 +4,7 @@ import java.util.List;
 
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.MatrixS;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public abstract class MatrixSImpl<S extends MatrixS<S, V>, V extends Value<V>>
 		extends MatrixImpl<S, V> implements MatrixS<S, V> {
@@ -12,18 +12,8 @@ public abstract class MatrixSImpl<S extends MatrixS<S, V>, V extends Value<V>>
 		super(size, size, order, valueFactory);
 	}
 
-	public MatrixSImpl(int size, Factory<V> valueFactory) {
-		super(size, size, valueFactory);
-	}
-
 	public MatrixSImpl(Order order, List<? extends List<? extends V>> values) {
 		super(order, values);
-
-		assertIsSquare(this);
-	}
-
-	public MatrixSImpl(List<? extends List<? extends V>> values) {
-		super(values);
 
 		assertIsSquare(this);
 	}

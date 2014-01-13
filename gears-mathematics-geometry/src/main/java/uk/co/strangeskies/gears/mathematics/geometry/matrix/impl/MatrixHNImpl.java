@@ -5,11 +5,12 @@ import java.util.List;
 
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.MatrixHN;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorH.Type;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.VectorHNImpl;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.VectorNImpl;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class MatrixHNImpl<V extends Value<V>> extends
 		MatrixHImpl<MatrixHN<V>, V> implements MatrixHN<V> {
@@ -17,16 +18,8 @@ public class MatrixHNImpl<V extends Value<V>> extends
 		super(size, order, valueFactory);
 	}
 
-	public MatrixHNImpl(int size, Factory<V> valueFactory) {
-		super(size, valueFactory);
-	}
-
 	public MatrixHNImpl(Order order, List<? extends List<? extends V>> values) {
 		super(order, values);
-	}
-
-	public MatrixHNImpl(List<? extends List<? extends V>> values) {
-		super(values);
 	}
 
 	@Override
@@ -36,7 +29,7 @@ public class MatrixHNImpl<V extends Value<V>> extends
 
 	@Override
 	public MatrixHN<V> copy() {
-		return new MatrixHNImpl<>(getData2());
+		return new MatrixHNImpl<>(getOrder(), getData2());
 	}
 
 	@Override
@@ -53,9 +46,11 @@ public class MatrixHNImpl<V extends Value<V>> extends
 				newType = Type.Relative;
 			}
 
-			return new VectorHNImpl<V>(newType, majorElements);
+			return new VectorHNImpl<V>(newType, Order.ColumnMajor,
+					Orientation.Column, majorElements);
 		} else {
-			return new VectorNImpl<V>(getData2().get(index));
+			return new VectorNImpl<V>(Order.RowMajor, Orientation.Row, getData2()
+					.get(index));
 		}
 	}
 
@@ -76,9 +71,11 @@ public class MatrixHNImpl<V extends Value<V>> extends
 				newType = Type.Relative;
 			}
 
-			return new VectorHNImpl<V>(newType, minorElements);
+			return new VectorHNImpl<V>(newType, Order.RowMajor, Orientation.Column,
+					minorElements);
 		} else {
-			return new VectorNImpl<V>(getData2().get(index));
+			return new VectorNImpl<V>(Order.ColumnMajor, Orientation.Row, getData2()
+					.get(index));
 		}
 	}
 }

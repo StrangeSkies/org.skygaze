@@ -3,8 +3,8 @@ package uk.co.strangeskies.gears.mathematics;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.utilities.Utilities;
 
-public class LinearInterpolationOperation<S extends T, T extends Scalable<S> & Subtractable<S, ? super T>>
-		implements InterpolationOperation<S, T> {
+public class LinearInterpolationOperation<T extends Scalable<S> & Subtractable<S, ? super T>, S extends T>
+		implements InterpolationOperation<T, S> {
 	@Override
 	public S apply(T from, T to, Value<?> delta) {
 		if (Utilities.areEqual(from, to)) {

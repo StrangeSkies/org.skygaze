@@ -1,18 +1,13 @@
 package uk.co.strangeskies.gears.mathematics.geometry;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import java.util.function.BiFunction;
+
 import uk.co.strangeskies.gears.mathematics.values.Value;
 
-public class Rotate2<O> extends
-		BinaryOperationExpression<O, Rotatable2<? extends O>, Value<?>> {
-	public Rotate2(Expression<? extends Rotatable2<? extends O>> firstOperand,
-			Expression<? extends Value<?>> secondOperand) {
-		super(firstOperand, secondOperand, new Rotation2Operation<O>());
-	}
-
+public class Rotate2<O> implements
+		BiFunction<Rotatable2<? extends O>, Value<?>, O> {
 	@Override
-	public String toString() {
-		return "(" + getFirstOperand() + " * " + getSecondOperand() + ")";
+	public O apply(Rotatable2<? extends O> firstOperand, Value<?> secondOperand) {
+		return firstOperand.getRotated(secondOperand);
 	}
 }

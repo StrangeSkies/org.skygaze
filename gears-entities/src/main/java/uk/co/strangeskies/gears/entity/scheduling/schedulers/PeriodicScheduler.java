@@ -1,13 +1,13 @@
 package uk.co.strangeskies.gears.entity.scheduling.schedulers;
 
 import uk.co.strangeskies.gears.entity.scheduling.ScheduleProcessingContext;
-import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
+import uk.co.strangeskies.gears.entity.scheduling.terminating.TerminatingScheduler;
 
 public class PeriodicScheduler extends CyclicScheduler {
 	private long cycleDurationNanoseconds;
 	private long processingStartTimeNanoseconds;
 
-	public PeriodicScheduler(Scheduler scheduler) {
+	public PeriodicScheduler(TerminatingScheduler scheduler) {
 		super(scheduler);
 	}
 

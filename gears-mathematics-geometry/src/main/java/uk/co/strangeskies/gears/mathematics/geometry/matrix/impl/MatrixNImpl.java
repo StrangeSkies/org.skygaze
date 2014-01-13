@@ -5,7 +5,7 @@ import java.util.List;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.MatrixN;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.VectorNImpl;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class MatrixNImpl<V extends Value<V>> extends MatrixSImpl<MatrixN<V>, V>
 		implements MatrixN<V> {
@@ -13,16 +13,8 @@ public class MatrixNImpl<V extends Value<V>> extends MatrixSImpl<MatrixN<V>, V>
 		super(size, order, valueFactory);
 	}
 
-	public MatrixNImpl(int size, Factory<V> valueFactory) {
-		super(size, valueFactory);
-	}
-
 	public MatrixNImpl(Order order, List<? extends List<? extends V>> values) {
 		super(order, values);
-	}
-
-	public MatrixNImpl(List<? extends List<? extends V>> values) {
-		super(values);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -75,6 +67,6 @@ public class MatrixNImpl<V extends Value<V>> extends MatrixSImpl<MatrixN<V>, V>
 
 	@Override
 	public MatrixN<V> copy() {
-		return new MatrixNImpl<>(getData2());
+		return new MatrixNImpl<>(getOrder(), getData2());
 	}
 }

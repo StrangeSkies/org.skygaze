@@ -3,7 +3,7 @@ package uk.co.strangeskies.gears.entity.behaviour;
 import java.util.Collection;
 
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public interface BehaviourComponentConfigurator extends
 		Factory<BehaviourComponent> {
@@ -35,16 +35,16 @@ public interface BehaviourComponentConfigurator extends
 	public BehaviourComponentConfigurator writeDependencies(
 			StateComponent<?>... writeDependencies);
 
-	public BehaviourComponentConfigurator indirectReadDependencies(
+	public BehaviourComponentConfigurator optionalReadDependencies(
 			Collection<? extends StateComponent<?>> readDependencies);
 
-	public BehaviourComponentConfigurator indirectReadDependencies(
+	public BehaviourComponentConfigurator optionalReadDependencies(
 			StateComponent<?>... readDependencies);
 
-	public BehaviourComponentConfigurator indirectWriteDependencies(
+	public BehaviourComponentConfigurator optionalWriteDependencies(
 			Collection<? extends StateComponent<?>> writeDependencies);
 
-	public BehaviourComponentConfigurator indirectWriteDependencies(
+	public BehaviourComponentConfigurator optionalWriteDependencies(
 			StateComponent<?>... writeDependencies);
 
 	public BehaviourComponentConfigurator process(BehaviourProcess process);

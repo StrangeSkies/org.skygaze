@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.Entity;
-import uk.co.strangeskies.gears.entity.assembly.Assemblage;
+import uk.co.strangeskies.gears.entity.assembly.AssemblageView;
 import uk.co.strangeskies.gears.entity.assembly.AssemblyContext;
 import uk.co.strangeskies.gears.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.gears.entity.assembly.Variable;
@@ -13,11 +13,11 @@ import uk.co.strangeskies.gears.entity.management.EntityManager;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.utilities.flowcontrol.FactoryFutureMap;
 import uk.co.strangeskies.gears.utilities.flowcontrol.FutureMap;
-import uk.co.strangeskies.gears.utilities.flowcontrol.StoredFutureMap;
 import uk.co.strangeskies.gears.utilities.flowcontrol.FutureMap.Mapping;
+import uk.co.strangeskies.gears.utilities.flowcontrol.StoredFutureMap;
 
 public class AssemblyContextImpl implements AssemblyContext {
-	private final Assemblage assemblage;
+	private final AssemblageView assemblage;
 	private final CollapsedCompositionAssemblageView collapsedView;
 	private final AssemblyContext parent;
 
@@ -27,14 +27,14 @@ public class AssemblyContextImpl implements AssemblyContext {
 	private final FutureMap<StateComponent<?>, Object> stateData;
 	private final FutureMap<Variable<?>, Object> variableValues;
 
-	private final FutureMap<Assemblage, AssemblyContextImpl> subcontexts;
+	private final FutureMap<AssemblageView, AssemblyContextImpl> subcontexts;
 
-	public AssemblyContextImpl(Assemblage assemblage, EntityManager entities) {
+	public AssemblyContextImpl(AssemblageView assemblage, EntityManager entities) {
 		this(assemblage, null, entities);
 	}
 
-	protected AssemblyContextImpl(Assemblage assemblage, AssemblyContext parent,
-			final EntityManager entities) {
+	protected AssemblyContextImpl(AssemblageView assemblage,
+			AssemblyContext parent, final EntityManager entities) {
 		this.assemblage = assemblage;
 		collapsedView = new CollapsedCompositionAssemblageView(assemblage);
 		this.parent = parent;
@@ -63,10 +63,10 @@ public class AssemblyContextImpl implements AssemblyContext {
 
 		variableValues = new FactoryFutureMap<Variable<?>, Object>();
 
-		subcontexts = new StoredFutureMap<Assemblage, AssemblyContextImpl>(
-				new StoredFutureMap.Mapping<Assemblage, AssemblyContextImpl>() {
+		subcontexts = new StoredFutureMap<AssemblageView, AssemblyContextImpl>(
+				new StoredFutureMap.Mapping<AssemblageView, AssemblyContextImpl>() {
 					@Override
-					public AssemblyContextImpl prepare(Assemblage key) {
+					public AssemblyContextImpl prepare(AssemblageView key) {
 						AssemblyContextImpl assemblyContext = new AssemblyContextImpl(key,
 								AssemblyContextImpl.this, entities);
 						assemblyContext.startAssembly();
@@ -82,21 +82,21 @@ public class AssemblyContextImpl implements AssemblyContext {
 
 	@Override
 	public Set<AssemblyContext> getSubcontexts(
-			Assemblage... subassemblageMatchPattern) {
+			AssemblageView... subassemblageMatchPattern) {
 		Set<AssemblyContextImpl> subcontexts = new HashSet<>();
 
 		if (subassemblageMatchPattern.length == 0) {
-			for (Assemblage subassemblage : this.subcontexts.getKeys()) {
+			for (AssemblageView subassemblage : this.subcontexts.getKeys()) {
 				subcontexts.add(this.subcontexts.get(subassemblage));
 			}
 		} else {
 			subcontexts.add(this);
 
-			for (Assemblage base : subassemblageMatchPattern) {
+			for (AssemblageView base : subassemblageMatchPattern) {
 				Set<AssemblyContextImpl> previousSubcontexts = subcontexts;
 				subcontexts = new HashSet<>();
 				for (AssemblyContextImpl subcontext : previousSubcontexts) {
-					for (Assemblage subassemblage : subcontext.subcontexts.getKeys()) {
+					for (AssemblageView subassemblage : subcontext.subcontexts.getKeys()) {
 						if (AssemblageImpl.isComposedFrom(subassemblage, base)) {
 							subcontexts.add(subcontext.subcontexts.get(subassemblage));
 						}
@@ -109,7 +109,8 @@ public class AssemblyContextImpl implements AssemblyContext {
 	}
 
 	@Override
-	public AssemblyContext getSubcontext(Assemblage... subassemblageMatchPattern) {
+	public AssemblyContext getSubcontext(
+			AssemblageView... subassemblageMatchPattern) {
 		Set<AssemblyContext> subcontexts = getSubcontexts(subassemblageMatchPattern);
 
 		if (subcontexts.size() != 1) {
@@ -143,7 +144,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 	}
 
 	public synchronized void startAssembly() {
-		for (final Assemblage subassemblage : collapsedView.getSubassemblages()) {
+		for (final AssemblageView subassemblage : collapsedView.getSubassemblages()) {
 			subcontexts.prepare(subassemblage);
 		}
 
@@ -167,14 +168,14 @@ public class AssemblyContextImpl implements AssemblyContext {
 	}
 
 	private void waitForAssembly() {
-		for (Assemblage subassemblage : subcontexts.getKeys()) {
+		for (AssemblageView subassemblage : subcontexts.getKeys()) {
 			subcontexts.get(subassemblage).waitForAssembly();
 		}
 		stateData.waitForAll();
 	}
 
 	@Override
-	public Assemblage getAssemblage() {
+	public AssemblageView getAssemblage() {
 		return assemblage;
 	}
 }

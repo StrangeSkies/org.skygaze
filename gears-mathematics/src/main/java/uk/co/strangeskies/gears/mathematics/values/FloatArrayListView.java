@@ -2,7 +2,7 @@ package uk.co.strangeskies.gears.mathematics.values;
 
 import java.util.AbstractList;
 
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class FloatArrayListView<V extends Value<V>> extends AbstractList<V> {
 	private final float[] array;

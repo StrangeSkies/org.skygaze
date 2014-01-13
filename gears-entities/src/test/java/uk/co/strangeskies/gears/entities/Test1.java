@@ -12,8 +12,6 @@ import uk.co.strangeskies.gears.entity.assembly.impl.AssemblerImpl;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentBuilder;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponentConfigurator;
-import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcess;
-import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcessingContext;
 import uk.co.strangeskies.gears.entity.behaviour.impl.BehaviourComponentBuilderImpl;
 import uk.co.strangeskies.gears.entity.management.EntityManager;
 import uk.co.strangeskies.gears.entity.management.EntityStateManager;
@@ -31,8 +29,7 @@ import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.impl.MatrixB
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
-import uk.co.strangeskies.gears.utilities.CopyFactory;
-import uk.co.strangeskies.gears.utilities.Factory;
+import uk.co.strangeskies.gears.utilities.factory.CopyFactory;
 
 public class Test1 {
 	private final EntityManager entityManager;
@@ -77,59 +74,54 @@ public class Test1 {
 		scheduler.setPeriodFrequency(5);
 		entities().behaviour().setDefaultScheduler(scheduler);
 
-		final StateComponent<Vector2<DoubleValue>> position = stateBuilder()
+		/*
+		 * State Components
+		 */
+		StateComponent<Vector2<DoubleValue>> position = stateBuilder()
 				.name("Position").description("Position of entity")
 				.data(new CopyFactory<>(matrices().doubles().vector2())).create();
 
-		final StateComponent<Vector2<DoubleValue>> velocity = stateBuilder()
+		StateComponent<Vector2<DoubleValue>> velocity = stateBuilder()
 				.name("Velocity").description("Velocity of entity")
 				.data(new CopyFactory<>(matrices().doubles().vector2()))
 				.readDependencies(position).create();
 
-		final StateComponent<IdentityExpression<String>> parrot = stateBuilder()
+		StateComponent<IdentityExpression<String>> parrot = stateBuilder()
 				.name("Parrot").description("A parrot which knows a word")
-				.data(new Factory<IdentityExpression<String>>() {
-					@Override
-					public IdentityExpression<String> create() {
-						return new IdentityExpression<>("");
-					}
-				}).create();
+				.data(() -> new IdentityExpression<>("Squawk")).create();
 
-		final BehaviourComponent movement = behaviourBuilder().name("Movement")
+		/*
+		 * Behaviour Components
+		 */
+		BehaviourComponent movement = behaviourBuilder()
+				.name("Movement")
 				.description("Moves entity by velocity")
-				.process(new BehaviourProcess() {
-					@Override
-					public void process(BehaviourProcessingContext context) {
-						for (Entity entity : context.getEntities()) {
-							EntityStateManager state = context.entities().state();
+				.process(
+						context -> {
+							for (Entity entity : context.getEntities()) {
+								EntityStateManager state = context.entity().state();
 
-							System.out.println(state.getData(entity, position).add(
-									state.getData(entity, velocity)));
-						}
-					}
-				}).readDependencies(velocity).writeDependencies(position).create();
+								System.out.println(state.getData(entity, position).add(
+										state.getData(entity, velocity)));
+							}
+						}).readDependencies(velocity).writeDependencies(position).create();
 		entities().behaviour().addUniversal(movement);
 
-		final BehaviourComponent parrotting = behaviourBuilder().name("Parrotting")
-				.description("Parrot makes a noise").process(new BehaviourProcess() {
-					@Override
-					public void process(BehaviourProcessingContext context) {
-						for (Entity entity : context.getEntities()) {
-							EntityStateManager state = context.entities().state();
-
-							System.out.println(state.getData(entity, parrot).get());
-						}
+		BehaviourComponent parrotting = behaviourBuilder().name("Parrotting")
+				.description("Parrot makes a noise").process(context -> {
+					for (Entity entity : context.getEntities()) {
+						EntityStateManager state = context.entity().state();
+						System.out.println(state.getData(entity, parrot).get());
 					}
 				}).readDependencies(parrot).create();
 		entities().behaviour().addUniversal(parrotting);
 
-		final Assemblage assemblage1 = assembler().create();
-		final Variable<IntValue> numberVariable = new Variable<IntValue>() {
-			@Override
-			public IntValue create() {
-				return new IntValue(new Random().nextInt());
-			}
-		};
+		/*
+		 * Assemblages
+		 */
+		Assemblage assemblage1 = assembler().create();
+		Variable<IntValue> numberVariable = () -> new IntValue(
+				new Random().nextInt());
 		assemblage1.getVariables().add(numberVariable);
 		assemblage1.getStates().add(position);
 		assemblage1.getStates().add(parrot);
@@ -142,61 +134,43 @@ public class Test1 {
 					}
 				});
 
-		final Assemblage assemblage2 = assembler().create();
+		Assemblage assemblage2 = assembler().create();
 		assemblage2.getComposition().add(assemblage1);
 		assemblage2.getStates().add(velocity);
 		assemblage2.getInitialisers(position).add(
-				new StateInitialiser<Vector2<DoubleValue>>() {
-					@Override
-					public void initialise(Vector2<DoubleValue> data,
-							AssemblyContext context) {
-						data.setData(12, 12);
-					}
-				});
+				(data, context) -> data.setData(12, 12));
 		assemblage2.getInitialisers(velocity).add(
-				new StateInitialiser<Vector2<DoubleValue>>() {
-					@Override
-					public void initialise(Vector2<DoubleValue> data,
-							AssemblyContext context) {
-						data.set(context.getSupercontext().getData(position)
-								.getSubtracted(matrices().doubles().vector2().setData(2, 2)));
-					}
-				});
+				(data, context) -> data.set(context.getSupercontext().getData(position)
+						.getSubtracted(matrices().doubles().vector2().setData(2, 2))));
 		assemblage2.getSubassemblages().add(assemblage1);
 
 		assemblage1.getInitialisers(parrot).add(
-				new StateInitialiser<IdentityExpression<String>>() {
-					@Override
-					public void initialise(IdentityExpression<String> data,
-							AssemblyContext context) {
-						try {
-							data.set("Child position: "
-									+ context.getSubcontext(assemblage1).getData(position)
-									+ " num " + context.getValue(numberVariable));
-						} catch (IllegalArgumentException e) {
-							data.set("Parent num: "
-									+ context.getSupercontext().getValue(numberVariable)
-									+ " num: " + context.getValue(numberVariable));
-						}
+				(data, context) -> {
+					try {
+						data.set("Child position: "
+								+ context.getSubcontext(assemblage1).getData(position)
+								+ " num " + context.getValue(numberVariable));
+					} catch (IllegalArgumentException e) {
+						data.set("Parent num: "
+								+ context.getSupercontext().getValue(numberVariable) + " num: "
+								+ context.getValue(numberVariable));
 					}
 				});
 
-		final Assemblage assemblage3 = assembler().create();
+		Assemblage assemblage3 = assembler().create();
 		assemblage3.getVariables().add(numberVariable);
 		assemblage3.getStates().add(position);
 		assemblage3.getInitialisers(position).add(
-				new StateInitialiser<Vector2<DoubleValue>>() {
-					@Override
-					public void initialise(Vector2<DoubleValue> data,
-							AssemblyContext context) {
-						data.set(context.getSubcontext(assemblage2, assemblage1)
-								.getData(position).getMultiplied(3));
-					}
-				});
+				(data, context) -> data.set(context
+						.getSubcontext(assemblage2, assemblage1).getData(position)
+						.getMultiplied(3)));
 		assemblage3.getSubassemblages().add(assemblage2);
 
 		assembler().assemble(assemblage3, entities());
 
+		/*
+		 * Process
+		 */
 		Processor processor = new ProcessorImpl();
 		processor.startProcessing(entities());
 		try {

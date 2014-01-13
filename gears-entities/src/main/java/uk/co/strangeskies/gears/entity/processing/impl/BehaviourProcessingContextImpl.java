@@ -25,7 +25,7 @@ public class BehaviourProcessingContextImpl implements
 	}
 
 	@Override
-	public EntityManager entities() {
+	public EntityManager entity() {
 		return entityManager;
 	}
 
@@ -62,18 +62,18 @@ public class BehaviourProcessingContextImpl implements
 		Set<Entity> entities;
 
 		if (!stateDependencies.isEmpty()) {
-			entities = new HashSet<>(entities().state().getEntitiesWith(
+			entities = new HashSet<>(entity().state().getEntitiesWith(
 					stateDependencies));
 
-			if (!entities().behaviour().isUniversal(behaviour)) {
-				entities.retainAll(entities().behaviour().getEntitiesExplicitlyWith(
+			if (!entity().behaviour().isUniversal(behaviour)) {
+				entities.retainAll(entity().behaviour().getEntitiesExplicitlyWith(
 						behaviour));
 			}
 		} else {
-			if (entities().behaviour().isUniversal(behaviour)) {
-				entities = entities().getAll();
+			if (entity().behaviour().isUniversal(behaviour)) {
+				entities = entity().getAll();
 			} else {
-				entities = entities().behaviour().getEntitiesExplicitlyWith(behaviour);
+				entities = entity().behaviour().getEntitiesExplicitlyWith(behaviour);
 			}
 		}
 

@@ -26,8 +26,8 @@ public class ScheduleProcessingContextImpl implements ScheduleProcessingContext 
 	public void processBehaviour(final BehaviourComponent behaviour)
 			throws InterruptedException {
 		LimitedReadWriteLockReleaseWrapper<StateComponent<?>> locks = new LimitedReadWriteLockReleaseWrapper<>(
-				this.locks, behaviour.getIndirectStateReadDependencies(),
-				behaviour.getIndirectStateWriteDependencies());
+				this.locks, behaviour.getOptionalReadDependencies(),
+				behaviour.getOptionalWriteDependencies());
 		locks.obtain();
 		behaviour.getProcess().process(
 				new BehaviourProcessingContextImpl(behaviour, entityManager, locks));
