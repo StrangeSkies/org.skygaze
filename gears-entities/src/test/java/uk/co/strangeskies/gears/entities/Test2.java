@@ -17,7 +17,7 @@ import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentBuilder;
 import uk.co.strangeskies.gears.entity.state.StateComponentConfigurator;
 import uk.co.strangeskies.gears.entity.state.impl.StateComponentBuilderImpl;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.impl.MatrixBuilderImpl;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.impl.MatrixBuilderImpl;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 

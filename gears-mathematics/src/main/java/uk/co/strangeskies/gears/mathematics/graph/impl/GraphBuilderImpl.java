@@ -1,7 +1,7 @@
 package uk.co.strangeskies.gears.mathematics.graph.impl;
 
-import uk.co.strangeskies.gears.mathematics.graph.build.GraphBuilder;
-import uk.co.strangeskies.gears.mathematics.graph.build.GraphConfigurator;
+import uk.co.strangeskies.gears.mathematics.graph.building.GraphBuilder;
+import uk.co.strangeskies.gears.mathematics.graph.building.GraphConfigurator;
 
 public class GraphBuilderImpl implements GraphBuilder {
 	@Override

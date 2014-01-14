@@ -24,7 +24,7 @@ import uk.co.strangeskies.gears.input.MouseInputController;
 import uk.co.strangeskies.gears.input.WindowManagerInputController;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.AssignmentBuffer;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.CloneBuffer;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.MatrixBuilder;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.MatrixBuilder;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
 

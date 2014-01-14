@@ -3,7 +3,7 @@ package uk.co.strangeskies.gears.input;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionBuffer;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionResultSettingBuffer;
 import uk.co.strangeskies.gears.mathematics.geometry.Bounds2;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.MatrixBuilder;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.MatrixBuilder;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;

@@ -4,8 +4,8 @@ import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.scheduling.ScheduleProcessingContext;
 import uk.co.strangeskies.gears.entity.scheduling.terminating.TerminatingScheduler;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
-import uk.co.strangeskies.gears.mathematics.graph.build.GraphBuilder;
-import uk.co.strangeskies.gears.mathematics.graph.build.GraphConfigurator;
+import uk.co.strangeskies.gears.mathematics.graph.building.GraphBuilder;
+import uk.co.strangeskies.gears.mathematics.graph.building.GraphConfigurator;
 import uk.co.strangeskies.gears.mathematics.graph.impl.GraphBuilderImpl;
 
 public class LinearScheduler implements TerminatingScheduler {

@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
-import uk.co.strangeskies.gears.mathematics.graph.build.GraphConfigurator;
+import uk.co.strangeskies.gears.mathematics.graph.building.GraphConfigurator;
 import uk.co.strangeskies.gears.utilities.functions.Functions;
 import uk.co.strangeskies.gears.utilities.tuples.Pair;
 

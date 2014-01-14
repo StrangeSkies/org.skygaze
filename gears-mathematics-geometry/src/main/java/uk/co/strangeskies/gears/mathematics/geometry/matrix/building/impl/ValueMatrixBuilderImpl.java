@@ -1,7 +1,7 @@
-package uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.impl;
+package uk.co.strangeskies.gears.mathematics.geometry.matrix.building.impl;
 
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix.Order;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.builder.ValueMatrixBuilder;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.ValueMatrixBuilder;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector3;

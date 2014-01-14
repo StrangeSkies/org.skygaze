@@ -1,4 +1,4 @@
-package uk.co.strangeskies.gears.mathematics.geometry.matrix.builder;
+package uk.co.strangeskies.gears.mathematics.geometry.matrix.building;
 
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix.Order;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
