@@ -3,6 +3,7 @@ package uk.co.strangeskies.gears.utilities.factory;
 public abstract class Configurator<T> implements Factory<T> {
 	private boolean stale = false;
 
+	@Override
 	public final T create() {
 		prepare();
 		T created;
