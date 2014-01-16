@@ -31,7 +31,6 @@ public class EntityStateManagerImpl implements EntityStateManager {
 		return (D) entityData.put(entity, stateComponent.create());
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public synchronized boolean detach(Entity entity,
 			StateComponent<?> stateComponent) {
