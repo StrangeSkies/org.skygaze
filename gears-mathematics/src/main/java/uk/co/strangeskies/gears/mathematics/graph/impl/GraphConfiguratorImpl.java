@@ -10,15 +10,15 @@ import java.util.function.Predicate;
 
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
+import uk.co.strangeskies.gears.mathematics.graph.GraphTransformer;
 import uk.co.strangeskies.gears.mathematics.graph.building.GraphConfigurator;
 import uk.co.strangeskies.gears.utilities.functions.Functions;
-import uk.co.strangeskies.gears.utilities.tuples.Pair;
 
 public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 	private boolean unmodifiableVertices;
 	private boolean unmodifiableEdges;
 	private Collection<V> vertices;
-	private Collection<Pair<V, V>> edges;
+	private Collection<EdgeVertices<V>> edges;
 	private boolean directed;
 	private boolean acyclic;
 	private boolean multigraph;
@@ -43,10 +43,74 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 
 	@Override
 	public Graph<V, E> create() {
-		if (multigraph)
-			return null;
-		else
-			return null;
+		return new Graph<V, E>() {
+			@Override
+			public Graph<V, E> copy() {
+				return new GraphBuilderImpl().configure().unmodifiableStructure()
+						.vertices(getVertices()).edges(getEdgeVertices())
+						.edgeFactory((v, w) -> getEdge(v, w)).create();
+			}
+
+			@Override
+			public Set<V> getVertices() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Set<E> getEdges() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public E getEdge(V from, V to) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public EdgeVertices<V> getVertices(E edge) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public boolean isDirected() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean isWeighted() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public double weight(E edge) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public double weight(V from, V to) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public boolean isSimple() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public GraphTransformer<V, E> transform() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
 	}
 
 	@Override
@@ -103,7 +167,7 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 	}
 
 	@Override
-	public GraphConfigurator<V, E> edges(Collection<Pair<V, V>> edges) {
+	public GraphConfigurator<V, E> edges(Collection<EdgeVertices<V>> edges) {
 		this.edges = edges;
 		return this;
 	}

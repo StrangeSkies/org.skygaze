@@ -11,8 +11,8 @@ import java.util.function.Predicate;
 
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
+import uk.co.strangeskies.gears.mathematics.graph.impl.EdgeVertices;
 import uk.co.strangeskies.gears.utilities.factory.Factory;
-import uk.co.strangeskies.gears.utilities.tuples.Pair;
 
 public interface GraphConfigurator<V, E> extends Factory<Graph<V, E>> {
 	public GraphConfigurator<V, E> unmodifiableStructure();
@@ -36,10 +36,10 @@ public interface GraphConfigurator<V, E> extends Factory<Graph<V, E>> {
 		return verticesAsExpressions(Arrays.asList(vertices));
 	}
 
-	public GraphConfigurator<V, E> edges(Collection<Pair<V, V>> edges);
+	public GraphConfigurator<V, E> edges(Collection<EdgeVertices<V>> edges);
 
 	public default GraphConfigurator<V, E> edges(
-			@SuppressWarnings("unchecked") Pair<V, V>... edges) {
+			@SuppressWarnings("unchecked") EdgeVertices<V>... edges) {
 		return edges(Arrays.asList(edges));
 	}
 

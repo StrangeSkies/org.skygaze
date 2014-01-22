@@ -1,11 +1,6 @@
 package uk.co.strangeskies.gears.mathematics.graph;
 
-import java.util.Arrays;
-import java.util.function.BiFunction;
-
 import uk.co.strangeskies.gears.mathematics.graph.building.GraphBuilder;
-import uk.co.strangeskies.gears.mathematics.graph.building.GraphConfigurator;
-import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.utilities.IdentityProperty;
 import uk.co.strangeskies.gears.utilities.SimpleProperty;
 

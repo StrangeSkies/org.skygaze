@@ -1,19 +1,39 @@
 package uk.co.strangeskies.gears.mathematics.graph;
 
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import uk.co.strangeskies.gears.mathematics.graph.impl.EdgeVertices;
 import uk.co.strangeskies.gears.utilities.Copyable;
-import uk.co.strangeskies.gears.utilities.tuples.Pair;
 
 public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 	public Set<V> getVertices();
 
 	public Set<E> getEdges();
 
+	public default Set<EdgeVertices<V>> getEdgeVertices() {
+		return getEdges().stream().map(e -> getVertices(e))
+				.collect(Collectors.toSet());
+	}
+
 	public E getEdge(V from, V to);
 
-	public Pair<V, V> getVertices(E edge);
+	public default Set<E> getEdges(V from, V to) {
+		Set<E> edges = new HashSet<>();
+		edges.add(getEdge(from, to));
+		return edges;
+	}
+
+	public EdgeVertices<V> getVertices(E edge);
+
+	public default V getFrom(E edge) {
+		return getVertices(edge).getFrom();
+	}
+
+	public default V getTo(E edge) {
+		return getVertices(edge).getTo();
+	}
 
 	public default boolean addVertex(V vertex) {
 		throw new UnsupportedOperationException();
@@ -36,11 +56,9 @@ public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 	}
 
 	public default boolean removeEdge(E edge) {
-		Pair<V, V> vertices = getVertices(edge);
-		return removeEdge(vertices.getLeft(), vertices.getRight()) != null;
+		EdgeVertices<V> vertices = getVertices(edge);
+		return removeEdge(vertices.getFrom(), vertices.getTo()) != null;
 	}
-
-	public Map<Pair<V, V>, E> edges();
 
 	public boolean isDirected();
 
