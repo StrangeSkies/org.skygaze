@@ -43,6 +43,12 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 
 	@Override
 	public Graph<V, E> create() {
+		/*
+		 * Have most of the implementation details figured out here with
+		 * functionality / data structures saved in final local variables which can
+		 * be easily wrapped by a following anonymous implementation of Graph.
+		 */
+
 		return new Graph<V, E>() {
 			@Override
 			public Graph<V, E> copy() {
