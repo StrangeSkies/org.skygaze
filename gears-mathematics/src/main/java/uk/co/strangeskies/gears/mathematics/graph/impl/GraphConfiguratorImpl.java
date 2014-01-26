@@ -2,6 +2,7 @@ package uk.co.strangeskies.gears.mathematics.graph.impl;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -17,8 +18,8 @@ import uk.co.strangeskies.gears.utilities.functions.Functions;
 public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 	private boolean unmodifiableVertices;
 	private boolean unmodifiableEdges;
-	private Collection<V> vertices;
-	private Collection<EdgeVertices<V>> edges;
+	private Set<V> vertices;
+	private Set<EdgeVertices<V>> edges;
 	private boolean directed;
 	private boolean acyclic;
 	private boolean multigraph;
@@ -48,6 +49,10 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 		 * functionality / data structures saved in final local variables which can
 		 * be easily wrapped by a following anonymous implementation of Graph.
 		 */
+
+		final boolean directed = this.directed;
+		final boolean weighted = edgeWeight != null;
+		final Function<E, Double> edgeWeight = weighted ? this.edgeWeight : e -> 1d;
 
 		return new Graph<V, E>() {
 			@Override
@@ -83,26 +88,17 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 
 			@Override
 			public boolean isDirected() {
-				// TODO Auto-generated method stub
-				return false;
+				return directed;
 			}
 
 			@Override
 			public boolean isWeighted() {
-				// TODO Auto-generated method stub
-				return false;
+				return weighted;
 			}
 
 			@Override
 			public double weight(E edge) {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public double weight(V from, V to) {
-				// TODO Auto-generated method stub
-				return 0;
+				return edgeWeight.apply(edge);
 			}
 
 			@Override
@@ -139,7 +135,7 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <W extends V> GraphConfigurator<W, E> vertices(Collection<W> vertices) {
-		this.vertices = (Collection<V>) vertices;
+		this.vertices = new HashSet<>(vertices);
 		return (GraphConfigurator<W, E>) this;
 	}
 
@@ -147,7 +143,7 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 	@Override
 	public <W extends Expression<? extends V>> GraphConfigurator<W, E> verticesAsExpressions(
 			Collection<W> vertices) {
-		this.vertices = (Collection<V>) vertices;
+		this.vertices = (Set<V>) new HashSet<W>(vertices);
 
 		edgeFactory = expressionForward(edgeFactory);
 		edgeMultiFactory = expressionForward(edgeMultiFactory);
@@ -174,7 +170,7 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 
 	@Override
 	public GraphConfigurator<V, E> edges(Collection<EdgeVertices<V>> edges) {
-		this.edges = edges;
+		this.edges = new HashSet<>(edges);
 		return this;
 	}
 

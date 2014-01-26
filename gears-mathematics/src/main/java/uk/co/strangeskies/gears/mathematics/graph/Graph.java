@@ -66,7 +66,9 @@ public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 
 	public double weight(E edge);
 
-	public double weight(V from, V to);
+	public default double weight(V from, V to) {
+		return weight(getEdge(from, to));
+	}
 
 	public boolean isSimple();
 
