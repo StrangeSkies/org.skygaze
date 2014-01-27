@@ -1,59 +1,61 @@
 package uk.co.strangeskies.gears.utilities.factory;
 
-public abstract class Configurator<T> implements Factory<T> {
-	private boolean stale = false;
+import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+public class Configurator<T> implements Factory<T> {
+	private boolean complete = false;
+
+	private final Supplier<T> supplier;
+	private final BooleanSupplier preparator;
+	private final Predicate<T> validator;
+
+	public Configurator(Supplier<T> supplier) {
+		this(supplier, null, null);
+	}
+
+	public Configurator(Supplier<T> supplier, BooleanSupplier preparator,
+			Predicate<T> validator) {
+		this.supplier = supplier;
+		this.preparator = preparator;
+		this.validator = validator;
+	}
 
 	@Override
 	public final T create() {
-		prepare();
+		if (complete)
+			throw new StaleBuilderStateException(this);
+
 		T created;
 		try {
-			if (!assertReady())
+			if (preparator != null && !preparator.getAsBoolean())
 				throw new IncompleteBuildStateException(this);
-			if (stale)
-				throw new StaleBuilderStateException(this);
 
-			created = tryCreate();
-			if (!assertValid(created)) {
+			created = supplier.get();
+			if (validator != null && !validator.test(created)) {
 				throw new InvalidBuildStateException(this);
 			}
 		} catch (Exception e) {
 			throw new InvalidBuildStateException(this, e);
 		}
 
-		stale = true;
-		created(created);
+		complete = true;
 
 		return created;
 	}
 
-	protected void prepare() {
+	public final boolean isComplete() {
+		return complete;
 	}
 
-	protected void created(T created) {
-	}
-
-	public abstract T tryCreate();
-
-	public boolean isComplete() {
-		return stale;
-	}
-
-	public void assertNotStale() {
-		if (stale)
+	public final void assertNotStale() {
+		if (complete)
 			throw new StaleBuilderStateException(this);
 	}
 
-	public void assertComplete() {
-		if (!stale)
+	public final void assertComplete() {
+		if (!complete)
 			throw new IncompleteBuildStateException(this);
-	}
-
-	protected boolean assertReady() {
-		return true;
-	}
-
-	protected boolean assertValid(T attempt) {
-		return true;
 	}
 }
