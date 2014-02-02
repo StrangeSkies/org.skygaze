@@ -1,10 +1,6 @@
 package uk.co.strangeskies.gears.mathematics;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
 
 import uk.co.strangeskies.gears.utilities.Copyable;
 import uk.co.strangeskies.gears.utilities.NaturalComparator;
@@ -92,7 +88,7 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 	}
 
 	public boolean contains(final T value) {
-		return containsComparable(new Comparable<T>() {
+		return contains(new Comparable<T>() {
 			@Override
 			public int compareTo(T other) {
 				return comparator.compare(value, other);
@@ -100,7 +96,16 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 		});
 	}
 
-	public boolean containsComparable(Comparable<? super T> value) {
+	public boolean touches(final T value) {
+		return touches(new Comparable<T>() {
+			@Override
+			public int compareTo(T other) {
+				return comparator.compare(value, other);
+			}
+		});
+	}
+
+	public boolean contains(Comparable<? super T> value) {
 		int fromCompare = value.compareTo(from);
 		int toCompare = value.compareTo(to);
 
@@ -119,63 +124,26 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 		}
 	}
 
-	public boolean containsAll(Collection<? extends T> values) {
-		for (T value : values) {
-			if (!contains(value)) {
+	public boolean touches(Comparable<? super T> value) {
+		return value.compareTo(from) >= 0 && value.compareTo(to) <= 0;
+	}
+
+	public boolean contains(Range<T> range) {
+		if (range.isFromInclusive()) {
+			if (!contains(range.getFrom()))
 				return false;
-			}
+		} else {
+			if (!touches(range.getFrom()))
+				return false;
+		}
+		if (range.isToInclusive()) {
+			if (!contains(range.getTo()))
+				return false;
+		} else {
+			if (!touches(range.getTo()))
+				return false;
 		}
 		return true;
-	}
-
-	public boolean containsAllComparables(
-			Collection<? extends Comparable<? super T>> values) {
-		for (Comparable<? super T> value : values) {
-			if (!containsComparable(value)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public boolean containsSome(Collection<? extends T> values) {
-		for (T value : values) {
-			if (contains(value)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean containsSomeComparables(
-			Collection<? extends Comparable<? super T>> values) {
-		for (Comparable<? super T> value : values) {
-			if (containsComparable(value)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public int containsCount(Collection<? extends T> values) {
-		int containsCount = 0;
-		for (T value : values) {
-			if (contains(value)) {
-				containsCount++;
-			}
-		}
-		return containsCount;
-	}
-
-	public int containsCountComparables(
-			Collection<? extends Comparable<? super T>> values) {
-		int containsCount = 0;
-		for (Comparable<? super T> value : values) {
-			if (!containsComparable(value)) {
-				containsCount++;
-			}
-		}
-		return containsCount;
 	}
 
 	public boolean isValueBelow(T value) {
@@ -194,7 +162,7 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 		}
 	}
 
-	public boolean isValueBelowComparable(Comparable<? super T> value) {
+	public boolean isValueBelow(Comparable<? super T> value) {
 		if (fromInclusive) {
 			return value.compareTo(from) < 0;
 		} else {
@@ -202,7 +170,7 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 		}
 	}
 
-	public boolean isValueAboveComparable(Comparable<? super T> value) {
+	public boolean isValueAbove(Comparable<? super T> value) {
 		if (toInclusive) {
 			return value.compareTo(to) > 0;
 		} else {
@@ -240,9 +208,9 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 		if (isEmpty()) {
 			return null;
 		}
-		if (isValueAboveComparable(value.get())) {
+		if (isValueAbove(value.get())) {
 			value.set(to);
-		} else if (isValueBelowComparable(value.get())) {
+		} else if (isValueBelow(value.get())) {
 			value.set(from);
 		}
 		return value;
@@ -309,74 +277,5 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 	@Override
 	public final Range<T> getThis() {
 		return this;
-	}
-
-	public <S extends Collection<? extends T>> S retainAllWithin(S values) {
-		Iterator<? extends T> valueIterator = values.iterator();
-
-		while (valueIterator.hasNext()) {
-			if (!contains(valueIterator.next())) {
-				valueIterator.remove();
-			}
-		}
-
-		return values;
-	}
-
-	public <U extends T, S extends Collection<U>> List<U> getAllWithin(S values) {
-		return retainAllWithin(new ArrayList<>(values));
-	}
-
-	public <S extends Collection<? extends T>> S removeAllWithin(S values) {
-		Iterator<? extends T> valueIterator = values.iterator();
-
-		while (valueIterator.hasNext()) {
-			if (contains(valueIterator.next())) {
-				valueIterator.remove();
-			}
-		}
-
-		return values;
-	}
-
-	public <U extends T, S extends Collection<U>> List<U> getWithoutAllWithin(
-			S values) {
-		return removeAllWithin(new ArrayList<>(values));
-	}
-
-	public <S extends Collection<? extends Comparable<? super T>>> S retainAllComparablesWithin(
-			S values) {
-		Iterator<? extends Comparable<? super T>> valueIterator = values.iterator();
-
-		while (valueIterator.hasNext()) {
-			if (!containsComparable(valueIterator.next())) {
-				valueIterator.remove();
-			}
-		}
-
-		return values;
-	}
-
-	public <U extends Comparable<? super T>, S extends Collection<U>> List<U> getAllComparablesWithin(
-			S values) {
-		return retainAllComparablesWithin(new ArrayList<>(values));
-	}
-
-	public <S extends Collection<? extends Comparable<? super T>>> S removeAllComparablesWithin(
-			S values) {
-		Iterator<? extends Comparable<? super T>> valueIterator = values.iterator();
-
-		while (valueIterator.hasNext()) {
-			if (containsComparable(valueIterator.next())) {
-				valueIterator.remove();
-			}
-		}
-
-		return values;
-	}
-
-	public <U extends Comparable<? super T>, S extends Collection<U>> List<U> getWithoutAllComparablesWithin(
-			S values) {
-		return removeAllComparablesWithin(new ArrayList<>(values));
 	}
 }
