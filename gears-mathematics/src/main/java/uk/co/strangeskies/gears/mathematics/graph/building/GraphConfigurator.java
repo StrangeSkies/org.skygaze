@@ -9,7 +9,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
 import uk.co.strangeskies.gears.mathematics.graph.impl.EdgeVertices;
 import uk.co.strangeskies.gears.utilities.factory.Factory;

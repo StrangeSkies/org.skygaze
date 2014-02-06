@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.mathematics.geometry.shape.tessellation;
 
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.SimplePolygon;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.mesh.Mesh;

@@ -1,11 +1,11 @@
 package uk.co.strangeskies.gears.mathematics.logic;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.BiFunctionExpression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 
 public class AND<O extends ANDable<?, ? super T>, T>
 		extends
-		BinaryOperationExpression< /* @ReadOnly */ANDable<? extends O, ? super T>, /*
+		BiFunctionExpression< /* @ReadOnly */ANDable<? extends O, ? super T>, /*
 																																								 * @
 																																								 * ReadOnly
 																																								 */T, /*

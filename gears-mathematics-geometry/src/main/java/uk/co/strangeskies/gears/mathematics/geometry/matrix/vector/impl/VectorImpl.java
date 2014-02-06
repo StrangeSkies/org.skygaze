@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.ConditionalExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
-import uk.co.strangeskies.gears.mathematics.expressions.IdentityExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.ListExpressionView;
+import uk.co.strangeskies.gears.mathematics.expression.BiFunctionExpression;
+import uk.co.strangeskies.gears.mathematics.expression.CompoundExpression;
+import uk.co.strangeskies.gears.mathematics.expression.ConditionalExpression;
+import uk.co.strangeskies.gears.mathematics.expression.CopyDecouplingExpression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.IdentityExpression;
+import uk.co.strangeskies.gears.mathematics.expression.collection.ListExpressionView;
 import uk.co.strangeskies.gears.mathematics.geometry.DimensionalityException;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
@@ -35,11 +35,11 @@ import uk.co.strangeskies.gears.mathematics.values.LongValue;
 import uk.co.strangeskies.gears.mathematics.values.LongValueFactory;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.utilities.Self;
-import uk.co.strangeskies.gears.utilities.collections.NullPointerInCollectionException;
+import uk.co.strangeskies.gears.utilities.collection.NullPointerInCollectionException;
 import uk.co.strangeskies.gears.utilities.factory.Factory;
-import uk.co.strangeskies.gears.utilities.functions.AssignmentOperation;
-import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformOnceView;
-import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformationView;
+import uk.co.strangeskies.gears.utilities.function.AssignmentOperation;
+import uk.co.strangeskies.gears.utilities.function.collection.ListTransformOnceView;
+import uk.co.strangeskies.gears.utilities.function.collection.ListTransformationView;
 
 /**
  * 
@@ -1568,7 +1568,7 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 		List<List<V>> data2 = data2Reference.get();
 
 		if (data2 == null) {
-			Expression</* @ReadOnly */Boolean> isOrientationAlignedWithOrder = new BinaryOperationExpression</*
+			Expression</* @ReadOnly */Boolean> isOrientationAlignedWithOrder = new BiFunctionExpression</*
 																																																				 * @
 																																																				 * ReadOnly
 																																																				 */Order, Orientation, Boolean>(

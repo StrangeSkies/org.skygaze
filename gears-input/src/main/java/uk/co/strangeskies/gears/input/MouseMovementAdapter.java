@@ -1,7 +1,7 @@
 package uk.co.strangeskies.gears.input;
 
-import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionBuffer;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionResultSettingBuffer;
+import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.gears.mathematics.expression.buffer.ExpressionBuffer;
 import uk.co.strangeskies.gears.mathematics.geometry.Bounds2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.MatrixBuilder;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
@@ -16,8 +16,8 @@ public class MouseMovementAdapter {
 	private final MouseInputController mouseInputController;
 	private final WindowManagerInputController windowManagerInputController;
 
-	private final ExpressionBuffer<Vector2<IntValue>, Vector2<IntValue>> mousePosition;
-	private final ExpressionBuffer<Vector2<IntValue>, Vector2<IntValue>> position;
+	private final DoubleBuffer<Vector2<IntValue>, Vector2<IntValue>> mousePosition;
+	private final DoubleBuffer<Vector2<IntValue>, Vector2<IntValue>> position;
 
 	private MovementType movementType;
 
@@ -31,16 +31,16 @@ public class MouseMovementAdapter {
 
 		this.matrixBuilder = matrixBuilder;
 
-		mousePosition = new ExpressionResultSettingBuffer<>(matrixBuilder.ints()
-				.vector2(), matrixBuilder.ints().vector2());
-		position = new ExpressionResultSettingBuffer<>(matrixBuilder.ints()
-				.vector2(), matrixBuilder.ints().vector2());
+		mousePosition = new ExpressionBuffer<>(matrixBuilder.ints().vector2(),
+				matrixBuilder.ints().vector2(), (f, b) -> f.set(b));
+		position = new ExpressionBuffer<>(matrixBuilder.ints().vector2(),
+				matrixBuilder.ints().vector2(), (f, b) -> f.set(b));
 		updateMousePosition();
 
 		setMovementType(MovementType.Absolute);
 	}
 
-	public ExpressionBuffer<Vector2<IntValue>, Vector2<IntValue>> getPosition() {
+	public DoubleBuffer<Vector2<IntValue>, Vector2<IntValue>> getPosition() {
 		return position;
 	}
 

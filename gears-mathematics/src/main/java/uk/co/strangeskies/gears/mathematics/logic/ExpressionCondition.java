@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.mathematics.logic;
 
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 
 public class ExpressionCondition implements Condition {
 	private final Expression<? extends /*@ReadOnly*/BooleanValue> expression;

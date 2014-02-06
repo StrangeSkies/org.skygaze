@@ -16,8 +16,8 @@ import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.utilities.Decorator;
 import uk.co.strangeskies.gears.utilities.Property;
-import uk.co.strangeskies.gears.utilities.collections.ListDecorator;
-import uk.co.strangeskies.gears.utilities.collections.SetDecorator;
+import uk.co.strangeskies.gears.utilities.collection.ListDecorator;
+import uk.co.strangeskies.gears.utilities.collection.SetDecorator;
 
 public class CollapsedCompositionAssemblageView extends
 		Decorator<AssemblageView> implements

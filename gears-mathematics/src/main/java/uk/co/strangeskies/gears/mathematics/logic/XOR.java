@@ -1,11 +1,11 @@
 package uk.co.strangeskies.gears.mathematics.logic;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.BiFunctionExpression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 
 public class XOR<O extends XORable<?, ? super T>, T>
 		extends
-		BinaryOperationExpression</* @ReadOnly */XORable<? extends O, ? super T>, /*
+		BiFunctionExpression</* @ReadOnly */XORable<? extends O, ? super T>, /*
 																																							 * @
 																																							 * ReadOnly
 																																							 */T, /*

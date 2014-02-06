@@ -1,11 +1,11 @@
 package uk.co.strangeskies.gears.mathematics.logic;
 
-import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.BiFunctionExpression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 
 public class NAND<O extends NANDable<?, ? super T>, T>
 		extends
-		BinaryOperationExpression</* @ReadOnly */NANDable<? extends O, ? super T>, /*
+		BiFunctionExpression</* @ReadOnly */NANDable<? extends O, ? super T>, /*
 																																								 * @
 																																								 * ReadOnly
 																																								 */T, /*

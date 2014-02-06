@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.mathematics.logic;
 
-import uk.co.strangeskies.gears.mathematics.expressions.MutableExpression;
+import uk.co.strangeskies.gears.mathematics.expression.MutableExpression;
 import uk.co.strangeskies.gears.utilities.Self;
 
 public class BooleanValue extends MutableExpression<BooleanValue>

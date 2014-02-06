@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import uk.co.strangeskies.gears.utilities.collections.HashSetMultiHashMap;
-import uk.co.strangeskies.gears.utilities.collections.SetMultiMap;
+import uk.co.strangeskies.gears.utilities.collection.HashSetMultiHashMap;
+import uk.co.strangeskies.gears.utilities.collection.SetMultiMap;
 
 public class HashingStripedReadWriteLock<K> implements StripedReadWriteLock<K> {
 	private final Map<K, ReentrantReadWriteLock> locks;

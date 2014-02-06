@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import uk.co.strangeskies.gears.utilities.collections.SetMultiMap;
+import uk.co.strangeskies.gears.utilities.collection.SetMultiMap;
 
 public class WrappingServiceTree {
 	private final ServiceReference<?> serviceReference;

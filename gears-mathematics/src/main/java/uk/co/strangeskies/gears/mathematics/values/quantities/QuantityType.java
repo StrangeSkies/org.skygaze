@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import uk.co.strangeskies.gears.mathematics.values.Fraction;
-import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformOnceView;
-import uk.co.strangeskies.gears.utilities.functions.collections.UnmodifiableMapFunction;
+import uk.co.strangeskies.gears.utilities.function.collection.ListTransformOnceView;
+import uk.co.strangeskies.gears.utilities.function.collection.UnmodifiableMapFunction;
 
 public class QuantityType {
 	private final String name;

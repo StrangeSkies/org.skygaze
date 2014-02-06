@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionSet;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionTreeSet;
+import uk.co.strangeskies.gears.mathematics.expression.collection.ExpressionSet;
+import uk.co.strangeskies.gears.mathematics.expression.collection.ExpressionTreeSet;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.ConvexPolygon;
 import uk.co.strangeskies.gears.mathematics.values.Value;

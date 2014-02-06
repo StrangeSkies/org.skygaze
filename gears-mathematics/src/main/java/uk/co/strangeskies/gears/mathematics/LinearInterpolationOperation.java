@@ -4,7 +4,7 @@ import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.utilities.Utilities;
 
 public class LinearInterpolationOperation<T extends Scalable<S> & Subtractable<S, ? super T>, S extends T>
-		implements InterpolationOperation<T, S> {
+		implements InterpolationFunction<T, S> {
 	@Override
 	public S apply(T from, T to, Value<?> delta) {
 		if (Utilities.areEqual(from, to)) {

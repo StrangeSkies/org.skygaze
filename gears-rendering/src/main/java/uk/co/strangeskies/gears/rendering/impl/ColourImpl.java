@@ -3,7 +3,7 @@ package uk.co.strangeskies.gears.rendering.impl;
 import java.awt.Color;
 import java.util.Arrays;
 
-import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
+import uk.co.strangeskies.gears.mathematics.expression.CompoundExpression;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.rendering.Colour;

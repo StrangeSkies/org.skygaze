@@ -9,9 +9,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.IdentityExpression;
+import uk.co.strangeskies.gears.mathematics.expression.CompoundExpression;
+import uk.co.strangeskies.gears.mathematics.expression.CopyDecouplingExpression;
+import uk.co.strangeskies.gears.mathematics.expression.IdentityExpression;
 import uk.co.strangeskies.gears.mathematics.geometry.DimensionalityException;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
@@ -32,12 +32,12 @@ import uk.co.strangeskies.gears.mathematics.values.LongArrayListView;
 import uk.co.strangeskies.gears.mathematics.values.LongValue;
 import uk.co.strangeskies.gears.mathematics.values.LongValueFactory;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.collections.MergeIndicesListView;
-import uk.co.strangeskies.gears.utilities.collections.NullPointerInCollectionException;
+import uk.co.strangeskies.gears.utilities.collection.MergeIndicesListView;
+import uk.co.strangeskies.gears.utilities.collection.NullPointerInCollectionException;
 import uk.co.strangeskies.gears.utilities.factory.Factory;
-import uk.co.strangeskies.gears.utilities.functions.AssignmentOperation;
-import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformationView;
-import uk.co.strangeskies.gears.utilities.functions.collections.UnmodifiableListFunction;
+import uk.co.strangeskies.gears.utilities.function.AssignmentOperation;
+import uk.co.strangeskies.gears.utilities.function.collection.ListTransformationView;
+import uk.co.strangeskies.gears.utilities.function.collection.UnmodifiableListFunction;
 
 public abstract class MatrixImpl<S extends Matrix<S, V>, V extends Value<V>>
 		extends CompoundExpression<S> implements Matrix<S, V>,

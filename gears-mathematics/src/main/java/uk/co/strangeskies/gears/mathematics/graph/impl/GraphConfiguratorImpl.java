@@ -9,12 +9,12 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
 import uk.co.strangeskies.gears.mathematics.graph.GraphTransformer;
 import uk.co.strangeskies.gears.mathematics.graph.building.GraphConfigurator;
 import uk.co.strangeskies.gears.utilities.factory.Configurator;
-import uk.co.strangeskies.gears.utilities.functions.Functions;
+import uk.co.strangeskies.gears.utilities.function.Functions;
 
 public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 		implements GraphConfigurator<V, E> {

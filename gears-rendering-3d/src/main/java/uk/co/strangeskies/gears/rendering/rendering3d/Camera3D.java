@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.rendering.rendering3d;
 
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.impl.Matrix4Impl;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.impl.MatrixH3Impl;
 import uk.co.strangeskies.gears.rendering.Camera;

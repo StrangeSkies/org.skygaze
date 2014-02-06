@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.swing.JFrame;
 
@@ -22,8 +23,8 @@ import uk.co.strangeskies.gears.input.BasicInputController;
 import uk.co.strangeskies.gears.input.KeyboardInputController;
 import uk.co.strangeskies.gears.input.MouseInputController;
 import uk.co.strangeskies.gears.input.WindowManagerInputController;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.AssignmentBuffer;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.OperationApplicationBuffer;
+import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.gears.mathematics.expression.buffer.FunctionBuffer;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.MatrixBuilder;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
@@ -32,23 +33,23 @@ import uk.co.strangeskies.gears.mathematics.values.IntValue;
 		KeyboardInputController.class, WindowManagerInputController.class })
 public class SwingInputController implements BasicInputController,
 		MouseListener, WindowListener, KeyListener {
-	private final OperationApplicationBuffer<HashSet<Integer>, HashSet<Integer>> keysDown;
-	private final OperationApplicationBuffer<ArrayList<Integer>, ArrayList<Integer>> keysPressed;
+	private final FunctionBuffer<HashSet<Integer>, HashSet<Integer>> keysDown;
+	private final FunctionBuffer<ArrayList<Integer>, ArrayList<Integer>> keysPressed;
 
-	private final OperationApplicationBuffer<HashSet<Integer>, HashSet<Integer>> buttonsDown;
-	private final OperationApplicationBuffer<ArrayList<Integer>, ArrayList<Integer>> buttonsPressed;
+	private final FunctionBuffer<HashSet<Integer>, HashSet<Integer>> buttonsDown;
+	private final FunctionBuffer<ArrayList<Integer>, ArrayList<Integer>> buttonsPressed;
 
 	private JFrame frame;
 
-	private final AssignmentBuffer<Boolean> windowClosing;
-	private final AssignmentBuffer<Boolean> windowMinimising;
-	private final AssignmentBuffer<Boolean> windowRestoring;
-	private final AssignmentBuffer<Boolean> windowMinimised;
+	private final DoubleBuffer<Boolean, Boolean> windowClosing;
+	private final DoubleBuffer<Boolean, Boolean> windowMinimising;
+	private final DoubleBuffer<Boolean, Boolean> windowRestoring;
+	private final DoubleBuffer<Boolean, Boolean> windowMinimised;
 
 	private Vector2<IntValue> mousePosition;
-	private final AssignmentBuffer<Boolean> mouseInside;
-	private final AssignmentBuffer<Boolean> mouseEntering;
-	private final AssignmentBuffer<Boolean> mouseExiting;
+	private final DoubleBuffer<Boolean, Boolean> mouseInside;
+	private final DoubleBuffer<Boolean, Boolean> mouseEntering;
+	private final DoubleBuffer<Boolean, Boolean> mouseExiting;
 
 	private final KeyRepeatSuppressor keyRepeatSuppressor;
 
@@ -58,24 +59,24 @@ public class SwingInputController implements BasicInputController,
 
 	@SuppressWarnings("unchecked")
 	public SwingInputController() {
-		keysDown = new OperationApplicationBuffer<>(new HashSet<Integer>(),
+		keysDown = new FunctionBuffer<>(new HashSet<Integer>(),
 				c -> (HashSet<Integer>) c.clone());
-		keysPressed = new OperationApplicationBuffer<>(new ArrayList<Integer>(),
+		keysPressed = new FunctionBuffer<>(new ArrayList<Integer>(),
 				c -> (ArrayList<Integer>) c.clone());
 
-		buttonsDown = new OperationApplicationBuffer<>(new HashSet<Integer>(),
+		buttonsDown = new FunctionBuffer<>(new HashSet<Integer>(),
 				c -> (HashSet<Integer>) c.clone());
-		buttonsPressed = new OperationApplicationBuffer<>(new ArrayList<Integer>(),
+		buttonsPressed = new FunctionBuffer<>(new ArrayList<Integer>(),
 				c -> (ArrayList<Integer>) c.clone());
 
-		windowClosing = new AssignmentBuffer<>(false);
-		windowMinimising = new AssignmentBuffer<>(false);
-		windowRestoring = new AssignmentBuffer<>(false);
-		windowMinimised = new AssignmentBuffer<>(false);
+		windowClosing = new FunctionBuffer<>(false, Function.identity());
+		windowMinimising = new FunctionBuffer<>(false, Function.identity());
+		windowRestoring = new FunctionBuffer<>(false, Function.identity());
+		windowMinimised = new FunctionBuffer<>(false, Function.identity());
 
-		mouseInside = new AssignmentBuffer<>(false);
-		mouseEntering = new AssignmentBuffer<>(false);
-		mouseExiting = new AssignmentBuffer<>(false);
+		mouseInside = new FunctionBuffer<>(false, Function.identity());
+		mouseEntering = new FunctionBuffer<>(false, Function.identity());
+		mouseExiting = new FunctionBuffer<>(false, Function.identity());
 
 		mousePosition = getActualMousePosition();
 

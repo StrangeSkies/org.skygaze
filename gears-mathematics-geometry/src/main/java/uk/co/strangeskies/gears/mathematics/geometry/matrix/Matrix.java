@@ -10,8 +10,8 @@ import uk.co.strangeskies.gears.mathematics.Negatable;
 import uk.co.strangeskies.gears.mathematics.NonCommutativelyMultipliable;
 import uk.co.strangeskies.gears.mathematics.Scalable;
 import uk.co.strangeskies.gears.mathematics.Subtractable;
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
-import uk.co.strangeskies.gears.mathematics.expressions.Variable;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.Variable;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
@@ -20,7 +20,7 @@ import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.utilities.Copyable;
 import uk.co.strangeskies.gears.utilities.Property;
 import uk.co.strangeskies.gears.utilities.Self;
-import uk.co.strangeskies.gears.utilities.functions.AssignmentOperation;
+import uk.co.strangeskies.gears.utilities.function.AssignmentOperation;
 
 public interface Matrix<S extends Matrix<S, V>, V extends Value<V>> extends
 		Self<S>, Copyable<S>, Comparable<Matrix<?, ?>>, Variable<S>,

@@ -6,8 +6,8 @@ import java.util.TreeMap;
 import java.util.function.Function;
 
 import uk.co.strangeskies.gears.mathematics.Interpolate;
-import uk.co.strangeskies.gears.mathematics.InterpolationOperation;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.DoubleBuffer;
+import uk.co.strangeskies.gears.mathematics.InterpolationFunction;
+import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.rendering.buffering.SceneInterpolator;
 import uk.co.strangeskies.gears.utilities.IdentityComparator;
@@ -49,7 +49,7 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	@Override
 	public <T, I> Interpolate<T, I> bufferInterpolation(
 			DoubleBuffer<? extends T, ? extends T> interpolation,
-			InterpolationOperation<? super T, ? extends I> operation) {
+			InterpolationFunction<? super T, ? extends I> operation) {
 		DoubleBuffer<?, T> from = bufferResult(interpolation);
 
 		DoubleBuffer<?, T> to = bufferResult(interpolation.getBackExpression());
@@ -65,7 +65,7 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	@Override
 	public <F, T, I> Interpolate<T, I> bufferInterpolation(
 			DoubleBuffer<? extends F, ? extends F> interpolation,
-			InterpolationOperation<? super T, ? extends I> operation,
+			InterpolationFunction<? super T, ? extends I> operation,
 			Function<? super F, ? extends T> function) {
 		DoubleBuffer<?, ? extends T> from = bufferResult(interpolation, function);
 

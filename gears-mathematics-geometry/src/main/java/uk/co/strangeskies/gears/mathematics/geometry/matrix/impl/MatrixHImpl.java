@@ -11,11 +11,11 @@ import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorH;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.VectorH.Type;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.VectorHNImpl;
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.collections.SubList;
+import uk.co.strangeskies.gears.utilities.collection.SubList;
 import uk.co.strangeskies.gears.utilities.factory.Factory;
-import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformOnceView;
-import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformationFunction;
-import uk.co.strangeskies.gears.utilities.functions.collections.SubListFunction;
+import uk.co.strangeskies.gears.utilities.function.collection.ListTransformOnceView;
+import uk.co.strangeskies.gears.utilities.function.collection.ListTransformationFunction;
+import uk.co.strangeskies.gears.utilities.function.collection.SubListFunction;
 
 public abstract class MatrixHImpl<S extends MatrixH<S, V>, V extends Value<V>>
 		extends /* @ReadOnly */MatrixImpl<S, V> implements MatrixH<S, V> {

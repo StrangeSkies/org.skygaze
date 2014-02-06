@@ -6,7 +6,7 @@ import uk.co.strangeskies.gears.mathematics.Addable;
 import uk.co.strangeskies.gears.mathematics.Multipliable;
 import uk.co.strangeskies.gears.mathematics.Scalable;
 import uk.co.strangeskies.gears.mathematics.Subtractable;
-import uk.co.strangeskies.gears.mathematics.expressions.Variable;
+import uk.co.strangeskies.gears.mathematics.expression.Variable;
 import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.utilities.Property;
 

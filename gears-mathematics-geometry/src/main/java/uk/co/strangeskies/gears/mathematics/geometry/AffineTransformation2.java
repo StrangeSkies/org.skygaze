@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.mathematics.geometry;
 
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.MatrixH2;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 

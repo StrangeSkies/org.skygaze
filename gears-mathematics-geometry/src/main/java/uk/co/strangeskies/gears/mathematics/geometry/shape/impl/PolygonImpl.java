@@ -2,8 +2,8 @@ package uk.co.strangeskies.gears.mathematics.geometry.shape.impl;
 
 import java.util.List;
 
-import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
-import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
+import uk.co.strangeskies.gears.mathematics.expression.CompoundExpression;
+import uk.co.strangeskies.gears.mathematics.expression.CopyDecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.geometry.Bounds2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.CompoundPolygon;

@@ -1,12 +1,13 @@
 package uk.co.strangeskies.gears.rendering.buffering.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.TreeSet;
 import java.util.function.Function;
 
-import uk.co.strangeskies.gears.mathematics.expressions.Expression;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.DoubleBuffer;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.ExpressionBuffer;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.OperationApplicationBuffer;
+import uk.co.strangeskies.gears.mathematics.expression.Expression;
+import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.gears.mathematics.expression.buffer.ExpressionBuffer;
+import uk.co.strangeskies.gears.mathematics.expression.buffer.FunctionBuffer;
 import uk.co.strangeskies.gears.rendering.buffering.SceneBuffer;
 import uk.co.strangeskies.gears.utilities.Copyable;
 import uk.co.strangeskies.gears.utilities.IdentityComparator;
@@ -30,17 +31,26 @@ public class SceneBufferImpl implements SceneBuffer {
 
 	@Override
 	public <T extends Copyable<? extends T>> DoubleBuffer<T, T> buffer(T item) {
-		DoubleBuffer<T, T> buffer = new OperationApplicationBuffer<>(item,
-				i -> i.copy());
+		DoubleBuffer<T, T> buffer = new FunctionBuffer<>(item, i -> i.copy());
 
 		registerBuffer(buffer);
 
 		return buffer;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Cloneable> DoubleBuffer<T, T> buffer(T item) {
-		CloneBuffer<T> buffer = new CloneBuffer<>(item);
+		DoubleBuffer<T, T> buffer;
+		buffer = new FunctionBuffer<>(item, c -> {
+			try {
+				return (T) Object.class.getMethod("clone").invoke(c);
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException
+					| SecurityException e) {
+				throw new UnsupportedOperationException(e);
+			}
+		});
 
 		registerBuffer(buffer);
 
@@ -48,10 +58,8 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public <T, B> OperationApplicationBuffer<T, B> buffer(T item,
-			Function<T, B> function) {
-		OperationApplicationBuffer<T, B> buffer = new OperationApplicationBuffer<>(
-				item, function);
+	public <T, B> FunctionBuffer<T, B> buffer(T item, Function<T, B> function) {
+		FunctionBuffer<T, B> buffer = new FunctionBuffer<>(item, function);
 
 		registerBuffer(buffer);
 
