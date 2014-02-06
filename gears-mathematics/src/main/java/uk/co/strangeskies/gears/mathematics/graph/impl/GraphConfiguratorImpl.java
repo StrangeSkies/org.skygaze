@@ -13,9 +13,11 @@ import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
 import uk.co.strangeskies.gears.mathematics.graph.GraphTransformer;
 import uk.co.strangeskies.gears.mathematics.graph.building.GraphConfigurator;
+import uk.co.strangeskies.gears.utilities.factory.Configurator;
 import uk.co.strangeskies.gears.utilities.functions.Functions;
 
-public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
+public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
+		implements GraphConfigurator<V, E> {
 	private boolean unmodifiableVertices;
 	private boolean unmodifiableEdges;
 	private Set<V> vertices;
@@ -43,15 +45,10 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 	}
 
 	@Override
-	public Graph<V, E> create() {
-		/*
-		 * Have most of the implementation details figured out here with
-		 * functionality / data structures saved in final local variables which can
-		 * be easily wrapped by a following anonymous implementation of Graph.
-		 */
-
+	public Graph<V, E> tryCreate() {
 		final boolean directed = this.directed;
 		final boolean weighted = edgeWeight != null;
+		final boolean simple = !multigraph;
 		final Function<E, Double> edgeWeight = weighted ? this.edgeWeight : e -> 1d;
 
 		return new Graph<V, E>() {
@@ -103,8 +100,7 @@ public class GraphConfiguratorImpl<V, E> implements GraphConfigurator<V, E> {
 
 			@Override
 			public boolean isSimple() {
-				// TODO Auto-generated method stub
-				return false;
+				return simple;
 			}
 
 			@Override

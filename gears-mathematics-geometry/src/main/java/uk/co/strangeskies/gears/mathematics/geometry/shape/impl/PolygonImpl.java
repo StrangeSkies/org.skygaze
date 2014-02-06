@@ -3,6 +3,7 @@ package uk.co.strangeskies.gears.mathematics.geometry.shape.impl;
 import java.util.List;
 
 import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
+import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.geometry.Bounds2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.CompoundPolygon;
@@ -12,7 +13,8 @@ import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.mathematics.values.Value;
 
 public abstract class PolygonImpl<S extends Polygon<S, V>, V extends Value<V>>
-		extends CompoundExpression<S> implements Polygon<S, V> {
+		extends CompoundExpression<S> implements Polygon<S, V>,
+		CopyDecouplingExpression<S> {
 	@Override
 	public Value<?> getPerimeter() {
 		List<Vector2<V>> vertices = getVertices();
@@ -34,20 +36,9 @@ public abstract class PolygonImpl<S extends Polygon<S, V>, V extends Value<V>>
 		return new Bounds2<V>(getVertices());
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public final S getThis() {
-		return (S) this;
-	}
-
 	@Override
 	public final S get() {
 		return getThis();
-	}
-
-	@Override
-	public final S getDecoupledValue() {
-		return copy();
 	}
 
 	@Override

@@ -6,10 +6,10 @@ import java.util.TreeSet;
 import uk.co.strangeskies.gears.utilities.IdentityComparator;
 import uk.co.strangeskies.gears.utilities.Observer;
 
-public abstract class ExpressionImplementation<T> implements Expression<T> {
+public abstract class MutableExpression<T> implements Expression<T> {
 	private final Set<Observer<? super Expression<T>>> observers;
 
-	public ExpressionImplementation() {
+	public MutableExpression() {
 		observers = new TreeSet<Observer<? super Expression<T>>>(
 				new IdentityComparator<>());
 	}

@@ -170,10 +170,4 @@ public abstract class Bounds<S extends Bounds<S, V>, V extends Value<V>>
 		}
 		return getThis();
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public final S getThis() {
-		return (S) this;
-	}
 }

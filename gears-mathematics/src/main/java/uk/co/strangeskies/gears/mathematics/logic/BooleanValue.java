@@ -1,9 +1,9 @@
 package uk.co.strangeskies.gears.mathematics.logic;
 
-import uk.co.strangeskies.gears.mathematics.expressions.ExpressionImplementation;
+import uk.co.strangeskies.gears.mathematics.expressions.MutableExpression;
 import uk.co.strangeskies.gears.utilities.Self;
 
-public class BooleanValue extends ExpressionImplementation<BooleanValue>
+public class BooleanValue extends MutableExpression<BooleanValue>
 		implements BooleanCombinationBehaviour<BooleanValue, BooleanValue>,
 		NOTable<BooleanValue, BooleanValue>, Self<BooleanValue> {
 	private boolean value;
@@ -26,11 +26,6 @@ public class BooleanValue extends ExpressionImplementation<BooleanValue>
 
 	public final BooleanValue getDecoupledValue() {
 		return copy();
-	}
-
-	@Override
-	public final BooleanValue getThis() {
-		return null;
 	}
 
 	@Override

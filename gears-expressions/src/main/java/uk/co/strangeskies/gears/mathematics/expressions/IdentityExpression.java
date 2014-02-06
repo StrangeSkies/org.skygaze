@@ -2,7 +2,7 @@ package uk.co.strangeskies.gears.mathematics.expressions;
 
 import uk.co.strangeskies.gears.utilities.Property;
 
-public class IdentityExpression<T> extends ExpressionImplementation<T>
+public class IdentityExpression<T> extends MutableExpression<T>
 		implements Property<T, T> {
 	private T value;
 

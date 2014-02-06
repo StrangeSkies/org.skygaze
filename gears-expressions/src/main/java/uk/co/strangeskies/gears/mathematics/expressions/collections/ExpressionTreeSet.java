@@ -7,12 +7,14 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.utilities.IdentityComparator;
 import uk.co.strangeskies.gears.utilities.Observer;
 
 public class ExpressionTreeSet<E extends Expression<?>> extends TreeSet<E>
-		implements SortedExpressionSet<ExpressionTreeSet<E>, E> {
+		implements SortedExpressionSet<ExpressionTreeSet<E>, E>,
+		CopyDecouplingExpression<ExpressionTreeSet<E>> {
 	private static final long serialVersionUID = 1L;
 
 	private boolean evaluated = true;
@@ -178,18 +180,8 @@ public class ExpressionTreeSet<E extends Expression<?>> extends TreeSet<E>
 	}
 
 	@Override
-	public final ExpressionTreeSet<E> getDecoupledValue() {
-		return copy();
-	}
-
-	@Override
 	public final void clearObservers() {
 		observers.clear();
-	}
-
-	@Override
-	public final ExpressionTreeSet<E> getThis() {
-		return this;
 	}
 
 	@Override

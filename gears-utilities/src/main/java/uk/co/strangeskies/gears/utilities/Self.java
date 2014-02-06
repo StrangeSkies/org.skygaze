@@ -9,7 +9,10 @@ package uk.co.strangeskies.gears.utilities;
  * @param <S>
  *          The final implementing class.
  */
-/*@I*/
+/* @I */
 public interface Self<S extends Self<S>> extends Copyable<S> {
-	public/*@I*/S getThis();
+	@SuppressWarnings("unchecked")
+	public default/* @I */S getThis() {
+		return (S) this;
+	}
 }

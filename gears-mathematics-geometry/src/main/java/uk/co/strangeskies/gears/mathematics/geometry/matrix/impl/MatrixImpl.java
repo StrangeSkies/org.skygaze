@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
+import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.IdentityExpression;
 import uk.co.strangeskies.gears.mathematics.geometry.DimensionalityException;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix;
@@ -39,7 +40,8 @@ import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformati
 import uk.co.strangeskies.gears.utilities.functions.collections.UnmodifiableListFunction;
 
 public abstract class MatrixImpl<S extends Matrix<S, V>, V extends Value<V>>
-		extends CompoundExpression<S> implements Matrix<S, V> {
+		extends CompoundExpression<S> implements Matrix<S, V>,
+		CopyDecouplingExpression<S> {
 	private List<List<V>> data;
 
 	private IdentityExpression<Order> order;
@@ -722,12 +724,6 @@ public abstract class MatrixImpl<S extends Matrix<S, V>, V extends Value<V>>
 		return new MergeIndicesListView<>(data);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public final S getThis() {
-		return (S) this;
-	}
-
 	@Override
 	public final String toString() {
 		String string = new String();
@@ -1039,11 +1035,6 @@ public abstract class MatrixImpl<S extends Matrix<S, V>, V extends Value<V>>
 	@Override
 	protected final S evaluate() {
 		return getThis();
-	}
-
-	@Override
-	public final S getDecoupledValue() {
-		return copy();
 	}
 
 	@Override

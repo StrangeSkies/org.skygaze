@@ -12,11 +12,6 @@ public class ImmutableExpression<T> implements Self<ImmutableExpression<T>>,
 	}
 
 	@Override
-	public final ImmutableExpression<T> getThis() {
-		return this;
-	}
-
-	@Override
 	public final ImmutableExpression<T> copy() {
 		return this;
 	}
@@ -38,5 +33,10 @@ public class ImmutableExpression<T> implements Self<ImmutableExpression<T>>,
 	@Override
 	public final boolean removeObserver(Observer<? super Expression<T>> observer) {
 		return false;
+	}
+
+	@Override
+	public final T decoupleValue() {
+		return Expression.super.decoupleValue();
 	}
 }

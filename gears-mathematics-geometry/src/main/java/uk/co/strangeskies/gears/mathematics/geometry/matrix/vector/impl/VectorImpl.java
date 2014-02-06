@@ -13,6 +13,7 @@ import java.util.function.Function;
 import uk.co.strangeskies.gears.mathematics.expressions.BinaryOperationExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.ConditionalExpression;
+import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.expressions.IdentityExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.ListExpressionView;
@@ -52,7 +53,7 @@ import uk.co.strangeskies.gears.utilities.functions.collections.ListTransformati
  *          The type of {@link Value} this Vector operates on.
  */
 public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
-		extends CompoundExpression<S> implements Vector<S, V> {
+		extends CompoundExpression<S> implements Vector<S, V>, CopyDecouplingExpression<S> {
 	private List<V> data;
 
 	private WeakReference<List<List<V>>> data2Reference;
@@ -381,12 +382,6 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	public final S getNegated() {
 		return copy().negate();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public final S getThis() {
-		return (S) this;
 	}
 
 	@Override
@@ -1351,11 +1346,6 @@ public abstract class VectorImpl<S extends Vector<S, V>, V extends Value<V>>
 	@Override
 	protected final S evaluate() {
 		return getThis();
-	}
-
-	@Override
-	public final S getDecoupledValue() {
-		return copy();
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class ExpressionBuffer<F extends Expression<?>, T> extends
 		return super.setBack(next);
 	}
 
-	public Observer<Expression<?>> nextBackObserver() {
+	private Observer<Expression<?>> nextBackObserver() {
 		return backObserver = new Observer<Expression<?>>() {
 			@Override
 			public void notify(Expression<?> message) {
@@ -60,7 +60,7 @@ public class ExpressionBuffer<F extends Expression<?>, T> extends
 		};
 	}
 
-	public Observer<Expression<?>> getBackObserver() {
+	private Observer<Expression<?>> getBackObserver() {
 		return backObserver;
 	}
 }

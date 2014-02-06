@@ -64,13 +64,13 @@ public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 
 	public boolean isWeighted();
 
+	public boolean isSimple();
+
 	public double weight(E edge);
 
 	public default double weight(V from, V to) {
 		return weight(getEdge(from, to));
 	}
-
-	public boolean isSimple();
 
 	public GraphTransformer<V, E> transform();
 }

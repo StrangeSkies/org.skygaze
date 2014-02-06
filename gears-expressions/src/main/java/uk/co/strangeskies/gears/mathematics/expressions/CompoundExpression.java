@@ -8,7 +8,7 @@ import uk.co.strangeskies.gears.mathematics.expressions.collections.SortedExpres
 import uk.co.strangeskies.gears.utilities.IdentityComparator;
 import uk.co.strangeskies.gears.utilities.Observer;
 
-public abstract class CompoundExpression<T> extends ExpressionImplementation<T> {
+public abstract class CompoundExpression<T> extends MutableExpression<T> {
 	private final SortedExpressionSet<?, Expression<? extends Object>> dependencies;
 
 	private T value;

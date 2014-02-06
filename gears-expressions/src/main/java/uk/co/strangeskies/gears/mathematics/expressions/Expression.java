@@ -48,4 +48,8 @@ public interface Expression<T> extends Observable<Expression<T>> {
 	 *         invocation.
 	 */
 	public T getValue();
+
+	public default T decoupleValue() {
+		return getValue();
+	}
 }

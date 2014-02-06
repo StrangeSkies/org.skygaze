@@ -1,10 +1,11 @@
 package uk.co.strangeskies.gears.mathematics.geometry.shape.impl;
 
 import uk.co.strangeskies.gears.mathematics.expressions.CompoundExpression;
+import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.geometry.Bounds2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.Matrix.Order;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector.Orientation;
+import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.impl.Vector2Impl;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.Line2;
 import uk.co.strangeskies.gears.mathematics.geometry.shape.Shape;
@@ -14,7 +15,7 @@ import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public class Line2Impl<V extends Value<V>> extends CompoundExpression<Line2<V>>
-		implements Line2<V> {
+		implements Line2<V>, CopyDecouplingExpression<Line2<V>> {
 	private final Vector2<V> a;
 	private final Vector2<V> b;
 
@@ -51,11 +52,6 @@ public class Line2Impl<V extends Value<V>> extends CompoundExpression<Line2<V>>
 	@Override
 	public Bounds2<V> getBounds() {
 		return new Bounds2<>(a, b);
-	}
-
-	@Override
-	public final Line2<V> getThis() {
-		return this;
 	}
 
 	@Override
@@ -116,11 +112,6 @@ public class Line2Impl<V extends Value<V>> extends CompoundExpression<Line2<V>>
 	@Override
 	public Line2<V> get() {
 		return getThis();
-	}
-
-	@Override
-	public Line2<V> getDecoupledValue() {
-		return copy();
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import uk.co.strangeskies.gears.mathematics.Multipliable;
 import uk.co.strangeskies.gears.mathematics.Negatable;
 import uk.co.strangeskies.gears.mathematics.Scalable;
 import uk.co.strangeskies.gears.mathematics.Subtractable;
+import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.mathematics.expressions.Variable;
 import uk.co.strangeskies.gears.utilities.Copyable;
@@ -20,7 +21,8 @@ import uk.co.strangeskies.gears.utilities.Self;
 public abstract class Value<S extends Value<S>> extends Number implements
 		Multipliable<S, Value<?>>, Addable<S, Value<?>>, Negatable<S, S>,
 		Subtractable<S, Value<?>>, Scalable<S>, Property<S, Value<?>>,
-		Incrementable<S>, Self<S>, Variable<S>, Copyable<S>, Comparable<Value<?>> {
+		Incrementable<S>, Self<S>, Variable<S>, Copyable<S>, Comparable<Value<?>>,
+		CopyDecouplingExpression<S> {
 	private static final long serialVersionUID = -979949605176385397L;
 
 	private final Set<Observer<? super Expression<S>>> observers;
@@ -137,12 +139,6 @@ public abstract class Value<S extends Value<S>> extends Number implements
 
 	public abstract S setValue(Number value);
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public final S getThis() {
-		return (S) this;
-	}
-
 	@Override
 	public abstract boolean equals(Object that);
 
@@ -195,11 +191,6 @@ public abstract class Value<S extends Value<S>> extends Number implements
 	public final S getValue() {
 		evaluated = true;
 		return getThis();
-	}
-
-	@Override
-	public final S getDecoupledValue() {
-		return copy();
 	}
 
 	protected final void update() {

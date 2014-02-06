@@ -6,11 +6,13 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
+import uk.co.strangeskies.gears.mathematics.expressions.CopyDecouplingExpression;
 import uk.co.strangeskies.gears.mathematics.expressions.Expression;
 import uk.co.strangeskies.gears.utilities.Observer;
 
 public class ExpressionArrayList<E extends Expression<?>> extends ArrayList<E>
-		implements ExpressionList<ExpressionArrayList<E>, E> {
+		implements ExpressionList<ExpressionArrayList<E>, E>,
+		CopyDecouplingExpression<ExpressionArrayList<E>> {
 	private static final long serialVersionUID = 1L;
 
 	private boolean evaluated = true;
@@ -167,11 +169,6 @@ public class ExpressionArrayList<E extends Expression<?>> extends ArrayList<E>
 	}
 
 	@Override
-	public final ExpressionArrayList<E> getDecoupledValue() {
-		return copy();
-	}
-
-	@Override
 	public final boolean addObserver(
 			Observer<? super Expression<ExpressionArrayList<E>>> observer) {
 		return observers.add(observer);
@@ -186,11 +183,6 @@ public class ExpressionArrayList<E extends Expression<?>> extends ArrayList<E>
 	@Override
 	public final void clearObservers() {
 		observers.clear();
-	}
-
-	@Override
-	public final ExpressionArrayList<E> getThis() {
-		return this;
 	}
 
 	@Override

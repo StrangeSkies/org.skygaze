@@ -86,18 +86,8 @@ public class ColourImpl extends CompoundExpression<Colour> implements Colour {
 	}
 
 	@Override
-	public final ColourImpl get() {
+	public final Colour get() {
 		return getThis();
-	}
-
-	@Override
-	public ColourImpl getDecoupledValue() {
-		return this;
-	}
-
-	@Override
-	public ColourImpl getThis() {
-		return this;
 	}
 
 	@Override

@@ -23,7 +23,7 @@ import uk.co.strangeskies.gears.input.KeyboardInputController;
 import uk.co.strangeskies.gears.input.MouseInputController;
 import uk.co.strangeskies.gears.input.WindowManagerInputController;
 import uk.co.strangeskies.gears.mathematics.expressions.collections.AssignmentBuffer;
-import uk.co.strangeskies.gears.mathematics.expressions.collections.CloneBuffer;
+import uk.co.strangeskies.gears.mathematics.expressions.collections.OperationApplicationBuffer;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.MatrixBuilder;
 import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.gears.mathematics.values.IntValue;
@@ -32,11 +32,11 @@ import uk.co.strangeskies.gears.mathematics.values.IntValue;
 		KeyboardInputController.class, WindowManagerInputController.class })
 public class SwingInputController implements BasicInputController,
 		MouseListener, WindowListener, KeyListener {
-	private final CloneBuffer<HashSet<Integer>> keysDown;
-	private final CloneBuffer<ArrayList<Integer>> keysPressed;
+	private final OperationApplicationBuffer<HashSet<Integer>, HashSet<Integer>> keysDown;
+	private final OperationApplicationBuffer<ArrayList<Integer>, ArrayList<Integer>> keysPressed;
 
-	private final CloneBuffer<HashSet<Integer>> buttonsDown;
-	private final CloneBuffer<ArrayList<Integer>> buttonsPressed;
+	private final OperationApplicationBuffer<HashSet<Integer>, HashSet<Integer>> buttonsDown;
+	private final OperationApplicationBuffer<ArrayList<Integer>, ArrayList<Integer>> buttonsPressed;
 
 	private JFrame frame;
 
@@ -56,12 +56,17 @@ public class SwingInputController implements BasicInputController,
 
 	private MatrixBuilder matrices;
 
+	@SuppressWarnings("unchecked")
 	public SwingInputController() {
-		keysDown = new CloneBuffer<>(new HashSet<Integer>());
-		keysPressed = new CloneBuffer<>(new ArrayList<Integer>());
+		keysDown = new OperationApplicationBuffer<>(new HashSet<Integer>(),
+				c -> (HashSet<Integer>) c.clone());
+		keysPressed = new OperationApplicationBuffer<>(new ArrayList<Integer>(),
+				c -> (ArrayList<Integer>) c.clone());
 
-		buttonsDown = new CloneBuffer<>(new HashSet<Integer>());
-		buttonsPressed = new CloneBuffer<>(new ArrayList<Integer>());
+		buttonsDown = new OperationApplicationBuffer<>(new HashSet<Integer>(),
+				c -> (HashSet<Integer>) c.clone());
+		buttonsPressed = new OperationApplicationBuffer<>(new ArrayList<Integer>(),
+				c -> (ArrayList<Integer>) c.clone());
 
 		windowClosing = new AssignmentBuffer<>(false);
 		windowMinimising = new AssignmentBuffer<>(false);
