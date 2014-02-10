@@ -1,11 +1,11 @@
 package uk.co.strangeskies.gears.mathematics.values.quantities;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import uk.co.strangeskies.gears.mathematics.values.Fraction;
 import uk.co.strangeskies.gears.utilities.function.collection.ListTransformOnceView;
-import uk.co.strangeskies.gears.utilities.function.collection.UnmodifiableMapFunction;
 
 public class QuantityType {
 	private final String name;
@@ -31,7 +31,7 @@ public class QuantityType {
 
 	public List<Map<QuantityType, Fraction>> getEquivalencies() {
 		return new ListTransformOnceView<>(equivalencies,
-				new UnmodifiableMapFunction<QuantityType, Fraction>());
+				m -> Collections.unmodifiableMap(m));
 	}
 
 	public Dimension getDimension() {

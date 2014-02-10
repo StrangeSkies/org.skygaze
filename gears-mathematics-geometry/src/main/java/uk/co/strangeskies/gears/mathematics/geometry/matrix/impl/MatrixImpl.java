@@ -3,6 +3,7 @@ package uk.co.strangeskies.gears.mathematics.geometry.matrix.impl;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -37,7 +38,6 @@ import uk.co.strangeskies.gears.utilities.collection.NullPointerInCollectionExce
 import uk.co.strangeskies.gears.utilities.factory.Factory;
 import uk.co.strangeskies.gears.utilities.function.AssignmentOperation;
 import uk.co.strangeskies.gears.utilities.function.collection.ListTransformationView;
-import uk.co.strangeskies.gears.utilities.function.collection.UnmodifiableListFunction;
 
 public abstract class MatrixImpl<S extends Matrix<S, V>, V extends Value<V>>
 		extends CompoundExpression<S> implements Matrix<S, V>,
@@ -160,7 +160,7 @@ public abstract class MatrixImpl<S extends Matrix<S, V>, V extends Value<V>>
 	 * Not public by default, as we don't want e.g. a Matrix23 to be able to
 	 * change order without also transposing the data such that it conceptually
 	 * remains a 2x3 matrix, as opposed to a 3x2 matrix.
-	 * 
+	 *
 	 * @param order
 	 * @param transposeData
 	 */
@@ -444,7 +444,7 @@ public abstract class MatrixImpl<S extends Matrix<S, V>, V extends Value<V>>
 
 	/**
 	 * Get the dimensions as: [columns, rows].
-	 * 
+	 *
 	 * @return A vector representing the current dimensions.
 	 */
 	@Override
@@ -716,7 +716,8 @@ public abstract class MatrixImpl<S extends Matrix<S, V>, V extends Value<V>>
 
 	@Override
 	public final List<List<V>> getData2() {
-		return new ListTransformationView<>(data, new UnmodifiableListFunction<V>());
+		return new ListTransformationView<>(data,
+				l -> Collections.unmodifiableList(l));
 	}
 
 	@Override

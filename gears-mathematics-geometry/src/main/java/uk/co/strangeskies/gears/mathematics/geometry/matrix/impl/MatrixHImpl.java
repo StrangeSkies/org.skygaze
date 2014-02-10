@@ -15,7 +15,6 @@ import uk.co.strangeskies.gears.utilities.collection.SubList;
 import uk.co.strangeskies.gears.utilities.factory.Factory;
 import uk.co.strangeskies.gears.utilities.function.collection.ListTransformOnceView;
 import uk.co.strangeskies.gears.utilities.function.collection.ListTransformationFunction;
-import uk.co.strangeskies.gears.utilities.function.collection.SubListFunction;
 
 public abstract class MatrixHImpl<S extends MatrixH<S, V>, V extends Value<V>>
 		extends /* @ReadOnly */MatrixImpl<S, V> implements MatrixH<S, V> {
@@ -63,7 +62,7 @@ public abstract class MatrixHImpl<S extends MatrixH<S, V>, V extends Value<V>>
 
 		if (getOrder() == Order.ColumnMajor) {
 			dataView = new ListTransformOnceView<List<V>, List<V>>(getData2(),
-					new SubListFunction<V>(0, getProjectedDimensions()));
+					l -> l.subList(0, getProjectedDimensions()));
 		} else {
 			dataView = new SubList<>(getData2(), 0, getProjectedDimensions());
 		}
@@ -74,7 +73,7 @@ public abstract class MatrixHImpl<S extends MatrixH<S, V>, V extends Value<V>>
 	protected List<List<V>> getTransformationData2() {
 		return ListTransformationFunction.apply(
 				getData2().subList(0, getProjectedDimensions()),
-				new SubListFunction<V>(0, getProjectedDimensions()));
+				l -> l.subList(0, getProjectedDimensions()));
 	}
 
 	@Override
