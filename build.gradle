@@ -27,11 +27,11 @@ configure(javaProjects()) {
 		compile group: 'org.osgi', name: 'org.osgi.enterprise', version:'5.+'
 	}
 
-  publishing {
-    publications {
-      maven(MavenPublication) {
-        from components.java
-      }
-    }
-  }
+	publishing {
+		publications {
+			maven(MavenPublication) {
+				from components.java
+			}
+		}
+	}
 }
