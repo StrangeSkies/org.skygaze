@@ -51,13 +51,13 @@ public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 		throw new UnsupportedOperationException();
 	}
 
-	public default E removeEdge(V from, V to) {
-		throw new UnsupportedOperationException();
-	}
-
 	public default boolean removeEdge(E edge) {
 		EdgeVertices<V> vertices = getVertices(edge);
 		return removeEdge(vertices.getFrom(), vertices.getTo()) != null;
+	}
+
+	public default E removeEdge(V from, V to) {
+		throw new UnsupportedOperationException();
 	}
 
 	public boolean isDirected();

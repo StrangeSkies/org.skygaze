@@ -21,7 +21,7 @@ public class MouseMovementAdapter {
 
 	private MovementType movementType;
 
-	private final MatrixBuilder matrixBuilder;
+	private final MatrixBuilder matrices;
 
 	public MouseMovementAdapter(MouseInputController mouseInputController,
 			WindowManagerInputController windowManagerInputController,
@@ -29,12 +29,12 @@ public class MouseMovementAdapter {
 		this.mouseInputController = mouseInputController;
 		this.windowManagerInputController = windowManagerInputController;
 
-		this.matrixBuilder = matrixBuilder;
+		this.matrices = matrixBuilder;
 
 		mousePosition = new ExpressionBuffer<>(matrixBuilder.ints().vector2(),
-				matrixBuilder.ints().vector2(), (f, b) -> f.set(b));
-		position = new ExpressionBuffer<>(matrixBuilder.ints().vector2(),
-				matrixBuilder.ints().vector2(), (f, b) -> f.set(b));
+				matrices.ints().vector2(), (f, b) -> f.set(b));
+		position = new ExpressionBuffer<>(matrixBuilder.ints().vector2(), matrices
+				.ints().vector2(), (f, b) -> f.set(b));
 		updateMousePosition();
 
 		setMovementType(MovementType.Absolute);
@@ -115,7 +115,7 @@ public class MouseMovementAdapter {
 			mouseInputController.setMousePosition(mousePosition.getBack());
 		}
 
-		return matrixBuilder.doubles().vector2().set(delta);
+		return matrices.doubles().vector2().set(delta);
 	}
 
 	private void updateMousePosition() {

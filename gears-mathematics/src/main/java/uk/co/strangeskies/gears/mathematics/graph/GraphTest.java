@@ -5,6 +5,7 @@ import uk.co.strangeskies.gears.utilities.IdentityProperty;
 import uk.co.strangeskies.gears.utilities.SimpleProperty;
 
 public class GraphTest {
+	@SuppressWarnings("unused")
 	public static void main(String... args) {
 		GraphBuilder build = (GraphBuilder) new Object();
 

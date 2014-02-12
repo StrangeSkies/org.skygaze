@@ -3,6 +3,7 @@ package uk.co.strangeskies.gears.mathematics.graph.impl;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -51,6 +52,11 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 		final boolean simple = !multigraph;
 		final Function<E, Double> edgeWeight = weighted ? this.edgeWeight : e -> 1d;
 
+		final Map<V, Map<V, E>> adjacencyMatrix;
+		final Map<E, EdgeVertices<V>> edgeList;
+		adjacencyMatrix = null;
+		edgeList = null;
+
 		return new Graph<V, E>() {
 			@Override
 			public Graph<V, E> copy() {
@@ -61,27 +67,39 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 
 			@Override
 			public Set<V> getVertices() {
-				// TODO Auto-generated method stub
-				return null;
+				return adjacencyMatrix.keySet();
 			}
 
 			@Override
 			public Set<E> getEdges() {
-				// TODO Auto-generated method stub
-				return null;
+				return edgeList.keySet();
 			}
 
 			@Override
 			public E getEdge(V from, V to) {
-				// TODO Auto-generated method stub
-				return null;
+				return adjacencyMatrix.get(from).get(to);
 			}
 
 			@Override
 			public EdgeVertices<V> getVertices(E edge) {
-				// TODO Auto-generated method stub
-				return null;
+				return edgeList.get(edge);
 			}
+
+			@Override
+			public boolean addVertex(V vertex) {
+			};
+
+			@Override
+			public boolean removeVertex(V vertex) {
+			};
+
+			@Override
+			public E addEdge(V from, V to, boolean addMissingVertices) {
+			};
+
+			@Override
+			public E removeEdge(V from, V to) {
+			};
 
 			@Override
 			public boolean isDirected() {
@@ -105,8 +123,7 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 
 			@Override
 			public GraphTransformer<V, E> transform() {
-				// TODO Auto-generated method stub
-				return null;
+				return new GraphTransformerImpl<>(this);
 			}
 		};
 	}
