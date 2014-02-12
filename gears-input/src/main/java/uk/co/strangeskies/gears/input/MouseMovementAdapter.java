@@ -29,7 +29,7 @@ public class MouseMovementAdapter {
 		this.mouseInputController = mouseInputController;
 		this.windowManagerInputController = windowManagerInputController;
 
-		this.matrices = matrixBuilder;
+		matrices = matrixBuilder;
 
 		mousePosition = new ExpressionBuffer<>(matrixBuilder.ints().vector2(),
 				matrices.ints().vector2(), (f, b) -> f.set(b));

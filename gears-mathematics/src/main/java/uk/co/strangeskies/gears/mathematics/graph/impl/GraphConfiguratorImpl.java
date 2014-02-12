@@ -1,5 +1,6 @@
 package uk.co.strangeskies.gears.mathematics.graph.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import uk.co.strangeskies.gears.mathematics.expression.Expression;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
 import uk.co.strangeskies.gears.mathematics.graph.GraphTransformer;
 import uk.co.strangeskies.gears.mathematics.graph.building.GraphConfigurator;
+import uk.co.strangeskies.gears.utilities.IdentityComparator;
 import uk.co.strangeskies.gears.utilities.factory.Configurator;
 import uk.co.strangeskies.gears.utilities.function.Functions;
 
@@ -27,8 +29,7 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 	private boolean acyclic;
 	private boolean multigraph;
 	private Function<E, Comparator<V>> lowToHighDirection;
-	private BiFunction<V, V, E> edgeFactory;
-	private BiFunction<V, V, Set<E>> edgeMultiFactory;
+	private BiFunction<V, V, ? extends Set<? extends E>> edgeFactory;
 	private Function<E, Double> edgeWeight;
 	private boolean edgeWeightMutable;
 	private Function<V, Collection<? super V>> incomingEdgeGenerator;
@@ -40,9 +41,11 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 	private BiPredicate<V, V> outgoingEdgeRule;
 	private boolean generateNeighbours;
 	private Predicate<Graph<V, E>> constraint;
+	private Comparator<V> comparator;
 
 	public static GraphConfigurator<Object, Object> configure() {
-		return new GraphConfiguratorImpl<>().edgeFactory(() -> new Object());
+		return new GraphConfiguratorImpl<>().edgeFactory(() -> new Object())
+				.comparator(new IdentityComparator<>());
 	}
 
 	@Override
@@ -52,10 +55,15 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 		final boolean simple = !multigraph;
 		final Function<E, Double> edgeWeight = weighted ? this.edgeWeight : e -> 1d;
 
+		final Set<V> vertices;
 		final Map<V, Map<V, E>> adjacencyMatrix;
 		final Map<E, EdgeVertices<V>> edgeList;
+
+		vertices = null;
 		adjacencyMatrix = null;
 		edgeList = null;
+
+		final BiFunction<V, V, ? extends Set<? extends E>> edgeFactory = this.edgeFactory;
 
 		return new Graph<V, E>() {
 			@Override
@@ -67,7 +75,7 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 
 			@Override
 			public Set<V> getVertices() {
-				return adjacencyMatrix.keySet();
+				return vertices;
 			}
 
 			@Override
@@ -77,7 +85,8 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 
 			@Override
 			public E getEdge(V from, V to) {
-				return adjacencyMatrix.get(from).get(to);
+				Map<V, E> adjacencyMap = adjacencyMatrix.get(from);
+				return adjacencyMap == null ? null : adjacencyMap.get(to);
 			}
 
 			@Override
@@ -87,19 +96,23 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 
 			@Override
 			public boolean addVertex(V vertex) {
-			};
+				return vertices.add(vertex);
+			}
 
 			@Override
 			public boolean removeVertex(V vertex) {
-			};
+				return vertices.remove(vertex);
+			}
 
 			@Override
-			public E addEdge(V from, V to, boolean addMissingVertices) {
-			};
+			public E addEdge(V from, V to) {
+				return edgeFactory.apply(from, to).iterator().next();
+			}
 
 			@Override
 			public E removeEdge(V from, V to) {
-			};
+				return null;
+			}
 
 			@Override
 			public boolean isDirected() {
@@ -159,7 +172,6 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 		this.vertices = (Set<V>) new HashSet<W>(vertices);
 
 		edgeFactory = expressionForward(edgeFactory);
-		edgeMultiFactory = expressionForward(edgeMultiFactory);
 
 		incomingEdgeGenerator = expressionForward(incomingEdgeGenerator);
 		outgoingEdgeGenerator = expressionForward(outgoingEdgeGenerator);
@@ -253,8 +265,7 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 	@Override
 	public <F extends E> GraphConfigurator<V, F> edgeFactory(
 			BiFunction<V, V, F> factory) {
-		edgeMultiFactory = null;
-		edgeFactory = (BiFunction<V, V, E>) factory;
+		edgeFactory = factory.andThen(e -> new HashSet<>(Arrays.asList(e)));
 		return (GraphConfigurator<V, F>) this;
 	}
 
@@ -262,8 +273,7 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 	@Override
 	public <F extends E> GraphConfigurator<V, F> edgeMultiFactory(
 			BiFunction<V, V, Set<F>> factory) {
-		edgeFactory = null;
-		edgeMultiFactory = (BiFunction<V, V, Set<E>>) (Object) factory;
+		edgeFactory = (BiFunction<V, V, Set<E>>) (Object) factory;
 		return (GraphConfigurator<V, F>) multigraph();
 	}
 
@@ -284,6 +294,12 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 	@Override
 	public GraphConfigurator<V, E> constraint(Predicate<Graph<V, E>> constraint) {
 		this.constraint = constraint;
+		return this;
+	}
+
+	@Override
+	public GraphConfigurator<V, E> comparator(Comparator<V> comparator) {
+		this.comparator = comparator;
 		return this;
 	}
 }

@@ -86,4 +86,6 @@ public interface GraphConfigurator<V, E> extends Factory<Graph<V, E>> {
 	public GraphConfigurator<V, E> generateNeighbours();
 
 	public GraphConfigurator<V, E> constraint(Predicate<Graph<V, E>> constraint);
+
+	public GraphConfigurator<V, E> comparator(Comparator<V> comparator);
 }

@@ -44,20 +44,25 @@ public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 	}
 
 	public default E addEdge(V from, V to) {
-		return addEdge(from, to, false);
+		throw new UnsupportedOperationException();
+	}
+
+	public default E removeEdge(V from, V to) {
+		throw new UnsupportedOperationException();
 	}
 
 	public default E addEdge(V from, V to, boolean addMissingVertices) {
-		throw new UnsupportedOperationException();
+		if (addMissingVertices) {
+			addVertex(from);
+			addVertex(to);
+		} else if (!getVertices().contains(from) || !getVertices().contains(to))
+			return null;
+		return addEdge(from, to);
 	}
 
 	public default boolean removeEdge(E edge) {
 		EdgeVertices<V> vertices = getVertices(edge);
 		return removeEdge(vertices.getFrom(), vertices.getTo()) != null;
-	}
-
-	public default E removeEdge(V from, V to) {
-		throw new UnsupportedOperationException();
 	}
 
 	public boolean isDirected();
