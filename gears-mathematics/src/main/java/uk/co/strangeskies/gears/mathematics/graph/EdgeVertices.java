@@ -1,4 +1,4 @@
-package uk.co.strangeskies.gears.mathematics.graph.impl;
+package uk.co.strangeskies.gears.mathematics.graph;
 
 public class EdgeVertices<V> {
 	private boolean directional;

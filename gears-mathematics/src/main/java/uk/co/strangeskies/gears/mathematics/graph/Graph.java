@@ -1,10 +1,10 @@
 package uk.co.strangeskies.gears.mathematics.graph;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import uk.co.strangeskies.gears.mathematics.graph.impl.EdgeVertices;
 import uk.co.strangeskies.gears.utilities.Copyable;
 
 public interface Graph<V, E> extends Copyable<Graph<V, E>> {
@@ -39,6 +39,14 @@ public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 		throw new UnsupportedOperationException();
 	}
 
+	public default boolean addVertices(Collection<? extends V> vertices) {
+		boolean modified = false;
+		for (V vertex : vertices) {
+			modified = addVertex(vertex) || modified;
+		}
+		return modified;
+	}
+
 	public default boolean removeVertex(V vertex) {
 		throw new UnsupportedOperationException();
 	}
@@ -58,6 +66,24 @@ public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 		} else if (!getVertices().contains(from) || !getVertices().contains(to))
 			return null;
 		return addEdge(from, to);
+	}
+
+	public default boolean addEdges(Collection<? extends V> from, V to) {
+		from.forEach(f -> addEdge(f, to));
+	}
+
+	public default boolean addEdges(V from, Collection<? extends V> to) {
+		to.forEach(t -> addEdge(from, t));
+	}
+
+	public default boolean addEdges(Collection<? extends V> from, V to,
+			boolean addMissingVertices) {
+		from.forEach(f -> addEdge(f, to, addMissingVertices));
+	}
+
+	public default boolean addEdges(V from, Collection<? extends V> to,
+			boolean addMissingVertices) {
+		to.forEach(t -> addEdge(from, t, addMissingVertices));
 	}
 
 	public default boolean removeEdge(E edge) {

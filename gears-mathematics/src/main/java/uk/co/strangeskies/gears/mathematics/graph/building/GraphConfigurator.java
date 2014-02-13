@@ -10,8 +10,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import uk.co.strangeskies.gears.mathematics.expression.Expression;
+import uk.co.strangeskies.gears.mathematics.graph.EdgeVertices;
 import uk.co.strangeskies.gears.mathematics.graph.Graph;
-import uk.co.strangeskies.gears.mathematics.graph.impl.EdgeVertices;
 import uk.co.strangeskies.gears.utilities.factory.Factory;
 
 public interface GraphConfigurator<V, E> extends Factory<Graph<V, E>> {
@@ -44,16 +44,14 @@ public interface GraphConfigurator<V, E> extends Factory<Graph<V, E>> {
 	}
 
 	public GraphConfigurator<V, E> edgeRule(
-			Function<V, Collection<? super V>> betweenNeighbours);
+			Function<? super V, Collection<? extends V>> betweenNeighbours);
 
 	public GraphConfigurator<V, E> edgeRule(
-			Function<V, Collection<? super V>> fromNeighbours,
-			Function<V, Collection<? super V>> toNeighbours);
+			Function<? super V, Collection<? extends V>> fromNeighbours,
+			Function<? super V, Collection<? extends V>> toNeighbours);
 
-	public GraphConfigurator<V, E> edgeRule(BiPredicate<V, V> betweenNeighbours);
-
-	public GraphConfigurator<V, E> edgeRule(BiPredicate<V, V> fromNeighbours,
-			BiPredicate<V, V> toNeighbours);
+	public GraphConfigurator<V, E> edgeRule(
+			BiPredicate<? super V, ? super V> betweenNeighbours);
 
 	public GraphConfigurator<V, E> edgeRuleAsymmetric();
 
@@ -63,6 +61,13 @@ public interface GraphConfigurator<V, E> extends Factory<Graph<V, E>> {
 
 	public GraphConfigurator<V, E> multigraph();
 
+	/**
+	 * Vertices are passed to the comparator in insertion order. The default
+	 * comparator always returns 1.
+	 * 
+	 * @param lowToHigh
+	 * @return
+	 */
 	public default GraphConfigurator<V, E> direction(Comparator<V> lowToHigh) {
 		return direction((e) -> lowToHigh);
 	}

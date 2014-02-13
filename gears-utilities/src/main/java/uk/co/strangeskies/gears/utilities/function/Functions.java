@@ -1,6 +1,7 @@
 package uk.co.strangeskies.gears.utilities.function;
 
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
@@ -20,6 +21,18 @@ public class Functions {
 			Function<? super T, ? extends I> a,
 			BiFunction<? super I, ? super I, R> combiner) {
 		return (v, w) -> combiner.apply(a.apply(v), a.apply(w));
+	}
+
+	public static <T, U, I, J> BiPredicate<T, U> compose(
+			Function<? super T, ? extends I> a, Function<? super U, ? extends J> b,
+			BiPredicate<? super I, ? super J> combiner) {
+		return (v, w) -> combiner.test(a.apply(v), b.apply(w));
+	}
+
+	public static <T, I> BiPredicate<T, T> compose(
+			Function<? super T, ? extends I> a,
+			BiPredicate<? super I, ? super I> combiner) {
+		return (v, w) -> combiner.test(a.apply(v), a.apply(w));
 	}
 
 	public static <T, I, R> Function<T, R> combineResults(
