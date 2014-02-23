@@ -58,12 +58,29 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 					}
 					return false;
 				};
-				if (configurator.edgeGenerator != null)
+				boolean generateNeighbours = configurator.generateNeighbours;
+				if (configurator.edgeGenerator != null) {
+					Function<? super V, Collection<? extends V>> edgeGenerator = configurator.edgeGenerator;
 					addVertex = addVertex.and((vertex) -> {
-						addEdges(vertex, configurator.outgoingEdgeGenerator.apply(vertex),
-								configurator.generateNeighbours);
+						addEdges(vertex, edgeGenerator.apply(vertex), generateNeighbours);
 						return true;
 					});
+				}
+				if (configurator.incomingEdgeGenerator != null) {
+					Function<? super V, Collection<? extends V>> edgeGenerator = configurator.incomingEdgeGenerator;
+					addVertex = addVertex.and((vertex) -> {
+						addEdges(edgeGenerator.apply(vertex), vertex, generateNeighbours);
+						return true;
+					});
+				}
+				if (configurator.outgoingEdgeGenerator != null) {
+					Function<? super V, Collection<? extends V>> edgeGenerator = configurator.outgoingEdgeGenerator;
+					addVertex = addVertex.and((vertex) -> {
+						addEdges(vertex, edgeGenerator.apply(vertex), generateNeighbours);
+						return true;
+					});
+				}
+				this.addVertex = addVertex;
 			}
 		}
 

@@ -69,21 +69,29 @@ public interface Graph<V, E> extends Copyable<Graph<V, E>> {
 	}
 
 	public default boolean addEdges(Collection<? extends V> from, V to) {
-		from.forEach(f -> addEdge(f, to));
+		return addEdges(from, to, false);
 	}
 
 	public default boolean addEdges(V from, Collection<? extends V> to) {
-		to.forEach(t -> addEdge(from, t));
+		return addEdges(from, to, false);
 	}
 
 	public default boolean addEdges(Collection<? extends V> from, V to,
 			boolean addMissingVertices) {
-		from.forEach(f -> addEdge(f, to, addMissingVertices));
+		boolean changed = false;
+		for (V f : from) {
+			changed = addEdge(f, to, addMissingVertices) != null | changed;
+		}
+		return changed;
 	}
 
 	public default boolean addEdges(V from, Collection<? extends V> to,
 			boolean addMissingVertices) {
-		to.forEach(t -> addEdge(from, t, addMissingVertices));
+		boolean changed = false;
+		for (V t : to) {
+			changed = addEdge(from, t, addMissingVertices) != null | changed;
+		}
+		return changed;
 	}
 
 	public default boolean removeEdge(E edge) {

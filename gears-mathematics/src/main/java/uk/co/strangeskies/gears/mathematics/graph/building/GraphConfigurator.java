@@ -64,7 +64,7 @@ public interface GraphConfigurator<V, E> extends Factory<Graph<V, E>> {
 	/**
 	 * Vertices are passed to the comparator in insertion order. The default
 	 * comparator always returns 1.
-	 * 
+	 *
 	 * @param lowToHigh
 	 * @return
 	 */
