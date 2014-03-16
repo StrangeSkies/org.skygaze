@@ -1,13 +1,14 @@
 package uk.co.strangeskies.gears.mathematics;
 
+import java.util.Objects;
+
 import uk.co.strangeskies.gears.mathematics.values.Value;
-import uk.co.strangeskies.gears.utilities.Utilities;
 
 public class LinearInterpolationOperation<T extends Scalable<S> & Subtractable<S, ? super T>, S extends T>
 		implements InterpolationFunction<T, S> {
 	@Override
 	public S apply(T from, T to, Value<?> delta) {
-		if (Utilities.areEqual(from, to)) {
+		if (!Objects.equals(from, to)) {
 			return from.copy();
 		}
 		if (delta.equals(0)) {

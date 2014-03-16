@@ -1,11 +1,11 @@
 package uk.co.strangeskies.gears.mathematics.expression.buffer;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import uk.co.strangeskies.gears.mathematics.expression.Expression;
 import uk.co.strangeskies.gears.mathematics.expression.IdentityExpression;
-import uk.co.strangeskies.gears.utilities.Utilities;
 import uk.co.strangeskies.gears.utilities.function.TransformationOperation;
 
 public class FunctionBuffer<B, F> extends IdentityExpression<F> implements
@@ -97,8 +97,8 @@ public class FunctionBuffer<B, F> extends IdentityExpression<F> implements
 		Object thatFront = thatDoubleBuffer.getFront();
 		Object thatBack = thatDoubleBuffer.getBack();
 
-		return Utilities.areEqual(thisFront, thatFront)
-				&& Utilities.areEqual(thisBack, thatBack);
+		return Objects.equals(thisFront, thatFront)
+				&& Objects.equals(thisBack, thatBack);
 	}
 
 	@Override
