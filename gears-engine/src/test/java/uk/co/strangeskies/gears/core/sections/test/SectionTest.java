@@ -1,8 +1,7 @@
 package uk.co.strangeskies.gears.core.sections.test;
 
-import org.junit.Assert;
-
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import uk.co.strangeskies.gears.engine.sections.Section;
 import uk.co.strangeskies.gears.engine.sections.SectionProcessingContext;
@@ -17,8 +16,8 @@ public class SectionTest {
 		SectionProcessor processor = new SectionProcessorImpl();
 		processor.process(new StackingSection(3, result));
 
-		Assert.assertEquals("[3 3h[2 2h[1 1h[0 0]r1 1]r2 2]r3 3]",
-				result.toString());
+		Assert.assertEquals(result.toString(),
+				"[3 3h[2 2h[1 1h[0 0]r1 1]r2 2]r3 3]");
 	}
 }
 

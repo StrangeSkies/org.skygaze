@@ -43,11 +43,13 @@ public interface GraphConfigurator<V, E> extends Factory<Graph<V, E>> {
 		return edges(Arrays.asList(edges));
 	}
 
-	public GraphConfigurator<V, E> edgeRule(
+	public GraphConfigurator<V, E> edgesBetween(
 			Function<? super V, Collection<? extends V>> betweenNeighbours);
 
-	public GraphConfigurator<V, E> edgeRule(
-			Function<? super V, Collection<? extends V>> fromNeighbours,
+	public GraphConfigurator<V, E> edgesFrom(
+			Function<? super V, Collection<? extends V>> fromNeighbours);
+
+	public GraphConfigurator<V, E> edgesTo(
 			Function<? super V, Collection<? extends V>> toNeighbours);
 
 	public GraphConfigurator<V, E> edgeRule(

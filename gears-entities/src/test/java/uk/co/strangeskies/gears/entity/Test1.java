@@ -1,6 +1,8 @@
-package uk.co.strangeskies.gears.entities;
+package uk.co.strangeskies.gears.entity;
 
 import java.util.Random;
+
+import org.testng.annotations.Test;
 
 import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.assembly.Assemblage;
@@ -69,9 +71,10 @@ public class Test1 {
 		return matrixBuilder;
 	}
 
+	@Test
 	private void run() {
 		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler());
-		scheduler.setPeriodFrequency(5);
+		scheduler.setPeriodLengthMilliseconds(0);
 		entities().behaviour().setDefaultScheduler(scheduler);
 
 		/*
@@ -181,9 +184,5 @@ public class Test1 {
 			e.printStackTrace();
 		}
 		processor.stopProcessing();
-	}
-
-	public static void main(String... args) {
-		new Test1().run();
 	}
 }

@@ -279,17 +279,22 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 	}
 
 	@Override
-	public GraphConfigurator<V, E> edgeRule(
+	public GraphConfigurator<V, E> edgesBetween(
 			Function<? super V, Collection<? extends V>> neighbours) {
 		edgeGenerator = neighbours;
 		return unmodifiableEdges();
 	}
 
 	@Override
-	public GraphConfigurator<V, E> edgeRule(
-			Function<? super V, Collection<? extends V>> fromNeighbours,
-			Function<? super V, Collection<? extends V>> toNeighbours) {
+	public GraphConfigurator<V, E> edgesFrom(
+			Function<? super V, Collection<? extends V>> fromNeighbours) {
 		incomingEdgeGenerator = fromNeighbours;
+		return unmodifiableEdges().directed();
+	}
+
+	@Override
+	public GraphConfigurator<V, E> edgesTo(
+			Function<? super V, Collection<? extends V>> toNeighbours) {
 		outgoingEdgeGenerator = toNeighbours;
 		return unmodifiableEdges().directed();
 	}

@@ -2,5 +2,6 @@ description = 'Gears Entities'
 
 dependencies {
 	compile project(':gears-utilities')
-	compile project(':gears-mathematics-geometry')
+	compile project(':gears-mathematics')
+	testCompile project(':gears-mathematics-geometry')
 }

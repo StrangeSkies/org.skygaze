@@ -78,6 +78,10 @@ public class IdentityComparator<T> implements Comparator<T> {
 		}
 	}
 
+	/**
+	 * This method can be called to prune stale references from the hash-collision
+	 * map. It is also called automatically
+	 */
 	public void clean() {
 		IDReference<?> oldReference;
 		while ((oldReference = (IDReference<?>) referenceQueue.poll()) != null) {

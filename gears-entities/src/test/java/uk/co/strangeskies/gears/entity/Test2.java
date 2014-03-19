@@ -1,4 +1,4 @@
-package uk.co.strangeskies.gears.entities;
+package uk.co.strangeskies.gears.entity;
 
 import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.assembly.Assembler;
@@ -39,23 +39,23 @@ public class Test2 {
 		assembler = new AssemblerImpl();
 	}
 
-	public EntityManager entity() {
+	private EntityManager entity() {
 		return entityManager;
 	}
 
-	public Assembler assembler() {
+	private Assembler assembler() {
 		return assembler;
 	}
 
-	public StateComponentConfigurator<Object> stateBuilder() {
+	private StateComponentConfigurator<Object> stateBuilder() {
 		return stateComponentBuilder.configure();
 	}
 
-	public BehaviourComponentConfigurator behaviourBuilder() {
+	private BehaviourComponentConfigurator behaviourBuilder() {
 		return behaviourComponentBuilderFactory.configure();
 	}
 
-	public MatrixBuilderImpl matrices() {
+	private MatrixBuilderImpl matrices() {
 		return matrixBuilder;
 	}
 
