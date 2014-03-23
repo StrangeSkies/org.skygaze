@@ -35,6 +35,19 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 		return new Range<T>(from, to, new NaturalComparator<T>());
 	}
 
+	public static Range<Integer> parse(String range) {
+		String[] splitRange = range.split("..");
+		if (splitRange.length != 2)
+			throw new IllegalArgumentException();
+		try {
+			Integer from = Integer.parseInt(splitRange[0]);
+			Integer to = Integer.parseInt(splitRange[1]);
+			return create(from, to);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
 	public T getFrom() {
 		return from;
 	}
