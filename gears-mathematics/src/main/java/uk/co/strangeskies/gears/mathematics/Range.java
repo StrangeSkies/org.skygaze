@@ -286,4 +286,8 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 		return new Range<>(from, to, comparator).setInclusive(isFromInclusive(),
 				isToInclusive());
 	}
+
+	public Range<T> reversed() {
+		return new Range<T>(getTo(), getFrom(), getComparator().reversed());
+	}
 }

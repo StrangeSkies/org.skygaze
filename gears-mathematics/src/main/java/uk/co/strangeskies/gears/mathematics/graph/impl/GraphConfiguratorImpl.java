@@ -82,6 +82,8 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 				}
 				this.addVertex = addVertex;
 			}
+
+			addVertices(configurator.vertices);
 		}
 
 		@Override
@@ -114,11 +116,7 @@ public class GraphConfiguratorImpl<V, E> extends Configurator<Graph<V, E>>
 
 		@Override
 		public boolean addVertex(V vertex) {
-			if (!adjacencyMatrix.containsKey(vertex)) {
-				adjacencyMatrix.put(vertex, new TreeMap<>(comparator));
-				return true;
-			}
-			return false;
+			return addVertex.test(vertex);
 		}
 
 		@Override

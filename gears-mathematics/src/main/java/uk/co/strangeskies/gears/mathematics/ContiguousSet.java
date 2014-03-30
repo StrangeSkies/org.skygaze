@@ -94,38 +94,40 @@ public class ContiguousSet<T> implements Iterable<T>, Collection<T>,
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
-			T on = getRange().getFrom();
+			T on = getRange().isFromInclusive() ? getRange().getFrom() : incrementor
+					.increment(getRange().getFrom());
 
 			@Override
 			public boolean hasNext() {
-				// TODO Auto-generated method stub
-				return false;
+				return on != null;
 			}
 
 			@Override
 			public T next() {
-				// TODO Auto-generated method stub
-				return null;
+				T was = on;
+				on = incrementor.increment(on);
+				int compare = comparator().compare(on, getRange().getTo());
+				if (getRange().isToInclusive() ? compare < 0 : compare <= 0)
+					on = null;
+				return was;
 			}
 
 			@Override
 			public void remove() {
-				// TODO Auto-generated method stub
-
+				throw new UnsupportedOperationException();
 			}
 		};
 	}
 
 	@Override
 	public NavigableSet<T> descendingSet() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ContiguousSet<>(getRange().reversed(), getIncrementor()
+				.reversed());
 	}
 
 	@Override
 	public Iterator<T> descendingIterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return descendingSet().iterator();
 	}
 
 	@Override
