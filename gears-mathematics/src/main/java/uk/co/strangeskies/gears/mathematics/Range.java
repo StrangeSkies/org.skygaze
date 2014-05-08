@@ -48,6 +48,17 @@ public class Range<T> implements Self<Range<T>>, Copyable<Range<T>> {
 		}
 	}
 
+	public static String compose(Range<Integer> range) {
+		String from = range.getFrom() == null ? ""
+				: (range.isFromInclusive() ? range.getFrom().toString() : Integer
+						.toString(range.getFrom() + 1));
+
+		String to = range.getTo() == null ? "" : (range.isToInclusive() ? range
+				.getTo().toString() : Integer.toString(range.getTo() - 1));
+
+		return from + ".." + to;
+	}
+
 	public T getFrom() {
 		return from;
 	}
