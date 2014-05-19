@@ -22,7 +22,7 @@ configure(javaProjects()) {
 	}
 
 	dependencies {
-    	testCompile group: 'org.testng', name: 'testng', version: '6.+'
+		testCompile group: 'org.testng', name: 'testng', version: '6.+'
 		compile group: 'org.osgi', name: 'org.osgi.core', version: '5.+'
 		compile group: 'org.osgi', name: 'org.osgi.enterprise', version: '5.+'
 	}
