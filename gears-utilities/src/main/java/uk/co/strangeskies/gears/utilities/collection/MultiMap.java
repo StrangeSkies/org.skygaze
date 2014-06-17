@@ -67,7 +67,6 @@ public interface MultiMap<K, V, C extends Collection<V>> extends Map<K, C> {
 		return added;
 	}
 
-	@SuppressWarnings("null")
 	public default boolean removeValue(K key, V value) {
 		C values = get(key);
 
@@ -80,7 +79,6 @@ public interface MultiMap<K, V, C extends Collection<V>> extends Map<K, C> {
 		return removed;
 	}
 
-	@SuppressWarnings("null")
 	public default boolean removeAll(K key, Collection<? extends V> values) {
 		C currentValues = get(key);
 

@@ -25,9 +25,6 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 	private final int ordinal;
 
 	protected Enumeration(String name) {
-		if (getEnumerationConstants((Class<T>) getClass()).stream().anyMatch(
-				e -> e.name().equals(name))) throw new IllegalArgumentException();
-
 		this.name = name;
 		ordinal = addInstance(getThis());
 	}
@@ -55,6 +52,10 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 		List<T> enumerationConstants = getEnumerationType(
 				((Class<T>) instance.getClass())).getInstances();
 
+		if (enumerationConstants.stream().anyMatch(
+				e -> e.name().equals(instance.name())))
+			throw new IllegalArgumentException();
+
 		int ordinal = enumerationConstants.size();
 		enumerationConstants.add(instance);
 
@@ -70,7 +71,7 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 		return enumType;
 	}
 
-	public static <T extends Enumeration<T>> List<T> getEnumerationConstants(
+	public static <T extends Enumeration<T>> List<T> getConstants(
 			Class<T> enumerationClass) {
 		return Collections.unmodifiableList(getEnumerationType(enumerationClass)
 				.getInstances());
@@ -78,7 +79,7 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 
 	public static <T extends Enumeration<T>> T valueOf(Class<T> enumerationClass,
 			String name) {
-		return getEnumerationConstants(enumerationClass).stream()
+		return getConstants(enumerationClass).stream()
 				.filter(e -> e.name().equals(name)).findAny().get();
 	}
 }
