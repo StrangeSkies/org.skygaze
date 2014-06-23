@@ -67,7 +67,8 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 		@SuppressWarnings("unchecked")
 		EnumerationType<T> enumType = (EnumerationType<T>) ENUM_TYPES.get(type);
 		if (enumType == null)
-			ENUM_TYPES.put(type, new EnumerationType<T>());
+			ENUM_TYPES.put(type, enumType = new EnumerationType<>());
+
 		return enumType;
 	}
 
