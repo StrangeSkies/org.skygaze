@@ -66,8 +66,10 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 			Class<T> type) {
 		@SuppressWarnings("unchecked")
 		EnumerationType<T> enumType = (EnumerationType<T>) ENUM_TYPES.get(type);
-		if (enumType == null)
+		if (enumType == null) {
 			ENUM_TYPES.put(type, enumType = new EnumerationType<>());
+			forceInitialisation(type);
+		}
 
 		return enumType;
 	}
@@ -82,5 +84,14 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 			String name) {
 		return getConstants(enumerationClass).stream()
 				.filter(e -> e.name().equals(name)).findAny().get();
+	}
+
+	private static void forceInitialisation(Class<?> initialiseClass) {
+		try {
+			Class.forName(initialiseClass.getName(), true,
+					initialiseClass.getClassLoader());
+		} catch (ClassNotFoundException e) {
+			throw new AssertionError(e);
+		}
 	}
 }
