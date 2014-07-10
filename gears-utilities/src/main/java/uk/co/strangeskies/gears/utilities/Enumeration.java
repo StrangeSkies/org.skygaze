@@ -9,13 +9,34 @@ import java.util.Map;
 public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 	private static class EnumerationType<T extends Enumeration<T>> {
 		private final List<T> instances;
+		private boolean initialised;
 
 		public EnumerationType() {
 			instances = new ArrayList<>();
+			initialised = false;
 		}
 
 		public List<T> getInstances() {
-			return instances;
+			return Collections.unmodifiableList(instances);
+		}
+
+		public int addInstance(T instance) {
+			if (initialised)
+				throw new IllegalStateException();
+
+			int ordinal = instances.size();
+
+			instances.add(instance);
+
+			return ordinal;
+		}
+
+		public void initialised() {
+			initialised = true;
+		}
+
+		public boolean isInitialised() {
+			return initialised;
 		}
 	}
 
@@ -43,32 +64,33 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 	};
 
 	@Override
-	public S copy() {
+	public final S copy() {
 		return getThis();
 	}
 
 	@SuppressWarnings("unchecked")
 	private static <T extends Enumeration<T>> int addInstance(T instance) {
-		List<T> enumerationConstants = getEnumerationType(
-				((Class<T>) instance.getClass())).getInstances();
+		EnumerationType<T> enumerationType = getEnumerationType(((Class<T>) instance
+				.getClass()));
+		List<T> enumerationConstants = enumerationType.getInstances();
 
 		if (enumerationConstants.stream().anyMatch(
 				e -> e.name().equals(instance.name())))
 			throw new IllegalArgumentException();
 
-		int ordinal = enumerationConstants.size();
-		enumerationConstants.add(instance);
-
-		return ordinal;
+		return enumerationType.addInstance(instance);
 	}
 
 	private static <T extends Enumeration<T>> EnumerationType<T> getEnumerationType(
 			Class<T> type) {
 		@SuppressWarnings("unchecked")
 		EnumerationType<T> enumType = (EnumerationType<T>) ENUM_TYPES.get(type);
-		if (enumType == null) {
+		if (enumType == null)
 			ENUM_TYPES.put(type, enumType = new EnumerationType<>());
+
+		if (!enumType.isInitialised() && !withinStaticInitialiser(type)) {
 			forceInitialisation(type);
+			enumType.initialised();
 		}
 
 		return enumType;
@@ -93,5 +115,14 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 		} catch (ClassNotFoundException e) {
 			throw new AssertionError(e);
 		}
+	}
+
+	private static boolean withinStaticInitialiser(Class<?> initialisingClass) {
+		for (StackTraceElement element : Thread.currentThread().getStackTrace())
+			if (element.getClassName().equals(initialisingClass.getCanonicalName())
+					&& element.getMethodName().equals("<clinit>"))
+				return true;
+
+		return false;
 	}
 }
