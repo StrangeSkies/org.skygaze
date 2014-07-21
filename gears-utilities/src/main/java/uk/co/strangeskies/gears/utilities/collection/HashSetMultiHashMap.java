@@ -8,6 +8,6 @@ public class HashSetMultiHashMap<K, V> extends MultiHashMap<K, V, Set<V>>
 	private static final long serialVersionUID = 1L;
 
 	public HashSetMultiHashMap() {
-		super(() -> new HashSet<V>());
+		super(HashSet::new);
 	}
 }
