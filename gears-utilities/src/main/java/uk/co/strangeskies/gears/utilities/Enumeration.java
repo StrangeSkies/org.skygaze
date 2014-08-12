@@ -96,7 +96,8 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 		return enumType;
 	}
 
-	public static <T extends Enumeration<T>> List<T> getConstants(
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static <T extends Enumeration> List<T> getConstants(
 			Class<T> enumerationClass) {
 		return Collections.unmodifiableList(getEnumerationType(enumerationClass)
 				.getInstances());
