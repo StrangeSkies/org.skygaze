@@ -49,7 +49,8 @@ public class PropertySet<T> {
 	}
 
 	public int generateHashCode() {
-		return properties.stream().map(Object::hashCode).reduce(0, (a, b) -> a ^ b);
+		return properties.stream().map(p -> Objects.hashCode(p.apply(object)))
+				.reduce(0, (a, b) -> a ^ b);
 	}
 
 	public List<Object> values() {

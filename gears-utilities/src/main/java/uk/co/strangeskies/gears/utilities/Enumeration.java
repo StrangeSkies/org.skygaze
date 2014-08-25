@@ -54,6 +54,16 @@ public class Enumeration<S extends Enumeration<S>> implements Self<S> {
 		return name;
 	}
 
+	@Override
+	public final boolean equals(Object obj) {
+		return super.equals(obj);
+	}
+
+	@Override
+	public final int hashCode() {
+		return super.hashCode();
+	}
+
 	public int ordinal() {
 		return ordinal;
 	}
