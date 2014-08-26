@@ -1,7 +1,0 @@
-
-
-description = 'Gears Scripting - Python'
-
-dependencies {
-    compile group: 'org.python', name: 'jython', version:'2.5.3'
-}

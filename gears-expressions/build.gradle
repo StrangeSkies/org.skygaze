@@ -1,5 +1,0 @@
-description = 'Gears Expressions'
-
-dependencies {
-	compile project(':gears-utilities')
-}

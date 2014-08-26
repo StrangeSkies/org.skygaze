@@ -1,3 +1,5 @@
 description = 'Gears Physics'
 
-dependencies { compile project(':gears-utilities') }
+dependencies {
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-utilities', version:'0.+'
+}

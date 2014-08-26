@@ -1,10 +1,10 @@
 description = 'Gears Swing'
 
 dependencies {
-	compile project(':gears-utilities')
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-utilities', version:'0.+'
 	compile project(':gears-input')
 	compile project(':gears-rendering')
 	compile project(':gears-rendering-2d')
-	compile project(':gears-mathematics')
-	compile project(':gears-mathematics-geometry')
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-mathematics', version:'0.+'
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-mathematics-geometry', version:'0.+'
 }

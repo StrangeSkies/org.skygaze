@@ -1,8 +1,8 @@
 description = 'Gears Rendering 2D'
 
 dependencies {
-	compile project(':gears-utilities')
-	compile project(':gears-mathematics')
-	compile project(':gears-mathematics-geometry')
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-utilities', version:'0.+'
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-mathematics', version:'0.+'
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-mathematics-geometry', version:'0.+'
 	compile project(':gears-rendering')
 }

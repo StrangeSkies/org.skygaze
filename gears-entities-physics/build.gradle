@@ -1,8 +1,8 @@
 description = 'Gears Entities Physics'
 
 dependencies {
-	compile project(':gears-utilities')
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-utilities', version:'0.+'
 	compile project(':gears-entities')
-	compile project(':gears-mathematics')
+	compile group: 'uk.co.strangeskies', name: 'strangeskies-mathematics', version:'0.+'
 	compile project(':gears-physics')
 }

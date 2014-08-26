@@ -1,7 +1,0 @@
-description = 'Gears Mathematics - Geometry'
-
-dependencies {
-	compile project(':gears-utilities')
-	compile project(':gears-mathematics')
-	compile group: 'edu.washington.cs.types.checker', name: 'checker-framework', version: '1.7.0'
-}

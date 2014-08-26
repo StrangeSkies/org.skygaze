@@ -1,6 +1,0 @@
-description = 'Gears Scripting'
-
-dependencies {
-	compile project(':gears-utilities')
-	compile project(':gears-mathematics')
-}
