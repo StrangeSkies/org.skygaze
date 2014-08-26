@@ -8,8 +8,8 @@ import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.management.EntityBehaviourManager;
 import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
-import uk.co.strangeskies.gears.utilities.collection.HashSetMultiHashMap;
-import uk.co.strangeskies.gears.utilities.collection.SetMultiMap;
+import uk.co.strangeskies.utilities.collection.HashSetMultiHashMap;
+import uk.co.strangeskies.utilities.collection.SetMultiMap;
 
 public class EntityBehaviourManagerImpl implements EntityBehaviourManager {
 	private final SetMultiMap<BehaviourComponent, Entity> entityBehaviours;

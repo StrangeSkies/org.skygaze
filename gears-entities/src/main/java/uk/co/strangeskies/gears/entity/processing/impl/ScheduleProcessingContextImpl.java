@@ -7,8 +7,8 @@ import uk.co.strangeskies.gears.entity.management.EntityManager;
 import uk.co.strangeskies.gears.entity.scheduling.ScheduleProcessingContext;
 import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.flowcontrol.LimitedReadWriteLockReleaseWrapper;
-import uk.co.strangeskies.gears.utilities.flowcontrol.StripedReadWriteLock;
+import uk.co.strangeskies.utilities.flowcontrol.LimitedReadWriteLockReleaseWrapper;
+import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLock;
 
 public class ScheduleProcessingContextImpl implements ScheduleProcessingContext {
 	private final EntityManager entityManager;

@@ -2,7 +2,7 @@ package uk.co.strangeskies.gears.entity.state;
 
 import java.util.function.Function;
 
-import uk.co.strangeskies.gears.utilities.Property;
+import uk.co.strangeskies.utilities.Property;
 
 public class StateComponentProperty<D, T> {
 	private final String name;

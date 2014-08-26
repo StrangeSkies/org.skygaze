@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.function.Function;
 
-import uk.co.strangeskies.gears.mathematics.Interpolate;
-import uk.co.strangeskies.gears.mathematics.InterpolationFunction;
-import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
-import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
 import uk.co.strangeskies.gears.rendering.buffering.SceneInterpolator;
-import uk.co.strangeskies.gears.utilities.IdentityComparator;
+import uk.co.strangeskies.mathematics.Interpolate;
+import uk.co.strangeskies.mathematics.InterpolationFunction;
+import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.mathematics.values.DoubleValue;
+import uk.co.strangeskies.utilities.IdentityComparator;
 
 public class SceneInterpolatorImpl extends SceneBufferImpl implements
 		SceneInterpolator {

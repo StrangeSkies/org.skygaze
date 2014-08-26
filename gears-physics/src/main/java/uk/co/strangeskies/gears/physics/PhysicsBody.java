@@ -1,6 +1,6 @@
 package uk.co.strangeskies.gears.physics;
 
-import uk.co.strangeskies.gears.utilities.Copyable;
+import uk.co.strangeskies.utilities.Copyable;
 
 public class PhysicsBody implements Copyable<PhysicsBody> {
 	@Override

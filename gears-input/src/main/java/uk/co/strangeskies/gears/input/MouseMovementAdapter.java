@@ -1,12 +1,12 @@
 package uk.co.strangeskies.gears.input;
 
-import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
-import uk.co.strangeskies.gears.mathematics.expression.buffer.ExpressionBuffer;
-import uk.co.strangeskies.gears.mathematics.geometry.Bounds2;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.MatrixBuilder;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
-import uk.co.strangeskies.gears.mathematics.values.IntValue;
+import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.mathematics.expression.buffer.ExpressionBuffer;
+import uk.co.strangeskies.mathematics.geometry.Bounds2;
+import uk.co.strangeskies.mathematics.geometry.matrix.building.MatrixBuilder;
+import uk.co.strangeskies.mathematics.geometry.matrix.vector.Vector2;
+import uk.co.strangeskies.mathematics.values.DoubleValue;
+import uk.co.strangeskies.mathematics.values.IntValue;
 
 public class MouseMovementAdapter {
 	public enum MovementType {

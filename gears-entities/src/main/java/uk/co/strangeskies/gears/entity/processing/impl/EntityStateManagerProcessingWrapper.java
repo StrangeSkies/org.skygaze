@@ -6,8 +6,8 @@ import java.util.Set;
 import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.management.EntityStateManager;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.Decorator;
-import uk.co.strangeskies.gears.utilities.flowcontrol.StripedReadWriteLockRelease;
+import uk.co.strangeskies.utilities.Decorator;
+import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLockRelease;
 
 public class EntityStateManagerProcessingWrapper extends
 		Decorator<EntityStateManager> implements EntityStateManager {

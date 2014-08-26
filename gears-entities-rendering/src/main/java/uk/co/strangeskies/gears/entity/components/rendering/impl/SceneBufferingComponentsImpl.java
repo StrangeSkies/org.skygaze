@@ -11,7 +11,7 @@ import uk.co.strangeskies.gears.rendering.buffering.SceneBuffer;
 import uk.co.strangeskies.gears.rendering.buffering.SceneInterpolator;
 import uk.co.strangeskies.gears.rendering.buffering.impl.SceneBufferImpl;
 import uk.co.strangeskies.gears.rendering.buffering.impl.SceneInterpolatorImpl;
-import uk.co.strangeskies.gears.utilities.factory.Factory;
+import uk.co.strangeskies.utilities.factory.Factory;
 
 public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 	private final StateComponent<SceneBuffer> sceneBufferState;

@@ -5,7 +5,7 @@ import java.util.Set;
 import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.management.EntityManager;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.flowcontrol.StripedReadWriteLockRelease;
+import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLockRelease;
 
 public interface BehaviourProcessingContext {
 	public EntityManager entity();

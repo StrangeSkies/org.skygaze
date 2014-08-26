@@ -2,11 +2,11 @@ package uk.co.strangeskies.gears.rendering.buffering;
 
 import java.util.function.Function;
 
-import uk.co.strangeskies.gears.mathematics.expression.Expression;
-import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
-import uk.co.strangeskies.gears.mathematics.expression.buffer.ExpressionBuffer;
-import uk.co.strangeskies.gears.mathematics.expression.buffer.FunctionBuffer;
-import uk.co.strangeskies.gears.utilities.Copyable;
+import uk.co.strangeskies.mathematics.expression.Expression;
+import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.mathematics.expression.buffer.ExpressionBuffer;
+import uk.co.strangeskies.mathematics.expression.buffer.FunctionBuffer;
+import uk.co.strangeskies.utilities.Copyable;
 
 public interface SceneBuffer {
 	public void push();
@@ -19,8 +19,7 @@ public interface SceneBuffer {
 
 	public <T extends Cloneable> DoubleBuffer<T, T> buffer(T item);
 
-	public <T, B> FunctionBuffer<T, B> buffer(T item,
-			Function<T, B> function);
+	public <T, B> FunctionBuffer<T, B> buffer(T item, Function<T, B> function);
 
 	public <T> ExpressionBuffer<Expression<? extends T>, T> bufferResult(
 			Expression<? extends T> expression);

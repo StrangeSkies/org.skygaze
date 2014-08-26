@@ -3,7 +3,7 @@ package uk.co.strangeskies.gears.entity.behaviour;
 import java.util.Collection;
 
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.factory.Factory;
+import uk.co.strangeskies.utilities.factory.Factory;
 
 public interface BehaviourComponentConfigurator extends
 		Factory<BehaviourComponent> {

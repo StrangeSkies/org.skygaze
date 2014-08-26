@@ -14,7 +14,7 @@ import uk.co.strangeskies.gears.rendering.rendering2d.Camera2D;
 import uk.co.strangeskies.gears.rendering.rendering2d.Data2D;
 import uk.co.strangeskies.gears.rendering.rendering2d.Renderer2D;
 import uk.co.strangeskies.gears.rendering.rendering2d.SceneFactory2D;
-import uk.co.strangeskies.gears.utilities.factory.Factory;
+import uk.co.strangeskies.utilities.factory.Factory;
 
 public class RenderingComponents2DImpl implements RenderingComponents2D {
 	private final StateComponent<Renderable<Data2D>> renderableState;

@@ -3,7 +3,7 @@ package uk.co.strangeskies.gears.entity.management;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.Entity;
-import uk.co.strangeskies.gears.utilities.factory.Factory;
+import uk.co.strangeskies.utilities.factory.Factory;
 
 /**
  * Naming convention suggest 'entity' for instances of {@link EntityManager}, as

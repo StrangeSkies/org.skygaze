@@ -1,11 +1,11 @@
 package uk.co.strangeskies.gears.rendering.rendering3d.impl;
 
-import uk.co.strangeskies.gears.mathematics.expression.Expression;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.impl.Matrix4Impl;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.impl.MatrixH3Impl;
 import uk.co.strangeskies.gears.rendering.Scene;
 import uk.co.strangeskies.gears.rendering.rendering3d.Camera3D;
 import uk.co.strangeskies.gears.rendering.rendering3d.Data3D;
+import uk.co.strangeskies.mathematics.expression.Expression;
+import uk.co.strangeskies.mathematics.geometry.matrix.impl.Matrix4Impl;
+import uk.co.strangeskies.mathematics.geometry.matrix.impl.MatrixH3Impl;
 
 public class Camera3DImpl implements Camera3D {
 	private Scene<Data3D> scene;
@@ -29,7 +29,8 @@ public class Camera3DImpl implements Camera3D {
 	}
 
 	@Override
-	public void setTransformation(Expression<? extends MatrixH3Impl<?>> transformation) {
+	public void setTransformation(
+			Expression<? extends MatrixH3Impl<?>> transformation) {
 		this.transformation = transformation;
 	}
 

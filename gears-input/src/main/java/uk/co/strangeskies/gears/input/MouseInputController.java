@@ -3,8 +3,8 @@ package uk.co.strangeskies.gears.input;
 import java.util.List;
 import java.util.Set;
 
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.strangeskies.gears.mathematics.values.IntValue;
+import uk.co.strangeskies.mathematics.geometry.matrix.vector.Vector2;
+import uk.co.strangeskies.mathematics.values.IntValue;
 
 /**
  * class for all the event tracking

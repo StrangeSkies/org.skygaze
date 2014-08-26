@@ -19,7 +19,7 @@ import uk.co.strangeskies.gears.rendering.rendering2d.Renderer2D;
 import uk.co.strangeskies.gears.swing.rendering.graphics2d.CircularExtensionDependencyException;
 import uk.co.strangeskies.gears.swing.rendering.graphics2d.GraphicsRenderer2DExtension;
 import uk.co.strangeskies.gears.swing.rendering.graphics2d.GraphicsRenderer2DExtensionProcessingContext;
-import uk.co.strangeskies.gears.utilities.factory.Factory;
+import uk.co.strangeskies.utilities.factory.Factory;
 
 public class GraphicsRenderer2D implements Renderer2D {
 	protected class ExtensionProcessor<T extends Data2D> {

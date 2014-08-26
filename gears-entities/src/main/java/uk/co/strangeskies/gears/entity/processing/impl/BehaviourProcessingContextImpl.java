@@ -8,7 +8,7 @@ import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourProcessingContext;
 import uk.co.strangeskies.gears.entity.management.EntityManager;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.flowcontrol.StripedReadWriteLockRelease;
+import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLockRelease;
 
 public class BehaviourProcessingContextImpl implements
 		BehaviourProcessingContext {

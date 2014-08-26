@@ -2,10 +2,10 @@ package uk.co.strangeskies.gears.rendering.buffering;
 
 import java.util.function.Function;
 
-import uk.co.strangeskies.gears.mathematics.Interpolate;
-import uk.co.strangeskies.gears.mathematics.InterpolationFunction;
-import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
-import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
+import uk.co.strangeskies.mathematics.Interpolate;
+import uk.co.strangeskies.mathematics.InterpolationFunction;
+import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.mathematics.values.DoubleValue;
 
 public interface SceneInterpolator extends SceneBuffer {
 	public DoubleValue getDelta();

@@ -23,11 +23,11 @@ import uk.co.strangeskies.gears.input.BasicInputController;
 import uk.co.strangeskies.gears.input.KeyboardInputController;
 import uk.co.strangeskies.gears.input.MouseInputController;
 import uk.co.strangeskies.gears.input.WindowManagerInputController;
-import uk.co.strangeskies.gears.mathematics.expression.buffer.DoubleBuffer;
-import uk.co.strangeskies.gears.mathematics.expression.buffer.FunctionBuffer;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.MatrixBuilder;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.strangeskies.gears.mathematics.values.IntValue;
+import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.mathematics.expression.buffer.FunctionBuffer;
+import uk.co.strangeskies.mathematics.geometry.matrix.building.MatrixBuilder;
+import uk.co.strangeskies.mathematics.geometry.matrix.vector.Vector2;
+import uk.co.strangeskies.mathematics.values.IntValue;
 
 @Component(service = { MouseInputController.class,
 		KeyboardInputController.class, WindowManagerInputController.class })

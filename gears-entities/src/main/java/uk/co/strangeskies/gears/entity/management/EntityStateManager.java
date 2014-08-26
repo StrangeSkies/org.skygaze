@@ -8,7 +8,7 @@ import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.function.collection.SetTransformationFunction;
+import uk.co.strangeskies.utilities.function.collection.SetTransformationFunction;
 
 public interface EntityStateManager {
 	public default <D> D attach(Entity entity, StateComponent<D> stateComponent) {

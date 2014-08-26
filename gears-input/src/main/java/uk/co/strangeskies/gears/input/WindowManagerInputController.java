@@ -1,7 +1,7 @@
 package uk.co.strangeskies.gears.input;
 
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.strangeskies.gears.mathematics.values.IntValue;
+import uk.co.strangeskies.mathematics.geometry.matrix.vector.Vector2;
+import uk.co.strangeskies.mathematics.values.IntValue;
 
 /**
  * class for all the event tracking

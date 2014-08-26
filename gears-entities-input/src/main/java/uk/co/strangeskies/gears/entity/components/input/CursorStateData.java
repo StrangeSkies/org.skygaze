@@ -1,8 +1,8 @@
 package uk.co.strangeskies.gears.entity.components.input;
 
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.strangeskies.gears.mathematics.values.IntValue;
-import uk.co.strangeskies.gears.utilities.Copyable;
+import uk.co.strangeskies.mathematics.geometry.matrix.vector.Vector2;
+import uk.co.strangeskies.mathematics.values.IntValue;
+import uk.co.strangeskies.utilities.Copyable;
 
 public class CursorStateData implements Copyable<CursorStateData> {
 	private Vector2<IntValue> position;

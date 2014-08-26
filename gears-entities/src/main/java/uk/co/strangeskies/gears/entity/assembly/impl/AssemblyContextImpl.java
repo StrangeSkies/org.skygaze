@@ -11,10 +11,10 @@ import uk.co.strangeskies.gears.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.gears.entity.assembly.Variable;
 import uk.co.strangeskies.gears.entity.management.EntityManager;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.flowcontrol.FactoryFutureMap;
-import uk.co.strangeskies.gears.utilities.flowcontrol.FutureMap;
-import uk.co.strangeskies.gears.utilities.flowcontrol.FutureMap.Mapping;
-import uk.co.strangeskies.gears.utilities.flowcontrol.StoredFutureMap;
+import uk.co.strangeskies.utilities.flowcontrol.FactoryFutureMap;
+import uk.co.strangeskies.utilities.flowcontrol.FutureMap;
+import uk.co.strangeskies.utilities.flowcontrol.FutureMap.Mapping;
+import uk.co.strangeskies.utilities.flowcontrol.StoredFutureMap;
 
 public class AssemblyContextImpl implements AssemblyContext {
 	private final AssemblageView assemblage;

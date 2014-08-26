@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.factory.Factory;
+import uk.co.strangeskies.utilities.factory.Factory;
 
 public class StateComponentImpl<D> implements StateComponent<D> {
 	private final String name;

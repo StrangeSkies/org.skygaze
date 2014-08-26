@@ -3,10 +3,10 @@ package uk.co.strangeskies.gears.rendering.impl;
 import java.awt.Color;
 import java.util.Arrays;
 
-import uk.co.strangeskies.gears.mathematics.expression.CompoundExpression;
-import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
-import uk.co.strangeskies.gears.mathematics.values.Value;
 import uk.co.strangeskies.gears.rendering.Colour;
+import uk.co.strangeskies.mathematics.expression.CompoundExpression;
+import uk.co.strangeskies.mathematics.values.DoubleValue;
+import uk.co.strangeskies.mathematics.values.Value;
 
 public class ColourImpl extends CompoundExpression<Colour> implements Colour {
 	private final DoubleValue red;

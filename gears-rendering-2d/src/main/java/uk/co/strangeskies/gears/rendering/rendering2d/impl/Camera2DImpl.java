@@ -1,10 +1,10 @@
 package uk.co.strangeskies.gears.rendering.rendering2d.impl;
 
-import uk.co.strangeskies.gears.mathematics.expression.Expression;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.impl.MatrixH2Impl;
 import uk.co.strangeskies.gears.rendering.Scene;
 import uk.co.strangeskies.gears.rendering.rendering2d.Camera2D;
 import uk.co.strangeskies.gears.rendering.rendering2d.Data2D;
+import uk.co.strangeskies.mathematics.expression.Expression;
+import uk.co.strangeskies.mathematics.geometry.matrix.impl.MatrixH2Impl;
 
 public class Camera2DImpl implements Camera2D {
 	private Scene<Data2D> scene;
@@ -27,7 +27,8 @@ public class Camera2DImpl implements Camera2D {
 	}
 
 	@Override
-	public void setTransformation(Expression<? extends MatrixH2Impl<?>> transformation) {
+	public void setTransformation(
+			Expression<? extends MatrixH2Impl<?>> transformation) {
 		this.transformation = transformation;
 	}
 }

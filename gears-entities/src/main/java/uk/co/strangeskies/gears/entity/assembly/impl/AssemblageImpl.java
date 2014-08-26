@@ -15,10 +15,10 @@ import uk.co.strangeskies.gears.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.gears.entity.assembly.Variable;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.collection.ArrayListMultiHashMap;
-import uk.co.strangeskies.gears.utilities.collection.FilteredListDecorator;
-import uk.co.strangeskies.gears.utilities.collection.FilteredSetDecorator;
-import uk.co.strangeskies.gears.utilities.collection.ListMultiMap;
+import uk.co.strangeskies.utilities.collection.ArrayListMultiHashMap;
+import uk.co.strangeskies.utilities.collection.FilteredListDecorator;
+import uk.co.strangeskies.utilities.collection.FilteredSetDecorator;
+import uk.co.strangeskies.utilities.collection.ListMultiMap;
 
 public class AssemblageImpl implements Assemblage {
 	private final List<Assemblage> composition;

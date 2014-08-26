@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.testng.annotations.Test;
 
-import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.assembly.Assemblage;
 import uk.co.strangeskies.gears.entity.assembly.Assembler;
 import uk.co.strangeskies.gears.entity.assembly.AssemblyContext;
@@ -26,12 +25,12 @@ import uk.co.strangeskies.gears.entity.state.StateComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponentBuilder;
 import uk.co.strangeskies.gears.entity.state.StateComponentConfigurator;
 import uk.co.strangeskies.gears.entity.state.impl.StateComponentBuilderImpl;
-import uk.co.strangeskies.gears.mathematics.expression.IdentityExpression;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.building.impl.MatrixBuilderImpl;
-import uk.co.strangeskies.gears.mathematics.geometry.matrix.vector.Vector2;
-import uk.co.strangeskies.gears.mathematics.values.DoubleValue;
-import uk.co.strangeskies.gears.mathematics.values.IntValue;
-import uk.co.strangeskies.gears.utilities.factory.CopyFactory;
+import uk.co.strangeskies.mathematics.expression.IdentityExpression;
+import uk.co.strangeskies.mathematics.geometry.matrix.building.impl.MatrixBuilderImpl;
+import uk.co.strangeskies.mathematics.geometry.matrix.vector.Vector2;
+import uk.co.strangeskies.mathematics.values.DoubleValue;
+import uk.co.strangeskies.mathematics.values.IntValue;
+import uk.co.strangeskies.utilities.factory.CopyFactory;
 
 public class Test1 {
 	private final EntityManager entityManager;

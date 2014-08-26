@@ -3,8 +3,8 @@ package uk.co.strangeskies.gears.entity.behaviour;
 import java.util.Set;
 
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.Described;
-import uk.co.strangeskies.gears.utilities.Named;
+import uk.co.strangeskies.utilities.Described;
+import uk.co.strangeskies.utilities.Named;
 
 public interface BehaviourComponent extends Named, Described {
 	public BehaviourProcess getProcess();

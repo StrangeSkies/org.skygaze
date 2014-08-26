@@ -10,8 +10,8 @@ import uk.co.strangeskies.gears.entity.management.EntityManager;
 import uk.co.strangeskies.gears.entity.processing.Processor;
 import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.gears.utilities.flowcontrol.HashingStripedReadWriteLock;
-import uk.co.strangeskies.gears.utilities.flowcontrol.StripedReadWriteLock;
+import uk.co.strangeskies.utilities.flowcontrol.HashingStripedReadWriteLock;
+import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLock;
 
 @Component(service = { Processor.class })
 public class ProcessorImpl implements Processor {
