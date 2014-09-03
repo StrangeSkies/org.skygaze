@@ -7,9 +7,9 @@ import uk.co.strangeskies.utilities.factory.Factory;
 /**
  * Implementations of this interface should always return a reference to the
  * object any method is invoked on (i.e. {@code return this}).
- * 
+ *
  * @author Elias N Vasylenko
- * 
+ *
  * @param <D>
  */
 public interface StateComponentConfigurator<D> extends
@@ -20,7 +20,7 @@ public interface StateComponentConfigurator<D> extends
 	 * object this method is called on. In other words, it should be safe for
 	 * implementations to hide the warning produced by the cast required to return
 	 * the invocation receiver.
-	 * 
+	 *
 	 * @param dataFactory
 	 * @return
 	 */

@@ -10,5 +10,4 @@ include ':gears-engine',
 		':gears-entities-physics',
 		':gears-entities-rendering',
 		':gears-swing',
-		':gears-entities-declarative',
 		':gears-rendering-2d-3d'

@@ -25,5 +25,4 @@ public interface AssemblageView {
 
 	public abstract <D> List<StateInitialiser<D>> getInitialisers(
 			StateComponent<D> state);
-
 }
