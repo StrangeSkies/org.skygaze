@@ -34,41 +34,33 @@ public class AssemblageImpl implements Assemblage {
 	private final Set<Variable<?>> variables;
 
 	protected AssemblageImpl() {
-		composition = new FilteredListDecorator<Assemblage>(
-				new FilteredListDecorator.Filter<Assemblage>() {
-					@Override
-					public boolean filter(Assemblage assemblage) {
-						if (assemblage.getCollapsedCompositionView().getComposition()
-								.contains(AssemblageImpl.this)) {
-							throw new IllegalArgumentException(
-									"Composition assemblage graph cycle detected");
-						}
-						return true;
-					}
-				});
+		composition = new FilteredListDecorator<Assemblage>(assemblage -> {
+			if (assemblage.getCollapsedCompositionView().getComposition()
+					.contains(AssemblageImpl.this)) {
+				throw new IllegalArgumentException(
+						"Composition assemblage graph cycle detected");
+			}
+			return true;
+		});
 
-		subassemblages = new FilteredSetDecorator<Assemblage>(
-				new FilteredSetDecorator.Filter<Assemblage>() {
-					@Override
-					public boolean filter(Assemblage assemblage) {
-						Queue<Assemblage> subassemblages = new ArrayDeque<>();
-						subassemblages.add(assemblage);
+		subassemblages = new FilteredSetDecorator<Assemblage>(assemblage -> {
+			Queue<Assemblage> subassemblages = new ArrayDeque<>();
+			subassemblages.add(assemblage);
 
-						while (!subassemblages.isEmpty()) {
-							Assemblage subassemblage = subassemblages.poll();
+			while (!subassemblages.isEmpty()) {
+				Assemblage subassemblage = subassemblages.poll();
 
-							if (subassemblage.equals(AssemblageImpl.this)) {
-								throw new IllegalArgumentException(
-										"Subassemblage graph cycle detected");
-							}
+				if (subassemblage.equals(AssemblageImpl.this)) {
+					throw new IllegalArgumentException(
+							"Subassemblage graph cycle detected");
+				}
 
-							subassemblages.addAll(subassemblage.getCollapsedCompositionView()
-									.getSubassemblages());
-						}
+				subassemblages.addAll(subassemblage.getCollapsedCompositionView()
+						.getSubassemblages());
+			}
 
-						return true;
-					}
-				});
+			return true;
+		});
 		overriddenSubassemblages = new HashMap<>();
 
 		behaviourComponents = new HashSet<>();
