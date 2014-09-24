@@ -1,0 +1,172 @@
+<?xml version="1.1" ?>
+<schema name="entities"
+	xmlns="http://schema.modabi.strangeskies.co.uk/2014-01-01/" xmlns:s="http://scripting.strangeskies.co.uk/2014-01-01/"
+	xmlns:e="http://entity.gears.strangeskies.co.uk/2014-01-01/">
+	<dependencies>
+		<dependency>s:scripting</dependency>
+	</dependencies>
+
+	<types>
+		<type name="stateReference" type="reference"
+			dataClass="uk.co.strangeskies.gears.entity.state.StateComponent">
+			<data name="targetModel">e:stateComponent</data>
+			<data name="targetId">e:name</data>
+		</type>
+
+		<type name="behaviourReference" type="reference"
+			dataClass="uk.co.strangeskies.gears.entity.state.BehaviourComponent">
+			<data name="targetModel">e:behaviourComponent</data>
+			<data name="targetId">e:name</data>
+		</type>
+
+		<type name="assemblage" type="assemblageReference"
+			dataClass="uk.co.strangeskies.gears.entity.assembly.Assemblage">
+			<data name="targetModel">e:assemblage</data>
+			<data name="targetId">e:name</data>
+		</type>
+	</types>
+
+	<models>
+		<model name="stateDependencies" bindingClass="java.util.Set">
+			<data format="SIMPLE_ELEMENT" name="dependency" type="stateReference"
+				in="add" isIterableOut="true" out="this" occurences="1.." />
+		</model>
+
+		<model name="e:stateComponent"
+			bindingClass="uk.co.strangeskies.gears.entity.state.StateComponent"
+			builderClass="uk.co.strangeskies.gears.entity.state.StateComponentConfigurator">
+			<simpleElement name="name" type="qualifiedName" />
+			<simpleElement name="description" type="string" />
+
+			<element name="readDependencies" model="stateDependencies"
+				occurences="0..1" />
+			<element name="writeDependencies" model="stateDependencies"
+				occurences="0..1" />
+
+			<element name="data">
+				<element name="type" model="class" />
+				<element name="factory" bindingClass="uk.co.strangeskies.gears.utilities.Factory"
+					model="userDefined" />
+			</element>
+		</model>
+
+		<model name="behaviourDependencies" bindingClass="java.util.Set">
+			<data format="SIMPLE_ELEMENT" name="dependency" type="behaviourReference"
+				in="add" isIterableOut="true" out="this" occurences="1.." />
+		</model>
+
+		<model name="e:behaviourComponent"
+			bindingClass="uk.co.strangeskies.gears.entity.state.BehaviourComponent"
+			builderClass="uk.co.strangeskies.gears.entity.state.BehaviourComponentConfigurator">
+			<simpleElement name="name" type="qualifiedName" />
+			<simpleElement name="description" type="string" />
+
+			<element name="readDependencies" model="stateDependencies"
+				occurences="0..1" />
+			<element name="writeDependencies" model="stateDependencies"
+				occurences="0..1" />
+
+			<element name="process" model="script" dataClass="BehaviourProcess" />
+		</model>
+
+		<model name="assemblage"
+			dataClass="uk.co.strangeskies.gears.entity.assembly.Assemblage">
+			<data format="PROPERTY" name="name" type="qualifiedName" />
+
+			<element name="composition" bindingClass="java.util.Set">
+				<data format="SIMPLE_ELEMENT" name="component" type="assemblageReference"
+					in="add" isIterableOut="true" out="this" occurences="1.." />
+			</element>
+
+			<element name="subAssemblages" bindingClass="java.util.Set">
+				<data format="SIMPLE_ELEMENT" name="component" type="assemblageReference"
+					in="add" isIterableOut="true" out="this" occurences="1.." />
+			</element>
+
+			<element name="variables" bindingClass="java.util.Set">
+			</element>
+
+			<element name="state" bindingClass="java.util.Set">
+				<data format="SIMPLE_ELEMENT" name="component" type="stateReference"
+					in="add" isIterableOut="true" out="this" occurences="1.." />
+			</element>
+
+			<element name="behaviour" bindingClass="java.util.Set">
+				<data format="SIMPLE_ELEMENT" name="component" type="stateReference"
+					in="add" isIterableOut="true" out="this" occurences="1.." />
+			</element>
+
+			<element name="initialisation" bindingClass="java.util.Set">
+				<element name="initialiser" isIterableOut="true" out="this"
+					occurences="1..">
+					<data name="state" format="PROPERTY" type="string" />
+
+					<element name="implementation" model="script" />
+				</element>
+			</element>
+		</model>
+
+		<model name="assemblages">
+			<data format="PROPERTY" name="name" type="qualifiedName" />
+
+			<data format="SIMPLE_ELEMENT" name="assemblage" type="assemblageReference"
+				in="add" isIterableOut="true" out="this" occurences="1.." />
+		</model>
+
+		<!-- Schedulers -->
+		<model name="scheduler" abstract="true" extensible="true"
+			dataClass="uk.co.strangeskies.gears.entity.scheduling.Scheduler" />
+
+		<model name="terminatingScheduler" abstract="true" base="scheduler"
+			dataClass="uk.co.strangeskies.gears.entity.scheduling.terminating.TerminatingScheduler" />
+
+		<model name="linearScheduler" abstract="true" base="terminatingScheduler"
+			dataClass="uk.co.strangeskies.gears.entity.scheduling.terminating.schedulers.LinearScheduler" />
+
+		<model name="criticalPathScheduler" abstract="true"
+			base="terminatingScheduler"
+			dataClass="uk.co.strangeskies.gears.entity.scheduling.terminating.schedulers.CriticalPathScheduler" />
+
+		<model name="cyclic" base="scheduler"
+			dataClass="uk.co.strangeskies.gears.entity.scheduling.schedulers.CyclicScheduler">
+			<element model="terminatingScheduler" />
+		</model>
+
+		<model name="periodic" base="scheduler"
+			dataClass="uk.co.strangeskies.gears.entity.scheduling.schedulers.PeriodicScheduler">
+			<element model="terminatingScheduler" />
+		</model>
+
+		<!-- Scene -->
+		<model name="scene"
+			dataClass="uk.co.strangeskies.gears.entity.management.EntityManager">
+			<data format="PROPERTY" name="name" type="qualifiedName" />
+
+			<element name="dependencies" occurances="0..1" dataClass="java.util.Set">
+				<simpleElement name="dependency" type="import"
+					outMethod="this" outMethodIterable="true"
+					dataClass="uk.co.strangeskies.modabi.schema.Schema">
+					<data name="import">
+						<data name="targetModel">e:assemblages</data>
+						<data name="targetId">e:qualifiedName</data>
+					</data>
+					<data name="assemblages" type="include" outMethod="this"
+						outMethodIterable="true">
+						<data name="targetModel">e:assemblage</data>
+					</data>
+				</simpleElement>
+			</element>
+
+			<element name="schedulers">
+				<element model="scheduler" abstract="true" occurences="1.." />
+			</element>
+
+			<element name="globalBehaviours">
+				<data format="SIMPLE_ELEMENT" name="behaviour" type="behaviourReference"
+					in="add" isIterableOut="true" out="this" occurences="1.." />
+			</element>
+
+			<element type="assemblages" />
+		</model>
+	</models>
+</schema>
