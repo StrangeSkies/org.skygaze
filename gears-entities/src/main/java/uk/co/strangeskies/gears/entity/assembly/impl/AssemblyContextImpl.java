@@ -11,10 +11,7 @@ import uk.co.strangeskies.gears.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.gears.entity.assembly.Variable;
 import uk.co.strangeskies.gears.entity.management.EntityManager;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.utilities.flowcontrol.FactoryFutureMap;
 import uk.co.strangeskies.utilities.flowcontrol.FutureMap;
-import uk.co.strangeskies.utilities.flowcontrol.FutureMap.Mapping;
-import uk.co.strangeskies.utilities.flowcontrol.StoredFutureMap;
 
 public class AssemblyContextImpl implements AssemblyContext {
 	private final AssemblageView assemblage;
@@ -41,38 +38,24 @@ public class AssemblyContextImpl implements AssemblyContext {
 		this.entities = entities;
 		entity = entities.create();
 
-		stateData = new FutureMap<>(new Mapping<StateComponent<?>, Object>() {
-			@Override
-			public void prepare(StateComponent<?> key) {
-				prepareData(key);
-			}
+		stateData = new FutureMap<>(state -> prepareStateData(state),
+				key -> entities.state().getData(entity, key));
 
-			protected <D> void prepareData(final StateComponent<D> state) {
-				for (StateInitialiser<D> initialiser : collapsedView
-						.getInitialisers(state)) {
-					initialiser.initialise(entities.state().getData(entity, state),
-							AssemblyContextImpl.this);
-				}
-			}
+		variableValues = new FutureMap<>(Variable::create);
 
-			@Override
-			public Object get(StateComponent<?> key) {
-				return entities.state().getData(entity, key);
-			}
+		subcontexts = new FutureMap<>((AssemblageView k) -> {
+			AssemblyContextImpl assemblyContext = new AssemblyContextImpl(k,
+					AssemblyContextImpl.this, entities);
+			assemblyContext.startAssembly();
+			return assemblyContext;
 		});
+	}
 
-		variableValues = new FactoryFutureMap<Variable<?>, Object>();
-
-		subcontexts = new StoredFutureMap<AssemblageView, AssemblyContextImpl>(
-				new StoredFutureMap.Mapping<AssemblageView, AssemblyContextImpl>() {
-					@Override
-					public AssemblyContextImpl prepare(AssemblageView key) {
-						AssemblyContextImpl assemblyContext = new AssemblyContextImpl(key,
-								AssemblyContextImpl.this, entities);
-						assemblyContext.startAssembly();
-						return assemblyContext;
-					}
-				});
+	protected <D> void prepareStateData(StateComponent<D> state) {
+		for (StateInitialiser<D> initialiser : collapsedView.getInitialisers(state)) {
+			initialiser.initialise(entities.state().getData(entity, state),
+					AssemblyContextImpl.this);
+		}
 	}
 
 	@Override
@@ -87,7 +70,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 
 		if (subassemblageMatchPattern.length == 0) {
 			for (AssemblageView subassemblage : this.subcontexts.getKeys()) {
-				subcontexts.add(this.subcontexts.get(subassemblage));
+				subcontexts.add(this.subcontexts.putGet(subassemblage));
 			}
 		} else {
 			subcontexts.add(this);
@@ -98,7 +81,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 				for (AssemblyContextImpl subcontext : previousSubcontexts) {
 					for (AssemblageView subassemblage : subcontext.subcontexts.getKeys()) {
 						if (AssemblageImpl.isComposedFrom(subassemblage, base)) {
-							subcontexts.add(subcontext.subcontexts.get(subassemblage));
+							subcontexts.add(subcontext.subcontexts.putGet(subassemblage));
 						}
 					}
 				}
@@ -131,7 +114,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 		if (!entities.state().has(entity, state)) {
 			throw new IllegalArgumentException();
 		}
-		return (D) stateData.get(state);
+		return (D) stateData.putGet(state);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -140,12 +123,12 @@ public class AssemblyContextImpl implements AssemblyContext {
 		if (!collapsedView.getVariables().contains(variable)) {
 			throw new IllegalArgumentException();
 		}
-		return (T) variableValues.get(variable);
+		return (T) variableValues.putGet(variable);
 	}
 
 	public synchronized void startAssembly() {
 		for (final AssemblageView subassemblage : collapsedView.getSubassemblages()) {
-			subcontexts.prepare(subassemblage);
+			subcontexts.put(subassemblage);
 		}
 
 		entities.behaviour().attachAll(entity, collapsedView.getBehaviours());
@@ -154,11 +137,11 @@ public class AssemblyContextImpl implements AssemblyContext {
 		entities.state().attachAll(entity, collapsedStates);
 
 		for (StateComponent<?> state : collapsedStates) {
-			stateData.prepare(state);
+			stateData.put(state);
 		}
 
 		for (Variable<?> variable : collapsedView.getVariables()) {
-			variableValues.prepare(variable);
+			variableValues.put(variable);
 		}
 	}
 
@@ -169,7 +152,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 
 	private void waitForAssembly() {
 		for (AssemblageView subassemblage : subcontexts.getKeys()) {
-			subcontexts.get(subassemblage).waitForAssembly();
+			subcontexts.putGet(subassemblage).waitForAssembly();
 		}
 		stateData.waitForAll();
 	}

@@ -95,7 +95,7 @@ public class AssemblageImpl implements Assemblage {
 	@Override
 	public <D> List<StateInitialiser<D>> getInitialisers(
 			final StateComponent<D> state) {
-		return (List<StateInitialiser<D>>) statePreparators.get(state);
+		return (List<StateInitialiser<D>>) statePreparators.getCollection(state);
 	}
 
 	@Override

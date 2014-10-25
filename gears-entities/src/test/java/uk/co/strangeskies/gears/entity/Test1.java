@@ -184,4 +184,8 @@ public class Test1 {
 		}
 		processor.stopProcessing();
 	}
+
+	public static void main(String... args) {
+		new Test1().run();
+	}
 }
