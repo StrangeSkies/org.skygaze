@@ -29,9 +29,9 @@ public class LinearScheduler implements TerminatingScheduler {
 		Graph<BehaviourComponent, ?> behaviourGraph = buildGraph()
 				.vertices(processingContext.getBehaviours())
 				.edgesTo(v -> v.getBehaviourDependents())
-				.edgesFrom(v -> v.getBehaviourDependencies()).edgeRuleAsymmetric()
-				.acyclic().unmodifiableStructure().create();
-
+				.edgesFrom(v -> v.getBehaviourDependencies()).directed().acyclic()
+				.unmodifiableStructure().create();
+		
 		return true;
 	}
 }
