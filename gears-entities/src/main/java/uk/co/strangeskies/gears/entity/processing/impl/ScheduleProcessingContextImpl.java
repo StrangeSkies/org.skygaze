@@ -23,15 +23,18 @@ public class ScheduleProcessingContextImpl implements ScheduleProcessingContext 
 	}
 
 	@Override
-	public void processBehaviour(final BehaviourComponent behaviour)
-			throws InterruptedException {
+	public void processBehaviour(final BehaviourComponent behaviour) {
 		LimitedReadWriteLockReleaseWrapper<StateComponent<?>> locks = new LimitedReadWriteLockReleaseWrapper<>(
 				this.locks, behaviour.getOptionalReadDependencies(),
 				behaviour.getOptionalWriteDependencies());
-		locks.obtain();
-		behaviour.getProcess().process(
-				new BehaviourProcessingContextImpl(behaviour, entityManager, locks));
-		locks.release();
+		try {
+			locks.obtain();
+			behaviour.getProcess().process(
+					new BehaviourProcessingContextImpl(behaviour, entityManager, locks));
+			locks.release();
+		} catch (InterruptedException e) {
+			// TODO
+		}
 	}
 
 	@Override

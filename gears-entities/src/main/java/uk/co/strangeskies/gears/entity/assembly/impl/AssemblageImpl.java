@@ -1,6 +1,7 @@
 package uk.co.strangeskies.gears.entity.assembly.impl;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,10 +16,10 @@ import uk.co.strangeskies.gears.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.gears.entity.assembly.Variable;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.state.StateComponent;
-import uk.co.strangeskies.utilities.collection.ArrayListMultiHashMap;
 import uk.co.strangeskies.utilities.collection.FilteredListDecorator;
 import uk.co.strangeskies.utilities.collection.FilteredSetDecorator;
-import uk.co.strangeskies.utilities.collection.ListMultiMap;
+import uk.co.strangeskies.utilities.collection.MultiHashMap;
+import uk.co.strangeskies.utilities.collection.MultiMap;
 
 public class AssemblageImpl implements Assemblage {
 	private final List<Assemblage> composition;
@@ -29,7 +30,7 @@ public class AssemblageImpl implements Assemblage {
 	private final Set<BehaviourComponent> behaviourComponents;
 
 	private final Set<StateComponent<?>> stateComponents;
-	private final ListMultiMap<StateComponent<?>, ? extends StateInitialiser<?>> statePreparators;
+	private final MultiMap<StateComponent<?>, ? extends StateInitialiser<?>, ? extends List<?>> statePreparators;
 
 	private final Set<Variable<?>> variables;
 
@@ -66,7 +67,7 @@ public class AssemblageImpl implements Assemblage {
 		behaviourComponents = new HashSet<>();
 
 		stateComponents = new HashSet<>();
-		statePreparators = new ArrayListMultiHashMap<>();
+		statePreparators = new MultiHashMap<>(ArrayList::new);
 
 		variables = new HashSet<>();
 	}

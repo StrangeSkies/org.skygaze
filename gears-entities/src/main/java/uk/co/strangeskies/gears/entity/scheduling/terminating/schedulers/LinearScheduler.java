@@ -7,6 +7,7 @@ import uk.co.strangeskies.mathematics.graph.Graph;
 import uk.co.strangeskies.mathematics.graph.building.GraphBuilder;
 import uk.co.strangeskies.mathematics.graph.building.GraphConfigurator;
 import uk.co.strangeskies.mathematics.graph.impl.GraphBuilderImpl;
+import uk.co.strangeskies.mathematics.graph.processing.GraphProcessor;
 
 public class LinearScheduler implements TerminatingScheduler {
 	private GraphBuilder graphBuilder;
@@ -31,7 +32,10 @@ public class LinearScheduler implements TerminatingScheduler {
 				.edgesTo(v -> v.getBehaviourDependents())
 				.edgesFrom(v -> v.getBehaviourDependencies()).directed().acyclic()
 				.unmodifiableStructure().create();
-		
+
+		new GraphProcessor().begin(behaviourGraph,
+				processingContext::processBehaviour).processEagerParallel();
+
 		return true;
 	}
 }

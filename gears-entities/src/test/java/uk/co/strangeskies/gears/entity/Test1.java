@@ -115,7 +115,7 @@ public class Test1 {
 						EntityStateManager state = context.entity().state();
 						System.out.println(state.getData(entity, parrot).get());
 					}
-				}).readDependencies(parrot).create();
+				}).readDependencies(parrot).behaviourDependencies(movement).create();
 		entities().behaviour().addUniversal(parrotting);
 
 		/*

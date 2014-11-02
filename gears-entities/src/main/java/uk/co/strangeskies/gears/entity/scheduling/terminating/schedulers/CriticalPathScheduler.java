@@ -8,14 +8,7 @@ public class CriticalPathScheduler implements TerminatingScheduler {
 	@Override
 	public boolean process(ScheduleProcessingContext processingContext) {
 		for (BehaviourComponent behaviour : processingContext.getBehaviours()) {
-			boolean done = false;
-			do {
-				try {
-					processingContext.processBehaviour(behaviour);
-					done = true;
-				} catch (InterruptedException e) {
-				}
-			} while (!done);
+			processingContext.processBehaviour(behaviour);
 		}
 
 		return true;

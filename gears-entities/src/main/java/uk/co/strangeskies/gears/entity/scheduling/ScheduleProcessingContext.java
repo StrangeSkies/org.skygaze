@@ -5,8 +5,7 @@ import java.util.Set;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 
 public interface ScheduleProcessingContext {
-	public abstract void processBehaviour(BehaviourComponent behaviour)
-			throws InterruptedException;
+	public abstract void processBehaviour(BehaviourComponent behaviour);
 
 	public Set<BehaviourComponent> getBehaviours();
 }

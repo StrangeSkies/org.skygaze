@@ -2,8 +2,8 @@ package uk.co.strangeskies.gears.rendering.buffering;
 
 import java.util.function.Function;
 
-import uk.co.strangeskies.mathematics.Interpolate;
-import uk.co.strangeskies.mathematics.InterpolationFunction;
+import uk.co.strangeskies.mathematics.operation.Interpolate;
+import uk.co.strangeskies.mathematics.operation.InterpolationFunction;
 import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
 import uk.co.strangeskies.mathematics.values.DoubleValue;
 

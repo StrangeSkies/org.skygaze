@@ -2,10 +2,10 @@ package uk.co.strangeskies.gears.rendering;
 
 import java.awt.Color;
 
-import uk.co.strangeskies.mathematics.Addable;
-import uk.co.strangeskies.mathematics.Multipliable;
-import uk.co.strangeskies.mathematics.Scalable;
-import uk.co.strangeskies.mathematics.Subtractable;
+import uk.co.strangeskies.mathematics.operation.Addable;
+import uk.co.strangeskies.mathematics.operation.Multipliable;
+import uk.co.strangeskies.mathematics.operation.Scalable;
+import uk.co.strangeskies.mathematics.operation.Subtractable;
 import uk.co.strangeskies.mathematics.expression.Variable;
 import uk.co.strangeskies.mathematics.values.DoubleValue;
 import uk.co.strangeskies.utilities.Property;

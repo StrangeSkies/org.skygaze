@@ -41,7 +41,8 @@ public class AssemblyContextImpl implements AssemblyContext {
 		stateData = new FutureMap<>(state -> prepareStateData(state),
 				key -> entities.state().getData(entity, key));
 
-		variableValues = new FutureMap<>(Variable::create);
+		// TODO yet another dumb JDK bug, can't use :: syntax for no good reason.
+		variableValues = new FutureMap<>(v -> v.create());
 
 		subcontexts = new FutureMap<>((AssemblageView k) -> {
 			AssemblyContextImpl assemblyContext = new AssemblyContextImpl(k,

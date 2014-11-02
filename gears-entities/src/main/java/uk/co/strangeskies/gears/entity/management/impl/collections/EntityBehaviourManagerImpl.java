@@ -8,21 +8,21 @@ import uk.co.strangeskies.gears.entity.Entity;
 import uk.co.strangeskies.gears.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.gears.entity.management.EntityBehaviourManager;
 import uk.co.strangeskies.gears.entity.scheduling.Scheduler;
-import uk.co.strangeskies.utilities.collection.HashSetMultiHashMap;
-import uk.co.strangeskies.utilities.collection.SetMultiMap;
+import uk.co.strangeskies.utilities.collection.MultiHashMap;
+import uk.co.strangeskies.utilities.collection.MultiMap;
 
 public class EntityBehaviourManagerImpl implements EntityBehaviourManager {
-	private final SetMultiMap<BehaviourComponent, Entity> entityBehaviours;
+	private final MultiMap<BehaviourComponent, Entity, ? extends Set<Entity>> entityBehaviours;
 	private final Set<BehaviourComponent> universalBehaviours;
 
 	private Scheduler defaultBehaviourProcessor;
-	private final SetMultiMap<Scheduler, BehaviourComponent> processorBehaviourAssociations;
+	private final MultiMap<Scheduler, BehaviourComponent, ? extends Set<BehaviourComponent>> processorBehaviourAssociations;
 
 	public EntityBehaviourManagerImpl() {
-		entityBehaviours = new HashSetMultiHashMap<>();
+		entityBehaviours = new MultiHashMap<>(HashSet::new);
 		universalBehaviours = new HashSet<>();
 
-		processorBehaviourAssociations = new HashSetMultiHashMap<>();
+		processorBehaviourAssociations = new MultiHashMap<>(HashSet::new);
 	}
 
 	@Override
