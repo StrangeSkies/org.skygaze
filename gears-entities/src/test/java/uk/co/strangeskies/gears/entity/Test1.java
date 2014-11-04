@@ -73,7 +73,7 @@ public class Test1 {
 	@Test
 	private void run() {
 		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler());
-		scheduler.setPeriodLengthMilliseconds(0);
+		scheduler.setPeriodLengthMilliseconds(250);
 		entities().behaviour().setDefaultScheduler(scheduler);
 
 		/*
@@ -104,7 +104,7 @@ public class Test1 {
 								EntityStateManager state = context.entity().state();
 
 								System.out.println(state.getData(entity, position).add(
-										state.getData(entity, velocity)));
+										state.getReadOnlyData(entity, velocity)));
 							}
 						}).readDependencies(velocity).writeDependencies(position).create();
 		entities().behaviour().addUniversal(movement);
@@ -113,7 +113,7 @@ public class Test1 {
 				.description("Parrot makes a noise").process(context -> {
 					for (Entity entity : context.getEntities()) {
 						EntityStateManager state = context.entity().state();
-						System.out.println(state.getData(entity, parrot).get());
+						System.out.println(state.getReadOnlyData(entity, parrot).get());
 					}
 				}).readDependencies(parrot).behaviourDependencies(movement).create();
 		entities().behaviour().addUniversal(parrotting);

@@ -6,9 +6,9 @@ import java.util.TreeMap;
 import java.util.function.Function;
 
 import uk.co.strangeskies.gears.rendering.buffering.SceneInterpolator;
-import uk.co.strangeskies.mathematics.operation.Interpolate;
-import uk.co.strangeskies.mathematics.operation.InterpolationFunction;
 import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
+import uk.co.strangeskies.mathematics.operation.Interpolation;
+import uk.co.strangeskies.mathematics.operation.InterpolationFunction;
 import uk.co.strangeskies.mathematics.values.DoubleValue;
 import uk.co.strangeskies.utilities.IdentityComparator;
 
@@ -47,14 +47,14 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	}
 
 	@Override
-	public <T, I> Interpolate<T, I> bufferInterpolation(
+	public <T, I> Interpolation<T, I> bufferInterpolation(
 			DoubleBuffer<? extends T, ? extends T> interpolation,
 			InterpolationFunction<? super T, ? extends I> operation) {
 		DoubleBuffer<?, T> from = bufferResult(interpolation);
 
 		DoubleBuffer<?, T> to = bufferResult(interpolation.getBackExpression());
 
-		Interpolate<T, I> interpolate = new Interpolate<>(from, to, getDelta(),
+		Interpolation<T, I> interpolate = new Interpolation<>(from, to, getDelta(),
 				operation);
 
 		registerInterpolation(interpolation, to, from);
@@ -63,7 +63,7 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	}
 
 	@Override
-	public <F, T, I> Interpolate<T, I> bufferInterpolation(
+	public <F, T, I> Interpolation<T, I> bufferInterpolation(
 			DoubleBuffer<? extends F, ? extends F> interpolation,
 			InterpolationFunction<? super T, ? extends I> operation,
 			Function<? super F, ? extends T> function) {
@@ -72,7 +72,7 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 		DoubleBuffer<?, ? extends T> to = bufferResult(
 				interpolation.getBackExpression(), function);
 
-		Interpolate<T, I> interpolate = new Interpolate<>(from, to, getDelta(),
+		Interpolation<T, I> interpolate = new Interpolation<>(from, to, getDelta(),
 				operation);
 
 		registerInterpolation(interpolation, to, from);
