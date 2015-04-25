@@ -1,0 +1,27 @@
+Export-Package: \
+	uk.co.strangeskies.extengine.entity,\
+	uk.co.strangeskies.extengine.entity.assembly,\
+	uk.co.strangeskies.extengine.entity.behaviour,\
+	uk.co.strangeskies.extengine.entity.management,\
+	uk.co.strangeskies.extengine.entity.management.impl.collections,\
+	uk.co.strangeskies.extengine.entity.processing,\
+	uk.co.strangeskies.extengine.entity.scheduling,\
+	uk.co.strangeskies.extengine.entity.scheduling.schedulers,\
+	uk.co.strangeskies.extengine.entity.scheduling.terminating,\
+	uk.co.strangeskies.extengine.entity.scheduling.terminating.schedulers,\
+	uk.co.strangeskies.extengine.entity.state
+Bundle-Name: Extengine Entities
+-dsannotations:  \
+	*
+-runee: JavaSE-1.8
+-runfw: org.eclipse.osgi;version='[3.10.1.v20140909-1633,3.10.1.v20140909-1633]'
+-buildpath:  \
+	org.testng:testng;  \
+		version = latest,  \
+	uk.co.strangeskies.utilities;  \
+		version = latest,  \
+	uk.co.strangeskies.mathematics;  \
+		version = latest,  \
+	osgi.enroute.base.api;  \
+		version = latest
+Bundle-Version: 0.2.0.${tstamp}

@@ -1,0 +1,26 @@
+Export-Package: \
+	uk.co.strangeskies.gears.rendering.rendering2d3d,\
+	uk.co.strangeskies.extengine.rendering.rendering2d3d.extensions
+Bundle-Name: Extengine Rendering 2D/3D
+-dsannotations:  \
+	*
+-runee: JavaSE-1.8
+-runfw: org.eclipse.osgi;version='[3.10.1.v20140909-1633,3.10.1.v20140909-1633]'
+-buildpath:  \
+	uk.co.strangeskies.utilities;  \
+		version = latest,  \
+	uk.co.strangeskies.mathematics;  \
+		version = latest,  \
+	uk.co.strangeskies.mathematics.geometry;  \
+		version = latest,  \
+	uk.co.strangeskies.extengine.rendering;  \
+		version = latest,  \
+	uk.co.strangeskies.extengine.rendering2d;  \
+		version = latest,  \
+	uk.co.strangeskies.extengine.rendering3d;  \
+		version = latest,  \
+	uk.co.strangeskies.expressions;  \
+		version = latest,  \
+	osgi.enroute.base.api;  \
+		version = latest
+Bundle-Version: 0.2.0.${tstamp}

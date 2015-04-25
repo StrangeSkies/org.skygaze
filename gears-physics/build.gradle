@@ -1,5 +1,0 @@
-description = 'Gears Physics'
-
-dependencies {
-	compile group: 'uk.co.strangeskies', name: 'strangeskies-utilities', version:'0.+'
-}

@@ -1,45 +1,31 @@
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
+/*
+ * Master Gradle build script
+ *
+ * Depends on bndPlugin property set by settings.gradle.
+ * and bnd_* values from gradle.properties.
+ */
+
+import aQute.bnd.build.Workspace
+
+/* Add bnd gradle plugin as a script dependency */
+buildscript {
+  dependencies {
+    classpath bndPlugin
+  }
 }
 
-allprojects  {
-	apply plugin: 'maven'
-	group = 'uk.co.strangeskies'
-	version = '0.0.1-SNAPSHOT'
+/* Initialize the bnd workspace */
+ext.bndWorkspace = Workspace.getWorkspace(rootDir, bnd_cnf)
+if (bndWorkspace == null) {
+  throw new GradleException("Unable to load workspace ${rootDir}/${bnd_cnf}")
 }
 
-def javaProjects() {
-	return subprojects.findAll { new File(it.projectDir, "src/main/java").exists() }
-}
+ext.cnf = rootProject.project(bnd_cnf)
 
-configure(javaProjects()) {
-	apply plugin: 'java'
-	apply plugin: 'osgi'
-	apply plugin: 'maven-publish'
-
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
-
-	repositories {
-		mavenCentral()
-		mavenLocal()
-	}
-
-	dependencies {
-		testCompile group: 'org.testng', name: 'testng', version: '6.+'
-		compile group: 'org.osgi', name: 'org.osgi.core', version: '5.+'
-		compile group: 'org.osgi', name: 'org.osgi.enterprise', version: '5.+'
-	}
-
-	publishing {
-		publications {
-			maven(MavenPublication) {
-				from components.java
-			}
-		}
-	}
-
-	test {
-		useTestNG()
-	}
+/* Configure the subprojects */
+subprojects {
+  def bndProject = bndWorkspace.getProject(name)
+  if (bndProject != null) {
+    plugins.apply 'biz.aQute.bnd'
+  }
 }
