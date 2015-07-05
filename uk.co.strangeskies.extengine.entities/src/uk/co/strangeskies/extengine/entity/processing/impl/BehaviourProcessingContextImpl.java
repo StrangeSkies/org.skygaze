@@ -14,11 +14,11 @@ public class BehaviourProcessingContextImpl implements
 		BehaviourProcessingContext {
 	private final BehaviourComponent behaviour;
 	private final EntityManager entityManager;
-	private final StripedReadWriteLockRelease<StateComponent<?>> locks;
+	private final StripedReadWriteLockRelease<StateComponent<?, ?>> locks;
 
 	public BehaviourProcessingContextImpl(BehaviourComponent behaviour,
 			final EntityManager entityManager,
-			StripedReadWriteLockRelease<StateComponent<?>> locks) {
+			StripedReadWriteLockRelease<StateComponent<?, ?>> locks) {
 		this.behaviour = behaviour;
 		this.entityManager = new EntityManagerProcessingWrapper(entityManager, locks);
 		this.locks = locks;
@@ -30,17 +30,17 @@ public class BehaviourProcessingContextImpl implements
 	}
 
 	@Override
-	public StripedReadWriteLockRelease<StateComponent<?>> getLockReleases() {
+	public StripedReadWriteLockRelease<StateComponent<?, ?>> lockReleases() {
 		return locks;
 	}
 
 	@Override
-	public BehaviourComponent getBehaviour() {
+	public BehaviourComponent processingBehaviour() {
 		return behaviour;
 	}
 
 	@Override
-	public Set<? extends Entity> getEntities() {
+	public Set<? extends Entity> participatingEntities() {
 		return getEntitiesWithBehaviourAndState(behaviour);
 	}
 
@@ -57,7 +57,7 @@ public class BehaviourProcessingContextImpl implements
 	 */
 	protected Set<? extends Entity> getEntitiesWithBehaviourAndState(
 			BehaviourComponent behaviour) {
-		Set<StateComponent<?>> stateDependencies = behaviour.getStateDependencies();
+		Set<StateComponent<?, ?>> stateDependencies = behaviour.getStateDependencies();
 
 		Set<Entity> entities;
 

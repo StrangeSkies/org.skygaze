@@ -26,18 +26,21 @@ import uk.co.strangeskies.extengine.entity.state.StateComponentBuilder;
 import uk.co.strangeskies.extengine.entity.state.StateComponentConfigurator;
 import uk.co.strangeskies.extengine.entity.state.impl.StateComponentBuilderImpl;
 import uk.co.strangeskies.mathematics.expression.IdentityExpression;
+import uk.co.strangeskies.mathematics.geometry.matrix.building.MatrixBuilder;
 import uk.co.strangeskies.mathematics.geometry.matrix.building.impl.MatrixBuilderImpl;
 import uk.co.strangeskies.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.mathematics.graph.impl.GraphBuilderImpl;
 import uk.co.strangeskies.mathematics.values.DoubleValue;
 import uk.co.strangeskies.mathematics.values.IntValue;
+import uk.co.strangeskies.utilities.IdentityProperty;
+import uk.co.strangeskies.utilities.Property;
 
 public class Test1 {
 	private final EntityManager entityManager;
 	private final BehaviourComponentBuilder behaviourComponentBuilderFactory;
 	private final StateComponentBuilder stateComponentBuilder;
 	private final Assembler assembler;
-	private final MatrixBuilderImpl matrixBuilder;
+	private final MatrixBuilder matrixBuilder;
 
 	public Test1() {
 		entityManager = new EntityManagerImpl();
@@ -58,7 +61,7 @@ public class Test1 {
 		return assembler;
 	}
 
-	public StateComponentConfigurator<Object> stateBuilder() {
+	public StateComponentConfigurator<Object, Object> stateBuilder() {
 		return stateComponentBuilder.configure();
 	}
 
@@ -66,32 +69,34 @@ public class Test1 {
 		return behaviourComponentBuilderFactory.configure();
 	}
 
-	public MatrixBuilderImpl matrices() {
+	public MatrixBuilder matrices() {
 		return matrixBuilder;
 	}
 
 	@Test
 	private void run() {
-		PeriodicScheduler scheduler = new PeriodicScheduler(
-				new LinearScheduler(new GraphBuilderImpl()));
+		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler(
+				new GraphBuilderImpl()));
 		scheduler.setPeriodLengthMilliseconds(250);
 		entities().behaviour().setDefaultScheduler(scheduler);
 
 		/*
 		 * State Components
 		 */
-		StateComponent<Vector2<DoubleValue>> position = stateBuilder()
+		StateComponent<Vector2<DoubleValue>, Vector2<DoubleValue>> position = stateBuilder()
 				.name("Position").description("Position of entity")
 				.data(matrices().doubles()::vector2).create();
 
-		StateComponent<Vector2<DoubleValue>> velocity = stateBuilder()
+		StateComponent<Vector2<DoubleValue>, Vector2<DoubleValue>> velocity = stateBuilder()
 				.name("Velocity").description("Velocity of entity")
 				.data(matrices().doubles()::vector2).readDependencies(position)
 				.create();
 
-		StateComponent<IdentityExpression<String>> parrot = stateBuilder()
-				.name("Parrot").description("A parrot which knows a word")
-				.data(() -> new IdentityExpression<>("Squawk")).create();
+		StateComponent<Property<String, String>, Property<String, String>> parrot = stateBuilder()
+				.name("Parrot")
+				.description("A parrot which knows a word")
+				.<Property<String, String>, Property<String, String>> data(
+						() -> new IdentityExpression<>("Squawk")).create();
 
 		/*
 		 * Behaviour Components
@@ -101,17 +106,11 @@ public class Test1 {
 				.description("Moves entity by velocity")
 				.process(
 						context -> {
-							for (Entity entity : context.getEntities()) {
-								EntityStateManager state = context.entity()
-										.state();
-
-								System.out.println(state.getData(entity,
-										position)
-										.add(state.getReadOnlyData(entity,
-												velocity)));
+							for (Entity entity : context.participatingEntities()) {
+								System.out.println(context.state().getData(entity, position)
+										.add(context.state().getReadOnlyData(entity, velocity)));
 							}
-						}).readDependencies(velocity)
-				.writeDependencies(position).create();
+						}).readDependencies(velocity).writeDependencies(position).create();
 		entities().behaviour().addUniversal(movement);
 
 		BehaviourComponent parrotting = behaviourBuilder()
@@ -119,14 +118,12 @@ public class Test1 {
 				.description("Parrot makes a noise")
 				.process(
 						context -> {
-							for (Entity entity : context.getEntities()) {
-								EntityStateManager state = context.entity()
-										.state();
-								System.out.println(state.getReadOnlyData(
-										entity, parrot).get());
+							for (Entity entity : context.participatingEntities()) {
+								System.out.println(context.state()
+										.getReadOnlyData(entity, parrot).get());
 							}
-						}).readDependencies(parrot)
-				.behaviourDependencies(movement).create();
+						}).readDependencies(parrot).behaviourDependencies(movement)
+				.create();
 		entities().behaviour().addUniversal(parrotting);
 
 		/*
@@ -138,14 +135,11 @@ public class Test1 {
 		assemblage1.getVariables().add(numberVariable);
 		assemblage1.getStates().add(position);
 		assemblage1.getStates().add(parrot);
+		assemblage1.getStates().add(velocity);
+		assemblage1.getInitialisers(velocity).add(
+				(data, context) -> data.setData(0.5, 0.5));
 		assemblage1.getInitialisers(position).add(
-				new StateInitialiser<Vector2<DoubleValue>>() {
-					@Override
-					public void initialise(Vector2<DoubleValue> data,
-							AssemblyContext context) {
-						data.setData(5, 5);
-					}
-				});
+				(data, context) -> data.setData(5, 5));
 
 		Assemblage assemblage2 = assembler().create();
 		assemblage2.getComposition().add(assemblage1);
@@ -153,24 +147,19 @@ public class Test1 {
 		assemblage2.getInitialisers(position).add(
 				(data, context) -> data.setData(12, 12));
 		assemblage2.getInitialisers(velocity).add(
-				(data, context) -> data.set(context
-						.getSupercontext()
-						.getData(position)
-						.getSubtracted(
-								matrices().doubles().vector2().setData(2, 2))));
+				(data, context) -> data.add(context.getSupercontext().getData(position)
+						.getSubtracted(matrices().doubles().vector2().setData(2, 2))));
 		assemblage2.getSubassemblages().add(assemblage1);
 
 		assemblage1.getInitialisers(parrot).add(
 				(data, context) -> {
 					try {
 						data.set("Child position: "
-								+ context.getSubcontext(assemblage1).getData(
-										position) + " num "
-								+ context.getValue(numberVariable));
+								+ context.getSubcontext(assemblage1).getData(position)
+								+ " num " + context.getValue(numberVariable));
 					} catch (IllegalArgumentException e) {
 						data.set("Parent num: "
-								+ context.getSupercontext().getValue(
-										numberVariable) + " num: "
+								+ context.getSupercontext().getValue(numberVariable) + " num: "
 								+ context.getValue(numberVariable));
 					}
 				});
@@ -180,8 +169,8 @@ public class Test1 {
 		assemblage3.getStates().add(position);
 		assemblage3.getInitialisers(position).add(
 				(data, context) -> data.set(context
-						.getSubcontext(assemblage2, assemblage1)
-						.getData(position).getMultiplied(3)));
+						.getSubcontext(assemblage2, assemblage1).getData(position)
+						.getMultiplied(3)));
 		assemblage3.getSubassemblages().add(assemblage2);
 
 		assembler().assemble(assemblage3, entities());

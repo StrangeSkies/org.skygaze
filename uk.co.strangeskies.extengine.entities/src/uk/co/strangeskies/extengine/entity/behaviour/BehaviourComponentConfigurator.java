@@ -24,28 +24,28 @@ public interface BehaviourComponentConfigurator extends
 			BehaviourComponent... behaviourDependents);
 
 	public BehaviourComponentConfigurator readDependencies(
-			Collection<? extends StateComponent<?>> readDependencies);
+			Collection<? extends StateComponent<?, ?>> readDependencies);
 
 	public BehaviourComponentConfigurator readDependencies(
-			StateComponent<?>... readDependencies);
+			StateComponent<?, ?>... readDependencies);
 
 	public BehaviourComponentConfigurator writeDependencies(
-			Collection<? extends StateComponent<?>> writeDependencies);
+			Collection<? extends StateComponent<?, ?>> writeDependencies);
 
 	public BehaviourComponentConfigurator writeDependencies(
-			StateComponent<?>... writeDependencies);
+			StateComponent<?, ?>... writeDependencies);
 
 	public BehaviourComponentConfigurator optionalReadDependencies(
-			Collection<? extends StateComponent<?>> readDependencies);
+			Collection<? extends StateComponent<?, ?>> readDependencies);
 
 	public BehaviourComponentConfigurator optionalReadDependencies(
-			StateComponent<?>... readDependencies);
+			StateComponent<?, ?>... readDependencies);
 
 	public BehaviourComponentConfigurator optionalWriteDependencies(
-			Collection<? extends StateComponent<?>> writeDependencies);
+			Collection<? extends StateComponent<?, ?>> writeDependencies);
 
 	public BehaviourComponentConfigurator optionalWriteDependencies(
-			StateComponent<?>... writeDependencies);
+			StateComponent<?, ?>... writeDependencies);
 
 	public BehaviourComponentConfigurator process(BehaviourProcess process);
 }

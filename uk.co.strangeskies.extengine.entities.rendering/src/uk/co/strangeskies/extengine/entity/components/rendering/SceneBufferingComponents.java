@@ -6,9 +6,9 @@ import uk.co.strangeskies.extengine.rendering.buffering.SceneBuffer;
 import uk.co.strangeskies.extengine.rendering.buffering.SceneInterpolator;
 
 public interface SceneBufferingComponents {
-	public StateComponent<SceneBuffer> getSceneBufferState();
+	public StateComponent<SceneBuffer, Object> getSceneBufferState();
 
-	public StateComponent<SceneInterpolator> getInterpolatableSceneBufferState();
+	public StateComponent<SceneInterpolator, Object> getInterpolatableSceneBufferState();
 
 	public BehaviourComponent getBufferingBehaviour();
 

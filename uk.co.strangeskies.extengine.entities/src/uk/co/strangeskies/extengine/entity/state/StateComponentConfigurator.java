@@ -12,8 +12,8 @@ import uk.co.strangeskies.utilities.factory.Factory;
  *
  * @param <D>
  */
-public interface StateComponentConfigurator<D> extends
-		Factory<StateComponent<D>> {
+public interface StateComponentConfigurator<D extends C, C> extends
+		Factory<StateComponent<D, C>> {
 	/**
 	 * The type bounding on T here isn't strictly necessary for normal use of this
 	 * class, but it prevents heap corruption when old references are held to the
@@ -24,22 +24,22 @@ public interface StateComponentConfigurator<D> extends
 	 * @param dataFactory
 	 * @return
 	 */
-	public <T extends D> StateComponentConfigurator<T> data(
+	public <T extends U, U> StateComponentConfigurator<T, U> data(
 			Factory<? extends T> dataFactory);
 
-	public StateComponentConfigurator<D> name(String name);
+	public StateComponentConfigurator<D, C> name(String name);
 
-	public StateComponentConfigurator<D> description(String description);
+	public StateComponentConfigurator<D, C> description(String description);
 
-	public StateComponentConfigurator<D> readDependencies(
-			Collection<? extends StateComponent<?>> readDependencies);
+	public StateComponentConfigurator<D, C> readDependencies(
+			Collection<? extends StateComponent<?, ?>> readDependencies);
 
-	public StateComponentConfigurator<D> readDependencies(
-			StateComponent<?>... readDependencies);
+	public StateComponentConfigurator<D, C> readDependencies(
+			StateComponent<?, ?>... readDependencies);
 
-	public StateComponentConfigurator<D> writeDependencies(
-			Collection<? extends StateComponent<?>> writeDependencies);
+	public StateComponentConfigurator<D, C> writeDependencies(
+			Collection<? extends StateComponent<?, ?>> writeDependencies);
 
-	public StateComponentConfigurator<D> writeDependencies(
-			StateComponent<?>... writeDependencies);
+	public StateComponentConfigurator<D, C> writeDependencies(
+			StateComponent<?, ?>... writeDependencies);
 }

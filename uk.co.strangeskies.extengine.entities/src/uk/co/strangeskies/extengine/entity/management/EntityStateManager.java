@@ -11,7 +11,7 @@ import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
 
 public interface EntityStateManager {
-	public default <D> D attach(Entity entity, StateComponent<D> stateComponent) {
+	public default <D> D attach(Entity entity, StateComponent<D, ?> stateComponent) {
 		if (!has(entity, stateComponent)) {
 			attachAndReset(entity, stateComponent);
 		}
@@ -19,38 +19,38 @@ public interface EntityStateManager {
 	}
 
 	public default void attachAll(Entity entity,
-			Collection<? extends StateComponent<?>> stateComponents) {
-		for (StateComponent<?> stateComponent : stateComponents) {
+			Collection<? extends StateComponent<?, ?>> stateComponents) {
+		for (StateComponent<?, ?> stateComponent : stateComponents) {
 			attach(entity, stateComponent);
 		}
 	}
 
 	public default void attachAll(Entity entity,
-			StateComponent<?>... stateComponents) {
+			StateComponent<?, ?>... stateComponents) {
 		attachAll(entity, Arrays.asList(stateComponents));
 	}
 
-	public <D> D attachAndReset(Entity entity, StateComponent<D> stateComponent);
+	public <D> D attachAndReset(Entity entity, StateComponent<D, ?> stateComponent);
 
 	public default void attachAndResetAll(Entity entity,
-			Collection<? extends StateComponent<?>> stateComponents) {
-		for (StateComponent<?> stateComponent : stateComponents) {
+			Collection<? extends StateComponent<?, ?>> stateComponents) {
+		for (StateComponent<?, ?> stateComponent : stateComponents) {
 			attachAndReset(entity, stateComponent);
 		}
 	}
 
 	public default void attachAndResetAll(Entity entity,
-			StateComponent<?>... stateComponents) {
+			StateComponent<?, ?>... stateComponents) {
 		attachAndResetAll(entity, Arrays.asList(stateComponents));
 	}
 
-	public boolean detach(Entity entity, StateComponent<?> stateComponent);
+	public boolean detach(Entity entity, StateComponent<?, ?> stateComponent);
 
 	public default boolean detachAll(Entity entity,
-			Collection<? extends StateComponent<?>> stateComponents) {
+			Collection<? extends StateComponent<?, ?>> stateComponents) {
 		boolean removed = false;
 
-		for (StateComponent<?> stateComponent : stateComponents) {
+		for (StateComponent<?, ?> stateComponent : stateComponents) {
 			detach(entity, stateComponent);
 		}
 
@@ -58,37 +58,36 @@ public interface EntityStateManager {
 	}
 
 	public default boolean detachAll(Entity entity,
-			StateComponent<?>... stateComponents) {
+			StateComponent<?, ?>... stateComponents) {
 		return detachAll(entity, Arrays.asList(stateComponents));
 	}
 
 	public void clear(Entity entity);
 
-	public Set<StateComponent<?>> getAll();
+	public Set<StateComponent<?, ?>> getAll();
 
-	public <D> D getData(Entity entity, StateComponent<D> stateComponent);
+	public <D> D getData(Entity entity, StateComponent<D, ?> stateComponent);
 
 	public default <D> D getReadOnlyData(Entity entity,
-			StateComponent<D> stateComponent) {
+			StateComponent<?, D> stateComponent) {
 		return getData(entity, stateComponent);
 	}
 
-	public default <D> Set<D> getAllData(final StateComponent<D> stateComponent) {
+	public default <D> Set<D> getAllData(final StateComponent<D, ?> stateComponent) {
 		return getEntitiesWith(stateComponent).stream()
-				.map(e -> getData(e, stateComponent))
-				.collect(Collectors.toSet());
+				.map(e -> getData(e, stateComponent)).collect(Collectors.toSet());
 	}
 
 	public default <D> Set<D> getAllReadOnlyData(
-			final StateComponent<D> stateComponent) {
-		return getAllData(stateComponent);
+			final StateComponent<?, D> stateComponent) {
+		return new HashSet<>(getAllData(stateComponent));
 	}
 
-	public boolean has(Entity entity, StateComponent<?> stateComponent);
+	public boolean has(Entity entity, StateComponent<?, ?> stateComponent);
 
 	public default boolean hasAll(Entity entity,
-			Collection<? extends StateComponent<?>> stateComponents) {
-		for (StateComponent<?> stateComponent : stateComponents) {
+			Collection<? extends StateComponent<?, ?>> stateComponents) {
+		for (StateComponent<?, ?> stateComponent : stateComponents) {
 			if (!has(entity, stateComponent)) {
 				return false;
 			}
@@ -98,35 +97,34 @@ public interface EntityStateManager {
 	}
 
 	public default boolean hasAll(Entity entity,
-			StateComponent<?>... stateComponents) {
+			StateComponent<?, ?>... stateComponents) {
 		return hasAll(entity, Arrays.asList(stateComponents));
 	}
 
-	public Set<Entity> getEntitiesWith(StateComponent<?> stateComponent);
+	public Set<Entity> getEntitiesWith(StateComponent<?, ?> stateComponent);
 
 	public default Set<Entity> getEntitiesWith(
-			Collection<? extends StateComponent<?>> stateComponents) {
+			Collection<? extends StateComponent<?, ?>> stateComponents) {
 		if (stateComponents.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 
 		Set<Entity> entitiesWithState = new HashSet<>();
 
-		Iterator<? extends StateComponent<?>> stateComponentIterator = stateComponents
+		Iterator<? extends StateComponent<?, ?>> stateComponentIterator = stateComponents
 				.iterator();
 
-		entitiesWithState
-				.addAll(getEntitiesWith(stateComponentIterator.next()));
+		entitiesWithState.addAll(getEntitiesWith(stateComponentIterator.next()));
 		while (stateComponentIterator.hasNext() && !entitiesWithState.isEmpty()) {
-			entitiesWithState.retainAll(getEntitiesWith(stateComponentIterator
-					.next()));
+			entitiesWithState
+					.retainAll(getEntitiesWith(stateComponentIterator.next()));
 		}
 
 		return entitiesWithState;
 	}
 
 	public default Set<Entity> getEntitiesWith(
-			StateComponent<?>... stateComponents) {
+			StateComponent<?, ?>... stateComponents) {
 		return getEntitiesWith(Arrays.asList(stateComponents));
 	}
 }

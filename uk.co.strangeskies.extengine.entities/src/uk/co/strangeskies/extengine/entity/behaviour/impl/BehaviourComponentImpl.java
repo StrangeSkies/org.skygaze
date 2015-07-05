@@ -17,11 +17,11 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	private final Set<BehaviourComponent> behaviourDependencies;
 	private final Set<BehaviourComponent> behaviourDependents;
 
-	private final Set<StateComponent<?>> readDependencies;
-	private final Set<StateComponent<?>> writeDependencies;
+	private final Set<StateComponent<?, ?>> readDependencies;
+	private final Set<StateComponent<?, ?>> writeDependencies;
 
-	private final Set<StateComponent<?>> optionalReadDependencies;
-	private final Set<StateComponent<?>> optionalWriteDependencies;
+	private final Set<StateComponent<?, ?>> optionalReadDependencies;
+	private final Set<StateComponent<?, ?>> optionalWriteDependencies;
 
 	public BehaviourComponentImpl(String name, String description,
 			BehaviourProcess process) {
@@ -54,18 +54,18 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 			BehaviourProcess process,
 			Collection<? extends BehaviourComponent> behaviourDependencies,
 			Collection<? extends BehaviourComponent> behaviourDependents,
-			Collection<? extends StateComponent<?>> readDependencies,
-			Collection<? extends StateComponent<?>> writeDependencies) {
+			Collection<? extends StateComponent<?, ?>> readDependencies,
+			Collection<? extends StateComponent<?, ?>> writeDependencies) {
 		this(name, description, process, behaviourDependencies, behaviourDependents);
 
 		this.readDependencies.addAll(readDependencies);
 		this.writeDependencies.addAll(writeDependencies);
 
 		// Add all indirect read and write dependencies
-		for (StateComponent<?> readDependency : readDependencies) {
+		for (StateComponent<?, ?> readDependency : readDependencies) {
 			optionalReadDependencies.addAll(readDependency.getReadDependencies());
 		}
-		for (StateComponent<?> writeDependency : writeDependencies) {
+		for (StateComponent<?, ?> writeDependency : writeDependencies) {
 			optionalWriteDependencies.addAll(writeDependency.getWriteDependencies());
 		}
 	}
@@ -99,21 +99,21 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 			BehaviourProcess process,
 			Collection<? extends BehaviourComponent> behaviourDependencies,
 			Collection<? extends BehaviourComponent> behaviourDependents,
-			Collection<? extends StateComponent<?>> readDependencies,
-			Collection<? extends StateComponent<?>> writeDependencies,
-			Collection<? extends StateComponent<?>> optionalReadDependencies,
-			Collection<? extends StateComponent<?>> optionalWriteDependencies) {
+			Collection<? extends StateComponent<?, ?>> readDependencies,
+			Collection<? extends StateComponent<?, ?>> writeDependencies,
+			Collection<? extends StateComponent<?, ?>> optionalReadDependencies,
+			Collection<? extends StateComponent<?, ?>> optionalWriteDependencies) {
 		this(name, description, process, behaviourDependencies,
 				behaviourDependents, readDependencies, writeDependencies);
 
 		// Add all explicitly added indirect read and write dependencies
-		for (StateComponent<?> readDependency : optionalReadDependencies) {
+		for (StateComponent<?, ?> readDependency : optionalReadDependencies) {
 			if (this.optionalReadDependencies.add(readDependency)) {
 				this.optionalReadDependencies.addAll(readDependency
 						.getReadDependencies());
 			}
 		}
-		for (StateComponent<?> writeDependency : optionalWriteDependencies) {
+		for (StateComponent<?, ?> writeDependency : optionalWriteDependencies) {
 			if (this.optionalWriteDependencies.add(writeDependency)) {
 				this.optionalWriteDependencies.addAll(writeDependency
 						.getWriteDependencies());
@@ -177,8 +177,8 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getStateDependencies() {
-		Set<StateComponent<?>> stateDependencies = new HashSet<>(readDependencies);
+	public final Set<StateComponent<?, ?>> getStateDependencies() {
+		Set<StateComponent<?, ?>> stateDependencies = new HashSet<>(readDependencies);
 		stateDependencies.addAll(writeDependencies);
 
 		return stateDependencies;
@@ -193,8 +193,8 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getOptionalStateDependencies() {
-		Set<StateComponent<?>> stateDependencies = new HashSet<>(readDependencies);
+	public final Set<StateComponent<?, ?>> getOptionalStateDependencies() {
+		Set<StateComponent<?, ?>> stateDependencies = new HashSet<>(readDependencies);
 		stateDependencies.addAll(writeDependencies);
 		stateDependencies.addAll(optionalReadDependencies);
 		stateDependencies.addAll(optionalWriteDependencies);
@@ -209,7 +209,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getReadDependencies() {
+	public final Set<StateComponent<?, ?>> getReadDependencies() {
 		return Collections.unmodifiableSet(readDependencies);
 	}
 
@@ -222,8 +222,8 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getOptionalReadDependencies() {
-		Set<StateComponent<?>> stateDependencies = new HashSet<>(readDependencies);
+	public final Set<StateComponent<?, ?>> getOptionalReadDependencies() {
+		Set<StateComponent<?, ?>> stateDependencies = new HashSet<>(readDependencies);
 		stateDependencies.addAll(optionalReadDependencies);
 
 		return stateDependencies;
@@ -236,7 +236,7 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getWriteDependencies() {
+	public final Set<StateComponent<?, ?>> getWriteDependencies() {
 		return Collections.unmodifiableSet(writeDependencies);
 	}
 
@@ -249,8 +249,8 @@ public class BehaviourComponentImpl implements BehaviourComponent {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getOptionalWriteDependencies() {
-		Set<StateComponent<?>> stateDependencies = new HashSet<>(writeDependencies);
+	public final Set<StateComponent<?, ?>> getOptionalWriteDependencies() {
+		Set<StateComponent<?, ?>> stateDependencies = new HashSet<>(writeDependencies);
 		stateDependencies.addAll(optionalWriteDependencies);
 
 		return stateDependencies;

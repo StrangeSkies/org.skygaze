@@ -30,7 +30,7 @@ public class LinearScheduler implements TerminatingScheduler {
 				.vertices(processingContext.getBehaviours())
 				.edgesTo(v -> v.getBehaviourDependents())
 				.edgesFrom(v -> v.getBehaviourDependencies()).directed()
-				.acyclic().unmodifiableStructure().create();
+				.acyclic().unmodifiable().create();
 
 		new GraphProcessor().begin(behaviourGraph,
 				processingContext::processBehaviour).processEagerParallel();

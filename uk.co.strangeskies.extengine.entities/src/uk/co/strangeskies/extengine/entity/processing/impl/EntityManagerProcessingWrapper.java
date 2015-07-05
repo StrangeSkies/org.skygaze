@@ -12,10 +12,10 @@ import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLockRelease;
 
 public class EntityManagerProcessingWrapper extends Decorator<EntityManager>
 		implements EntityManager {
-	private final StripedReadWriteLockRelease<StateComponent<?>> locks;
+	private final StripedReadWriteLockRelease<StateComponent<?, ?>> locks;
 
 	public EntityManagerProcessingWrapper(EntityManager entityManager,
-			StripedReadWriteLockRelease<StateComponent<?>> locks) {
+			StripedReadWriteLockRelease<StateComponent<?, ?>> locks) {
 		super(entityManager);
 
 		this.locks = locks;

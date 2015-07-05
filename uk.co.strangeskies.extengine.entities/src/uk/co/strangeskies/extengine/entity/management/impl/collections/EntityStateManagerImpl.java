@@ -11,7 +11,7 @@ import uk.co.strangeskies.extengine.entity.management.EntityStateManager;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
 
 public class EntityStateManagerImpl implements EntityStateManager {
-	private final Map<StateComponent<?>, Map<Entity, Object>> entityStateData;
+	private final Map<StateComponent<?, ?>, Map<Entity, Object>> entityStateData;
 
 	public EntityStateManagerImpl() {
 		entityStateData = new HashMap<>();
@@ -20,7 +20,7 @@ public class EntityStateManagerImpl implements EntityStateManager {
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized <D> D attachAndReset(Entity entity,
-			StateComponent<D> stateComponent) {
+			StateComponent<D, ?> stateComponent) {
 		Map<Entity, Object> entityData = entityStateData.get(stateComponent);
 
 		if (entityData == null) {
@@ -33,7 +33,7 @@ public class EntityStateManagerImpl implements EntityStateManager {
 
 	@Override
 	public synchronized boolean detach(Entity entity,
-			StateComponent<?> stateComponent) {
+			StateComponent<?, ?> stateComponent) {
 		Map<Entity, ?> entities = entityStateData.get(stateComponent);
 
 		boolean removed = entities != null && entities.remove(entity) != null;
@@ -63,20 +63,20 @@ public class EntityStateManagerImpl implements EntityStateManager {
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized <D> D getData(Entity entity,
-			StateComponent<D> stateComponent) {
+			StateComponent<D, ?> stateComponent) {
 		return (D) entityStateData.get(stateComponent).get(entity);
 	}
 
 	@Override
 	public synchronized boolean has(Entity entity,
-			StateComponent<?> stateComponent) {
+			StateComponent<?, ?> stateComponent) {
 		Map<Entity, Object> dataMap = entityStateData.get(stateComponent);
 		return dataMap != null && dataMap.containsKey(entity);
 	}
 
 	@Override
 	public synchronized Set<Entity> getEntitiesWith(
-			StateComponent<?> stateComponent) {
+			StateComponent<?, ?> stateComponent) {
 		Map<Entity, Object> dataMap = entityStateData.get(stateComponent);
 		if (dataMap != null) {
 			return new HashSet<>(dataMap.keySet());
@@ -86,7 +86,7 @@ public class EntityStateManagerImpl implements EntityStateManager {
 	}
 
 	@Override
-	public synchronized Set<StateComponent<?>> getAll() {
+	public synchronized Set<StateComponent<?, ?>> getAll() {
 		return entityStateData.keySet();
 	}
 }

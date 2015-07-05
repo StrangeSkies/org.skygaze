@@ -33,7 +33,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getStateDependencies();
+	public Set<StateComponent<?, ?>> getStateDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component does not
@@ -43,7 +43,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getOptionalStateDependencies();
+	public Set<StateComponent<?, ?>> getOptionalStateDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component needs read
@@ -51,7 +51,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getReadDependencies();
+	public Set<StateComponent<?, ?>> getReadDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component does not
@@ -61,7 +61,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getOptionalReadDependencies();
+	public Set<StateComponent<?, ?>> getOptionalReadDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component needs write
@@ -69,7 +69,7 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getWriteDependencies();
+	public Set<StateComponent<?, ?>> getWriteDependencies();
 
 	/**
 	 * Get the set of state components which this behaviour component does not
@@ -79,5 +79,5 @@ public interface BehaviourComponent extends Named, Described {
 	 * 
 	 * @return
 	 */
-	public Set<StateComponent<?>> getOptionalWriteDependencies();
+	public Set<StateComponent<?, ?>> getOptionalWriteDependencies();
 }

@@ -21,8 +21,8 @@ public interface AssemblageView {
 
 	public abstract Set<BehaviourComponent> getBehaviours();
 
-	public abstract Set<StateComponent<?>> getStates();
+	public abstract Set<StateComponent<?, ?>> getStates();
 
 	public abstract <D> List<StateInitialiser<D>> getInitialisers(
-			StateComponent<D> state);
+			StateComponent<D, ?> state);
 }

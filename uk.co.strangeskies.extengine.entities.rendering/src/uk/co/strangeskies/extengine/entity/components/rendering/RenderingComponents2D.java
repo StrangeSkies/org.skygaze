@@ -8,15 +8,13 @@ import uk.co.strangeskies.extengine.rendering.rendering2d.Camera2D;
 import uk.co.strangeskies.extengine.rendering.rendering2d.Data2D;
 
 public interface RenderingComponents2D {
-
 	public BehaviourComponent getRenderingBehaviour();
 
 	public BehaviourComponent getBufferingBehaviour();
 
-	public StateComponent<Renderable<Data2D>> getRenderableState();
+	public StateComponent<Renderable<Data2D>, Object> getRenderableState();
 
-	public StateComponent<Camera2D> getCameraState();
+	public StateComponent<Camera2D, Object> getCameraState();
 
-	public StateComponent<Scene<Data2D>> getSceneState();
-
+	public StateComponent<Scene<Data2D>, Object> getSceneState();
 }

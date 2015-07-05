@@ -8,7 +8,7 @@ import uk.co.strangeskies.extengine.entity.state.StateComponentConfigurator;
 @Component(service = StateComponentBuilder.class)
 public class StateComponentBuilderImpl implements StateComponentBuilder {
 	@Override
-	public StateComponentConfigurator<Object> configure() {
+	public StateComponentConfigurator<Object, Object> configure() {
 		return new StateComponentConfiguratorImpl<>();
 	}
 }

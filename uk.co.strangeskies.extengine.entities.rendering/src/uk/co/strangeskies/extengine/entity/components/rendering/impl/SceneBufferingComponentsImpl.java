@@ -9,9 +9,9 @@ import uk.co.strangeskies.extengine.rendering.buffering.SceneBuffer;
 import uk.co.strangeskies.extengine.rendering.buffering.SceneInterpolator;
 
 public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
-	private final StateComponent<SceneBuffer> sceneBufferState;
+	private final StateComponent<SceneBuffer, Object> sceneBufferState;
 
-	private final StateComponent<SceneInterpolator> interpolatableSceneBufferState;
+	private final StateComponent<SceneInterpolator, Object> interpolatableSceneBufferState;
 
 	private final BehaviourComponent bufferingBehaviour;
 
@@ -22,12 +22,12 @@ public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 			StateComponentBuilder stateComponentBuilder,
 			SceneInterpolator sceneInterpolator) {
 		sceneBufferState = stateComponentBuilder.configure()
-				.data(() -> (SceneBuffer) sceneInterpolator)
+				.<SceneBuffer, Object> data(() -> sceneInterpolator)
 				.name("Renderable in 2D")
 				.description("Data for 2D rendering of entities").create();
 
 		interpolatableSceneBufferState = stateComponentBuilder.configure()
-				.data(() -> sceneInterpolator)
+				.<SceneInterpolator, Object> data(() -> sceneInterpolator)
 				.name("Buffer for interpolatable rendering data")
 				.description("Data for 2D rendering of entities").create();
 
@@ -53,12 +53,12 @@ public class SceneBufferingComponentsImpl implements SceneBufferingComponents {
 	}
 
 	@Override
-	public StateComponent<SceneBuffer> getSceneBufferState() {
+	public StateComponent<SceneBuffer, Object> getSceneBufferState() {
 		return sceneBufferState;
 	}
 
 	@Override
-	public StateComponent<SceneInterpolator> getInterpolatableSceneBufferState() {
+	public StateComponent<SceneInterpolator, Object> getInterpolatableSceneBufferState() {
 		return interpolatableSceneBufferState;
 	}
 

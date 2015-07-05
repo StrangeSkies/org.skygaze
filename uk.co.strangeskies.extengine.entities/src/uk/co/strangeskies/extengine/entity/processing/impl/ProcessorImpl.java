@@ -15,7 +15,7 @@ import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLockImpl;
 
 @Component(service = { Processor.class })
 public class ProcessorImpl implements Processor {
-	private final StripedReadWriteLock<StateComponent<?>> locks;
+	private final StripedReadWriteLock<StateComponent<?, ?>> locks;
 	private final Set<Scheduler> schedulers;
 
 	public ProcessorImpl() {
@@ -40,13 +40,8 @@ public class ProcessorImpl implements Processor {
 			boolean addedProcesses = this.schedulers.addAll(schedulers);
 
 			for (final Scheduler scheduler : this.schedulers) {
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						scheduler.process(new ScheduleProcessingContextImpl(
-								scheduler, entityManager, locks));
-					}
-				}).start();
+				new Thread(() -> scheduler.process(new ScheduleProcessingContextImpl(
+						scheduler, entityManager, locks))).start();
 			}
 
 			return addedProcesses;

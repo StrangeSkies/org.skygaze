@@ -2,9 +2,10 @@ package uk.co.strangeskies.extengine.entity.assembly.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import uk.co.strangeskies.extengine.entity.assembly.Assemblage;
@@ -25,16 +26,29 @@ public class CollapsedCompositionAssemblageView extends
 		super(assemblage);
 	}
 
+	protected <T> List<T> collapseIntoList(
+			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction) {
+		return collapseIntoCollection(new ArrayList<>(), collectionFunction,
+				(l, i) -> l.add(0, i));
+	}
+
+	protected <T> Set<T> collapseIntoSet(
+			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction) {
+		return new LinkedHashSet<>(collapseIntoList(collectionFunction));
+	}
+
 	protected <C extends Collection<T>, T> C collapseIntoCollection(
 			C collection,
-			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction) {
+			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction,
+			BiConsumer<C, T> add) {
 		List<AssemblageView> composition = new ArrayList<>();
 		composition.add(getComponent());
 
 		while (!composition.isEmpty()) {
 			AssemblageView assemblage = composition.get(0);
 			composition.remove(0);
-			collection.addAll(collectionFunction.apply(assemblage));
+			for (T item : collectionFunction.apply(assemblage))
+				add.accept(collection, item);
 
 			composition.addAll(0, assemblage.getComposition());
 		}
@@ -42,20 +56,16 @@ public class CollapsedCompositionAssemblageView extends
 		return collection;
 	}
 
-	private List<Assemblage> list() {
-		return new ArrayList<Assemblage>();
-	}
-
 	@Override
 	public List<Assemblage> getComposition() {
-		return new ListDecorator<>(() -> collapseIntoCollection(list(),
-				AssemblageView::getComposition));
+		return new ListDecorator<>(
+				() -> collapseIntoList(AssemblageView::getComposition));
 	}
 
 	@Override
 	public Set<Assemblage> getSubassemblages() {
-		return new SetDecorator<>(() -> collapseIntoCollection(new HashSet<>(),
-				AssemblageView::getSubassemblages));
+		return new SetDecorator<>(
+				() -> collapseIntoSet(AssemblageView::getSubassemblages));
 	}
 
 	@Override
@@ -70,32 +80,32 @@ public class CollapsedCompositionAssemblageView extends
 	@Override
 	public Set<Assemblage> getSubassemblages(
 			final AssemblageView subassemblageMatch) {
-		return new SetDecorator<>(() -> collapseIntoCollection(new HashSet<>(),
-				input -> input.getSubassemblages(subassemblageMatch)));
+		return new SetDecorator<>(
+				() -> collapseIntoSet(input -> input
+						.getSubassemblages(subassemblageMatch)));
 	}
 
 	@Override
 	public Set<Variable<?>> getVariables() {
-		return new SetDecorator<>(() -> collapseIntoCollection(new HashSet<>(),
-				AssemblageView::getVariables));
+		return new SetDecorator<>(
+				() -> collapseIntoSet(AssemblageView::getVariables));
 	}
 
 	@Override
 	public Set<BehaviourComponent> getBehaviours() {
-		return new SetDecorator<>(() -> collapseIntoCollection(new HashSet<>(),
-				AssemblageView::getBehaviours));
+		return new SetDecorator<>(
+				() -> collapseIntoSet(AssemblageView::getBehaviours));
 	}
 
 	@Override
-	public Set<StateComponent<?>> getStates() {
-		return new SetDecorator<>(() -> collapseIntoCollection(new HashSet<>(),
-				AssemblageView::getStates));
+	public Set<StateComponent<?, ?>> getStates() {
+		return new SetDecorator<>(() -> collapseIntoSet(AssemblageView::getStates));
 	}
 
 	@Override
 	public <D> List<StateInitialiser<D>> getInitialisers(
-			final StateComponent<D> state) {
-		return new ListDecorator<>(() -> collapseIntoCollection(
-				new ArrayList<>(), input -> input.getInitialisers(state)));
+			final StateComponent<D, ?> state) {
+		return new ListDecorator<>(
+				() -> collapseIntoList(input -> input.getInitialisers(state)));
 	}
 }

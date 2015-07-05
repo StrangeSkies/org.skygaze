@@ -29,8 +29,8 @@ public class AssemblageImpl implements Assemblage {
 
 	private final Set<BehaviourComponent> behaviourComponents;
 
-	private final Set<StateComponent<?>> stateComponents;
-	private final MultiMap<StateComponent<?>, ? extends StateInitialiser<?>, ? extends List<?>> statePreparators;
+	private final Set<StateComponent<?, ?>> stateComponents;
+	private final MultiMap<StateComponent<?, ?>, ? extends StateInitialiser<?>, ? extends List<?>> statePreparators;
 
 	private final Set<Variable<?>> variables;
 
@@ -88,14 +88,14 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Set<StateComponent<?>> getStates() {
+	public Set<StateComponent<?, ?>> getStates() {
 		return stateComponents;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <D> List<StateInitialiser<D>> getInitialisers(
-			final StateComponent<D> state) {
+			final StateComponent<D, ?> state) {
 		return (List<StateInitialiser<D>>) statePreparators.getCollection(state);
 	}
 

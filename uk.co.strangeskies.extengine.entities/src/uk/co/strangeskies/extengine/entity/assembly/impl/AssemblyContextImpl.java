@@ -21,7 +21,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 	private final EntityManager entities;
 	private final Entity entity;
 
-	private final FutureMap<StateComponent<?>, Object> stateData;
+	private final FutureMap<StateComponent<?, ?>, Object> stateData;
 	private final FutureMap<Variable<?>, Object> variableValues;
 
 	private final FutureMap<AssemblageView, AssemblyContextImpl> subcontexts;
@@ -52,7 +52,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 		});
 	}
 
-	protected <D> void prepareStateData(StateComponent<D> state) {
+	protected <D> void prepareStateData(StateComponent<D, ?> state) {
 		for (StateInitialiser<D> initialiser : collapsedView.getInitialisers(state)) {
 			initialiser.initialise(entities.state().getData(entity, state),
 					AssemblyContextImpl.this);
@@ -111,7 +111,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <D> D getData(StateComponent<D> state) {
+	public <D> D getData(StateComponent<D, ?> state) {
 		if (!entities.state().has(entity, state)) {
 			throw new IllegalArgumentException();
 		}
@@ -134,10 +134,10 @@ public class AssemblyContextImpl implements AssemblyContext {
 
 		entities.behaviour().attachAll(entity, collapsedView.getBehaviours());
 
-		Set<StateComponent<?>> collapsedStates = collapsedView.getStates();
+		Set<StateComponent<?, ?>> collapsedStates = collapsedView.getStates();
 		entities.state().attachAll(entity, collapsedStates);
 
-		for (StateComponent<?> state : collapsedStates) {
+		for (StateComponent<?, ?> state : collapsedStates) {
 			stateData.put(state);
 		}
 

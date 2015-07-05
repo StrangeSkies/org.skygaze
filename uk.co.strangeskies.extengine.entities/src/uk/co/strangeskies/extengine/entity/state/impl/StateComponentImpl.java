@@ -9,14 +9,14 @@ import java.util.Set;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
 import uk.co.strangeskies.utilities.factory.Factory;
 
-public class StateComponentImpl<D> implements StateComponent<D> {
+public class StateComponentImpl<D extends C, C> implements StateComponent<D, C> {
 	private final String name;
 	private final String description;
 
 	private final Factory<? extends D> dataFactory;
 
-	private final Set<StateComponent<?>> readDependencies;
-	private final Set<StateComponent<?>> writeDependencies;
+	private final Set<StateComponent<?, ?>> readDependencies;
+	private final Set<StateComponent<?, ?>> writeDependencies;
 
 	public StateComponentImpl(String name, String description,
 			Factory<? extends D> dataFactory) {
@@ -31,32 +31,32 @@ public class StateComponentImpl<D> implements StateComponent<D> {
 
 	public StateComponentImpl(String name, String description,
 			Factory<? extends D> factory,
-			Collection<? extends StateComponent<?>> readDependencies) {
+			Collection<? extends StateComponent<?, ?>> readDependencies) {
 		this(name, description, factory);
 
 		this.readDependencies.addAll(readDependencies);
 
 		// Add all indirect read dependencies
-		for (StateComponent<?> readDependency : readDependencies) {
+		for (StateComponent<?, ?> readDependency : readDependencies) {
 			this.readDependencies.addAll(readDependency.getReadDependencies());
 		}
 	}
 
 	public StateComponentImpl(String name, String description,
-			Factory<? extends D> factory, StateComponent<?>... readDependencies) {
+			Factory<? extends D> factory, StateComponent<?, ?>... readDependencies) {
 		this(name, description, factory, Arrays.asList(readDependencies));
 	}
 
 	public StateComponentImpl(String name, String description,
 			Factory<? extends D> factory,
-			Collection<? extends StateComponent<?>> readDependencies,
-			Collection<? extends StateComponent<?>> writeDependencies) {
+			Collection<? extends StateComponent<?, ?>> readDependencies,
+			Collection<? extends StateComponent<?, ?>> writeDependencies) {
 		this(name, description, factory, readDependencies);
 
 		this.writeDependencies.addAll(writeDependencies);
 
 		// Add all indirect write dependencies
-		for (StateComponent<?> writeDependency : writeDependencies) {
+		for (StateComponent<?, ?> writeDependency : writeDependencies) {
 			this.writeDependencies.addAll(writeDependency.getWriteDependencies());
 		}
 	}
@@ -83,7 +83,7 @@ public class StateComponentImpl<D> implements StateComponent<D> {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getReadDependencies() {
+	public final Set<StateComponent<?, ?>> getReadDependencies() {
 		return Collections.unmodifiableSet(readDependencies);
 	}
 
@@ -94,7 +94,7 @@ public class StateComponentImpl<D> implements StateComponent<D> {
 	 * @return
 	 */
 	@Override
-	public final Set<StateComponent<?>> getWriteDependencies() {
+	public final Set<StateComponent<?, ?>> getWriteDependencies() {
 		return Collections.unmodifiableSet(writeDependencies);
 	}
 

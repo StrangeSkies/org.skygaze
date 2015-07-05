@@ -12,11 +12,11 @@ import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLock;
 
 public class ScheduleProcessingContextImpl implements ScheduleProcessingContext {
 	private final EntityManager entityManager;
-	private final StripedReadWriteLock<StateComponent<?>> locks;
+	private final StripedReadWriteLock<StateComponent<?, ?>> locks;
 	private final Set<BehaviourComponent> behaviours;
 
 	public ScheduleProcessingContextImpl(Scheduler scheduler,
-			EntityManager entityManager, StripedReadWriteLock<StateComponent<?>> locks) {
+			EntityManager entityManager, StripedReadWriteLock<StateComponent<?, ?>> locks) {
 		this.entityManager = entityManager;
 		this.locks = locks;
 		behaviours = entityManager.behaviour().getBehavioursForScheduler(scheduler);
@@ -25,7 +25,7 @@ public class ScheduleProcessingContextImpl implements ScheduleProcessingContext 
 	@Override
 	public void processBehaviour(final BehaviourComponent behaviour) {
 		try {
-			LimitedReadWriteLockReleaseWrapper<StateComponent<?>> locks = new LimitedReadWriteLockReleaseWrapper<>(
+			LimitedReadWriteLockReleaseWrapper<StateComponent<?, ?>> locks = new LimitedReadWriteLockReleaseWrapper<>(
 					this.locks, behaviour.getOptionalReadDependencies(),
 					behaviour.getOptionalWriteDependencies());
 

@@ -20,11 +20,11 @@ public class BehaviourComponentConfiguratorImpl implements
 	private Collection<? extends BehaviourComponent> behaviourDependencies;
 	private Collection<? extends BehaviourComponent> behaviourDependents;
 
-	private Collection<? extends StateComponent<?>> readDependencies;
-	private Collection<? extends StateComponent<?>> writeDependencies;
+	private Collection<? extends StateComponent<?, ?>> readDependencies;
+	private Collection<? extends StateComponent<?, ?>> writeDependencies;
 
-	private Collection<? extends StateComponent<?>> optionalReadDependencies;
-	private Collection<? extends StateComponent<?>> optionalWriteDependencies;
+	private Collection<? extends StateComponent<?, ?>> optionalReadDependencies;
+	private Collection<? extends StateComponent<?, ?>> optionalWriteDependencies;
 
 	public BehaviourComponentConfiguratorImpl() {
 		name = "";
@@ -90,7 +90,7 @@ public class BehaviourComponentConfiguratorImpl implements
 
 	@Override
 	public BehaviourComponentConfigurator readDependencies(
-			Collection<? extends StateComponent<?>> readDependencies) {
+			Collection<? extends StateComponent<?, ?>> readDependencies) {
 		this.readDependencies = readDependencies;
 
 		return this;
@@ -98,13 +98,13 @@ public class BehaviourComponentConfiguratorImpl implements
 
 	@Override
 	public BehaviourComponentConfigurator readDependencies(
-			StateComponent<?>... readDependencies) {
+			StateComponent<?, ?>... readDependencies) {
 		return readDependencies(Arrays.asList(readDependencies));
 	}
 
 	@Override
 	public BehaviourComponentConfigurator writeDependencies(
-			Collection<? extends StateComponent<?>> writeDependencies) {
+			Collection<? extends StateComponent<?, ?>> writeDependencies) {
 		this.writeDependencies = writeDependencies;
 
 		return this;
@@ -112,13 +112,13 @@ public class BehaviourComponentConfiguratorImpl implements
 
 	@Override
 	public BehaviourComponentConfigurator writeDependencies(
-			StateComponent<?>... writeDependencies) {
+			StateComponent<?, ?>... writeDependencies) {
 		return writeDependencies(Arrays.asList(writeDependencies));
 	}
 
 	@Override
 	public BehaviourComponentConfigurator optionalReadDependencies(
-			Collection<? extends StateComponent<?>> readDependencies) {
+			Collection<? extends StateComponent<?, ?>> readDependencies) {
 		this.optionalReadDependencies = readDependencies;
 
 		return this;
@@ -126,13 +126,13 @@ public class BehaviourComponentConfiguratorImpl implements
 
 	@Override
 	public BehaviourComponentConfigurator optionalReadDependencies(
-			StateComponent<?>... readDependencies) {
+			StateComponent<?, ?>... readDependencies) {
 		return optionalReadDependencies(Arrays.asList(readDependencies));
 	}
 
 	@Override
 	public BehaviourComponentConfigurator optionalWriteDependencies(
-			Collection<? extends StateComponent<?>> writeDependencies) {
+			Collection<? extends StateComponent<?, ?>> writeDependencies) {
 		this.optionalWriteDependencies = writeDependencies;
 
 		return this;
@@ -140,7 +140,7 @@ public class BehaviourComponentConfiguratorImpl implements
 
 	@Override
 	public BehaviourComponentConfigurator optionalWriteDependencies(
-			StateComponent<?>... writeDependencies) {
+			StateComponent<?, ?>... writeDependencies) {
 		return optionalWriteDependencies(Arrays.asList(writeDependencies));
 	}
 
