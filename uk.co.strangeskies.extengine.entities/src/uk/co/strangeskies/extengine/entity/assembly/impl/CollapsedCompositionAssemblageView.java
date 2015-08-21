@@ -28,8 +28,8 @@ public class CollapsedCompositionAssemblageView extends
 
 	protected <T> List<T> collapseIntoList(
 			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction) {
-		return collapseIntoCollection(new ArrayList<>(), collectionFunction,
-				(l, i) -> l.add(0, i));
+		return collapseIntoCollection(new ArrayList<>(), collectionFunction, (
+				l, i) -> l.add(0, i));
 	}
 
 	protected <T> Set<T> collapseIntoSet(
@@ -65,7 +65,7 @@ public class CollapsedCompositionAssemblageView extends
 	@Override
 	public Set<Assemblage> getSubassemblages() {
 		return new SetDecorator<>(
-				() -> collapseIntoSet(AssemblageView::getSubassemblages));
+				() -> collapseIntoSet(a -> a.getSubassemblages()));
 	}
 
 	@Override
@@ -99,7 +99,8 @@ public class CollapsedCompositionAssemblageView extends
 
 	@Override
 	public Set<StateComponent<?, ?>> getStates() {
-		return new SetDecorator<>(() -> collapseIntoSet(AssemblageView::getStates));
+		return new SetDecorator<>(
+				() -> collapseIntoSet(AssemblageView::getStates));
 	}
 
 	@Override

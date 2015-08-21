@@ -22,3 +22,4 @@ Bundle-Name: Extengine Rendering
 	osgi.enroute.base.api;  \
 		version = latest
 Bundle-Version: 0.2.0.${tstamp}
+Private-Package: uk.co.strangeskies.extengine.entity.components.rendering.impl

@@ -25,3 +25,10 @@ Bundle-Name: Extengine Entities
 	osgi.enroute.base.api;  \
 		version = latest
 Bundle-Version: 0.2.0.${tstamp}
+Private-Package: \
+	uk.co.strangeskies.extengine.entity.assembly.impl,\
+	uk.co.strangeskies.extengine.entity.behaviour.impl,\
+	uk.co.strangeskies.extengine.entity.management.impl,\
+	uk.co.strangeskies.extengine.entity.management.impl.collections,\
+	uk.co.strangeskies.extengine.entity.processing.impl,\
+	uk.co.strangeskies.extengine.entity.state.impl
