@@ -1,11 +1,18 @@
 language: java
 jdk:
 - oraclejdk8
+
+sudo: false
+addons:
+  apt:
+    packages:
+    - oracle-java8-installer
+
 env:
   matrix:
   - TERM=dumb
   global:
-    secure: aHymzi4IVCeX5lZA9j3ovJXZ9UW3YHczVZQuYahkqXiycOanCF8ZxHwWgYjt/tQnhxgabll4Lz/ZkBFf4z7WyxfA1I7UQ3BIIj0RmONzK1XZGLagLHovBb0f6sMOVYHqjHoZ9GgwomIyDYJoDIsV2cd040vBctSHPe8SpIxcefo=
+
 install: "./gradlew --version"
-script: ./gradlew --continue build aggregateJavadoc publishGhPages -PgithubUser="${GITHUB_TOKEN}"
-  -PgithubPassword=""
+
+script: ./gradlew --continue build test aggregateJavadoc publishGhPages artifactoryPublish -PgithubUser="${GITHUB_TOKEN}" -PgithubPassword="" -PjfrogUser="${JFROG_USER}" -PjfrogPassword="${JFROG_PASSWORD}" --stacktrace

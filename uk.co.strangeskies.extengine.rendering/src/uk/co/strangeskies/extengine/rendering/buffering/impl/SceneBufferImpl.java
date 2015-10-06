@@ -10,13 +10,13 @@ import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
 import uk.co.strangeskies.mathematics.expression.buffer.ExpressionBuffer;
 import uk.co.strangeskies.mathematics.expression.buffer.FunctionBuffer;
 import uk.co.strangeskies.utilities.Copyable;
-import uk.co.strangeskies.utilities.IdentityComparator;
+import uk.co.strangeskies.utilities.EqualityComparator;
 
 public class SceneBufferImpl implements SceneBuffer {
 	private final TreeSet<DoubleBuffer<?, ?>> buffers;
 
 	public SceneBufferImpl() {
-		buffers = new TreeSet<>(new IdentityComparator<>());
+		buffers = new TreeSet<>(EqualityComparator.identityComparator());
 	}
 
 	@Override
@@ -45,9 +45,8 @@ public class SceneBufferImpl implements SceneBuffer {
 		buffer = new FunctionBuffer<>(item, c -> {
 			try {
 				return (T) Object.class.getMethod("clone").invoke(c);
-			} catch (IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException
-					| SecurityException e) {
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException e) {
 				throw new UnsupportedOperationException(e);
 			}
 		});
@@ -67,10 +66,9 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public <T> ExpressionBuffer<Expression<? extends T>, T> bufferResult(
-			Expression<? extends T> expression) {
-		ExpressionBuffer<Expression<? extends T>, T> buffer = new ExpressionBuffer<>(
-				expression, e -> e.decoupleValue());
+	public <T> ExpressionBuffer<Expression<? extends T>, T> bufferResult(Expression<? extends T> expression) {
+		ExpressionBuffer<Expression<? extends T>, T> buffer = new ExpressionBuffer<>(expression,
+				e -> e.decoupleValue());
 
 		registerBuffer(buffer);
 
@@ -78,10 +76,10 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public <F, T> ExpressionBuffer<Expression<? extends F>, T> bufferResult(
-			Expression<? extends F> expression, Function<? super F, T> function) {
-		ExpressionBuffer<Expression<? extends F>, T> buffer = new ExpressionBuffer<>(
-				expression, e -> function.apply(e.decoupleValue()));
+	public <F, T> ExpressionBuffer<Expression<? extends F>, T> bufferResult(Expression<? extends F> expression,
+			Function<? super F, T> function) {
+		ExpressionBuffer<Expression<? extends F>, T> buffer = new ExpressionBuffer<>(expression,
+				e -> function.apply(e.decoupleValue()));
 
 		registerBuffer(buffer);
 

@@ -1,4 +1,5 @@
+/bin/
 /generated/
-/bin/
 /cache/
-/bin/
+/release/
+!/local/**/*.jar

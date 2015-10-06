@@ -1,7 +1,7 @@
 package uk.co.strangeskies.gears.core.sections.test;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import uk.co.strangeskies.gears.engine.sections.Section;
 import uk.co.strangeskies.gears.engine.sections.SectionProcessingContext;

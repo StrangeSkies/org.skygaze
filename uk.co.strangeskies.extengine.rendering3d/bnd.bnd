@@ -2,21 +2,19 @@ Export-Package: \
 	uk.co.strangeskies.extengine.rendering.rendering3d,\
 	uk.co.strangeskies.extengine.rendering.rendering3d.extensions
 Bundle-Name: Extengine Rendering 3D
--dsannotations:  \
+-dsannotations: \
 	*
 -runee: JavaSE-1.8
 -runfw: org.eclipse.osgi;version='[3.10.1.v20140909-1633,3.10.1.v20140909-1633]'
--buildpath:  \
-	uk.co.strangeskies.utilities;  \
-		version = latest,  \
-	uk.co.strangeskies.mathematics;  \
-		version = latest,  \
-	uk.co.strangeskies.mathematics.geometry;  \
-		version = latest,  \
+-buildpath: \
+	osgi.enroute.base.api,\
+	osgi.enroute.junit.wrapper,\
+	osgi.enroute.hamcrest.wrapper,\
+	org.hamcrest__java-hamcrest,\
+	${ss;utilities},\
+	${ss;mathematics},\
+	${ss;mathematics.geometry},\
+	${ss;expressions},\
 	uk.co.strangeskies.extengine.rendering;  \
-		version = latest,  \
-	uk.co.strangeskies.expressions;  \
-		version = latest,  \
-	osgi.enroute.base.api;  \
 		version = latest
 Bundle-Version: 0.2.0.${tstamp}

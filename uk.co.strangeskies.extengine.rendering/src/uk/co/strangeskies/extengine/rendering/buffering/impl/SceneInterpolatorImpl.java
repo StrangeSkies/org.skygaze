@@ -10,7 +10,7 @@ import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
 import uk.co.strangeskies.mathematics.operation.Interpolation;
 import uk.co.strangeskies.mathematics.operation.InterpolationFunction;
 import uk.co.strangeskies.mathematics.values.DoubleValue;
-import uk.co.strangeskies.utilities.IdentityComparator;
+import uk.co.strangeskies.utilities.EqualityComparator;
 
 public class SceneInterpolatorImpl extends SceneBufferImpl implements
 		SceneInterpolator {
@@ -19,7 +19,7 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	private final TreeMap<DoubleBuffer<?, ?>, List<DoubleBuffer<?, ?>>> interpolations;
 
 	public SceneInterpolatorImpl() {
-		interpolations = new TreeMap<>(new IdentityComparator<>());
+		interpolations = new TreeMap<>(EqualityComparator.identityComparator());
 
 		delta = new DoubleValue(0);
 	}

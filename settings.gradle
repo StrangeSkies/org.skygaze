@@ -9,10 +9,17 @@ import aQute.bnd.build.Workspace
 /* Add bnd gradle plugin as a script dependency */
 buildscript {
   repositories {
+    ivy {
+      url 'https://bndtools.ci.cloudbees.com/job/bnd.master/lastSuccessfulBuild/artifact/dist/bundles'
+      layout 'pattern', {
+            artifact '[module]/[artifact]-[revision].[ext]' /* OSGi repo pattern */
+      }
+    }
     jcenter()
   }
   dependencies {
-    classpath bnd_plugin
+    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:latest'
+    classpath 'biz.aQute.bnd:biz.aQute.bnd:latest'
   }
   /* Pass bnd gradle plugin classpath to rootProject once created */
   def bndPlugin = files(configurations.classpath.files)
