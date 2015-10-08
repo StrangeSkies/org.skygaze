@@ -9,6 +9,9 @@ javac.target: 1.8
 ## Bnd Options
 -sources: true
 
+-dsannotations: \
+	*
+
 bnd-release = https://bndtools.ci.cloudbees.com/job/bnd.master/lastSuccessfulBuild/artifact/dist/bundles
 
 copyright.year = ${tstamp;yyyy}
