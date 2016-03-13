@@ -16,6 +16,7 @@ Bundle-Name: Extengine Entities
 -buildpath: \
 	${ss;utilities},\
 	${ss;mathematics},\
+	${mdb;scripting},\
 	${ss;mathematics.geometry}
 
 Private-Package: \
@@ -25,3 +26,12 @@ Private-Package: \
 	uk.co.strangeskies.extengine.entity.management.impl.collections,\
 	uk.co.strangeskies.extengine.entity.processing.impl,\
 	uk.co.strangeskies.extengine.entity.state.impl
+
+-pluginpath: \
+	${pluginpath.modabi;xml}
+
+-plugin: \
+	uk.co.strangeskies.modabi.bnd.xml.ModabiXmlBndPlugin
+
+-includeresource: \
+	META-INF/schemata=schemata

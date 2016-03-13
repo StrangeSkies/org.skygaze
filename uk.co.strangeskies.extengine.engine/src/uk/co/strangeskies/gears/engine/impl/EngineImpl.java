@@ -8,7 +8,7 @@ import uk.co.strangeskies.gears.engine.Engine;
 import uk.co.strangeskies.gears.engine.Game;
 import uk.co.strangeskies.gears.engine.sections.SectionProcessor;
 
-@Component(service = Engine.class, immediate = true)
+@Component(immediate = true)
 public class EngineImpl implements Engine {
 	private Game game;
 	private SectionProcessor sectionProcessor;

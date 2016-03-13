@@ -16,6 +16,8 @@ copyright = Copyright (c) Strange Skies (2014, ${copyright.year}). All Rights Re
 
 groupid: uk.co.strangeskies.extengine
 
+modabi-version: 1.0.0
+
 extengine-version: 0.0.1
 extengine-version-ceiling: 1.0.0
 
@@ -34,7 +36,8 @@ Bundle-Version: ${extengine-version}.${tstamp}
 	${pluginpath.aether}
 
 -plugin.7.StrangeSkies:\
-	${plugin.strangeskies}
+	${plugin.strangeskies},\
+	${plugin.modabi}
 
 -plugin.8.Eclipse:\
 	${plugin.eclipse.sdk},\
