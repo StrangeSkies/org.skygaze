@@ -9,7 +9,7 @@ import uk.co.strangeskies.mathematics.geometry.matrix.MatrixH2;
 public class Camera2DImpl implements Camera2D {
 	private Scene<Data2D> scene;
 
-	private Expression<? extends MatrixH2<?>> transformation;
+	private Expression<?, ? extends MatrixH2<?>> transformation;
 
 	@Override
 	public Scene<Data2D> getScene() {
@@ -22,13 +22,12 @@ public class Camera2DImpl implements Camera2D {
 	}
 
 	@Override
-	public Expression<? extends MatrixH2<?>> getTransformation() {
+	public Expression<?, ? extends MatrixH2<?>> getTransformation() {
 		return transformation;
 	}
 
 	@Override
-	public void setTransformation(
-			Expression<? extends MatrixH2<?>> transformation) {
+	public void setTransformation(Expression<?, ? extends MatrixH2<?>> transformation) {
 		this.transformation = transformation;
 	}
 }

@@ -16,10 +16,10 @@ import uk.co.strangeskies.extengine.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.extengine.entity.assembly.Variable;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
-import uk.co.strangeskies.utilities.collection.decorator.FilteredListDecorator;
-import uk.co.strangeskies.utilities.collection.decorator.FilteredSetDecorator;
-import uk.co.strangeskies.utilities.collection.multimap.MultiHashMap;
-import uk.co.strangeskies.utilities.collection.multimap.MultiMap;
+import uk.co.strangeskies.utilities.collection.FilteredListDecorator;
+import uk.co.strangeskies.utilities.collection.FilteredSetDecorator;
+import uk.co.strangeskies.utilities.collection.MultiHashMap;
+import uk.co.strangeskies.utilities.collection.MultiMap;
 
 public class AssemblageImpl implements Assemblage {
 	private final List<Assemblage> composition;
@@ -36,10 +36,8 @@ public class AssemblageImpl implements Assemblage {
 
 	protected AssemblageImpl() {
 		composition = new FilteredListDecorator<Assemblage>(assemblage -> {
-			if (assemblage.getCollapsedCompositionView().getComposition()
-					.contains(AssemblageImpl.this)) {
-				throw new IllegalArgumentException(
-						"Composition assemblage graph cycle detected");
+			if (assemblage.getCollapsedCompositionView().getComposition().contains(AssemblageImpl.this)) {
+				throw new IllegalArgumentException("Composition assemblage graph cycle detected");
 			}
 			return true;
 		});
@@ -52,12 +50,10 @@ public class AssemblageImpl implements Assemblage {
 				Assemblage subassemblage = subassemblages.poll();
 
 				if (subassemblage.equals(AssemblageImpl.this)) {
-					throw new IllegalArgumentException(
-							"Subassemblage graph cycle detected");
+					throw new IllegalArgumentException("Subassemblage graph cycle detected");
 				}
 
-				subassemblages.addAll(subassemblage.getCollapsedCompositionView()
-						.getSubassemblages());
+				subassemblages.addAll(subassemblage.getCollapsedCompositionView().getSubassemblages());
 			}
 
 			return true;
@@ -94,8 +90,7 @@ public class AssemblageImpl implements Assemblage {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <D> List<StateInitialiser<D>> getInitialisers(
-			final StateComponent<D, ?> state) {
+	public <D> List<StateInitialiser<D>> getInitialisers(final StateComponent<D, ?> state) {
 		return (List<StateInitialiser<D>>) statePreparators.getCollection(state);
 	}
 
@@ -116,8 +111,7 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
-	public Set<Assemblage> overrideSubassemblages(
-			AssemblageView subassemblageMatch) {
+	public Set<Assemblage> overrideSubassemblages(AssemblageView subassemblageMatch) {
 		Set<Assemblage> overridingAssemblages = new HashSet<>();
 
 		Set<Assemblage> subassemblages = getSubassemblages(subassemblageMatch);
@@ -133,8 +127,7 @@ public class AssemblageImpl implements Assemblage {
 
 	@Override
 	public void revertOverrides(AssemblageView subassemblageMatch) {
-		overriddenSubassemblages.keySet().removeAll(
-				getSubassemblages(subassemblageMatch));
+		overriddenSubassemblages.keySet().removeAll(getSubassemblages(subassemblageMatch));
 	}
 
 	@Override
@@ -160,8 +153,7 @@ public class AssemblageImpl implements Assemblage {
 		return isComposedFrom(this, base);
 	}
 
-	public static boolean isComposedFrom(AssemblageView assemblage,
-			AssemblageView base) {
+	public static boolean isComposedFrom(AssemblageView assemblage, AssemblageView base) {
 		if (assemblage == base) {
 			return true;
 		}

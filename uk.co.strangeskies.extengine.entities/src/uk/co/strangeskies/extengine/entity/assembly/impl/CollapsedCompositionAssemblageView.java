@@ -15,21 +15,23 @@ import uk.co.strangeskies.extengine.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.extengine.entity.assembly.Variable;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
-import uk.co.strangeskies.utilities.Decorator;
-import uk.co.strangeskies.utilities.collection.decorator.ListDecorator;
-import uk.co.strangeskies.utilities.collection.decorator.SetDecorator;
+import uk.co.strangeskies.utilities.collection.ListDecorator;
+import uk.co.strangeskies.utilities.collection.SetDecorator;
 
-public class CollapsedCompositionAssemblageView extends
-		Decorator<AssemblageView> implements
-/* @ReadOnly */CollapsedAssemblageView {
+public class CollapsedCompositionAssemblageView implements/* @ReadOnly */CollapsedAssemblageView {
+	private final AssemblageView component;
+
 	public CollapsedCompositionAssemblageView(AssemblageView assemblage) {
-		super(assemblage);
+		this.component = assemblage;
+	}
+
+	protected AssemblageView getComponent() {
+		return component;
 	}
 
 	protected <T> List<T> collapseIntoList(
 			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction) {
-		return collapseIntoCollection(new ArrayList<>(), collectionFunction, (
-				l, i) -> l.add(0, i));
+		return collapseIntoCollection(new ArrayList<>(), collectionFunction, (l, i) -> l.add(0, i));
 	}
 
 	protected <T> Set<T> collapseIntoSet(
@@ -37,10 +39,8 @@ public class CollapsedCompositionAssemblageView extends
 		return new LinkedHashSet<>(collapseIntoList(collectionFunction));
 	}
 
-	protected <C extends Collection<T>, T> C collapseIntoCollection(
-			C collection,
-			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction,
-			BiConsumer<C, T> add) {
+	protected <C extends Collection<T>, T> C collapseIntoCollection(C collection,
+			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction, BiConsumer<C, T> add) {
 		List<AssemblageView> composition = new ArrayList<>();
 		composition.add(getComponent());
 
@@ -58,14 +58,12 @@ public class CollapsedCompositionAssemblageView extends
 
 	@Override
 	public List<Assemblage> getComposition() {
-		return new ListDecorator<>(
-				() -> collapseIntoList(AssemblageView::getComposition));
+		return ListDecorator.over(collapseIntoList(AssemblageView::getComposition));
 	}
 
 	@Override
 	public Set<Assemblage> getSubassemblages() {
-		return new SetDecorator<>(
-				() -> collapseIntoSet(a -> a.getSubassemblages()));
+		return SetDecorator.over(collapseIntoSet(a -> a.getSubassemblages()));
 	}
 
 	@Override
@@ -78,35 +76,27 @@ public class CollapsedCompositionAssemblageView extends
 	}
 
 	@Override
-	public Set<Assemblage> getSubassemblages(
-			final AssemblageView subassemblageMatch) {
-		return new SetDecorator<>(
-				() -> collapseIntoSet(input -> input
-						.getSubassemblages(subassemblageMatch)));
+	public Set<Assemblage> getSubassemblages(final AssemblageView subassemblageMatch) {
+		return SetDecorator.over(collapseIntoSet(input -> input.getSubassemblages(subassemblageMatch)));
 	}
 
 	@Override
 	public Set<Variable<?>> getVariables() {
-		return new SetDecorator<>(
-				() -> collapseIntoSet(AssemblageView::getVariables));
+		return SetDecorator.over(collapseIntoSet(AssemblageView::getVariables));
 	}
 
 	@Override
 	public Set<BehaviourComponent> getBehaviours() {
-		return new SetDecorator<>(
-				() -> collapseIntoSet(AssemblageView::getBehaviours));
+		return SetDecorator.over(collapseIntoSet(AssemblageView::getBehaviours));
 	}
 
 	@Override
 	public Set<StateComponent<?, ?>> getStates() {
-		return new SetDecorator<>(
-				() -> collapseIntoSet(AssemblageView::getStates));
+		return SetDecorator.over(collapseIntoSet(AssemblageView::getStates));
 	}
 
 	@Override
-	public <D> List<StateInitialiser<D>> getInitialisers(
-			final StateComponent<D, ?> state) {
-		return new ListDecorator<>(
-				() -> collapseIntoList(input -> input.getInitialisers(state)));
+	public <D> List<StateInitialiser<D>> getInitialisers(final StateComponent<D, ?> state) {
+		return ListDecorator.over(collapseIntoList(input -> input.getInitialisers(state)));
 	}
 }

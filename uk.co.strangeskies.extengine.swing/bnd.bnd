@@ -20,3 +20,6 @@ Bundle-Name: Extengine Swing
 	uk.co.strangeskies.extengine.input;  \
 		version = latest
 Bundle-Version: 0.2.0.${tstamp}
+Private-Package: \
+	uk.co.strangeskies.extengine.swing.input.impl,\
+	uk.co.strangeskies.extengine.swing.rendering.graphics2d.impl

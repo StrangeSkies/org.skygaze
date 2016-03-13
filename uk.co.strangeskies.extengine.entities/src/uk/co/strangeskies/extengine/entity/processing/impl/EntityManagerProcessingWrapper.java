@@ -7,18 +7,21 @@ import uk.co.strangeskies.extengine.entity.management.EntityBehaviourManager;
 import uk.co.strangeskies.extengine.entity.management.EntityManager;
 import uk.co.strangeskies.extengine.entity.management.EntityStateManager;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
-import uk.co.strangeskies.utilities.Decorator;
 import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLockRelease;
 
-public class EntityManagerProcessingWrapper extends Decorator<EntityManager>
-		implements EntityManager {
+public class EntityManagerProcessingWrapper implements EntityManager {
+	private final EntityManager component;
 	private final StripedReadWriteLockRelease<StateComponent<?, ?>> locks;
 
 	public EntityManagerProcessingWrapper(EntityManager entityManager,
 			StripedReadWriteLockRelease<StateComponent<?, ?>> locks) {
-		super(entityManager);
+		component = entityManager;
 
 		this.locks = locks;
+	}
+
+	protected EntityManager getComponent() {
+		return component;
 	}
 
 	@Override
@@ -28,8 +31,7 @@ public class EntityManagerProcessingWrapper extends Decorator<EntityManager>
 
 	@Override
 	public EntityStateManager state() {
-		return new EntityStateManagerProcessingWrapper(getComponent().state(),
-				locks);
+		return new EntityStateManagerProcessingWrapper(getComponent().state(), locks);
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package uk.co.strangeskies.extengine.entity.scheduling.terminating.schedulers;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.scheduling.ScheduleProcessingContext;
 import uk.co.strangeskies.extengine.entity.scheduling.terminating.TerminatingScheduler;
-import uk.co.strangeskies.mathematics.graph.EdgeVertices;
 import uk.co.strangeskies.mathematics.graph.Graph;
 import uk.co.strangeskies.mathematics.graph.GraphListeners;
 import uk.co.strangeskies.mathematics.graph.building.GraphBuilder;
@@ -28,14 +27,14 @@ public class LinearScheduler implements TerminatingScheduler {
 	@Override
 	public synchronized boolean process(ScheduleProcessingContext processingContext) {
 		Graph<BehaviourComponent, ?> behaviourGraph = buildGraph().vertices(processingContext.getBehaviours())
-				.addInternalListener(GraphListeners::vertexAdded, (g, v) -> {
-					for (BehaviourComponent b : v.getBehaviourDependents()) {
-						g.vertices().add(b);
-						g.edges().add(v, b);
+				.addInternalListener(GraphListeners::vertexAdded, c -> {
+					for (BehaviourComponent b : c.vertex().getBehaviourDependents()) {
+						c.graph().vertices().add(b);
+						c.graph().edges().add(c.vertex(), b);
 					}
-					for (BehaviourComponent b : v.getBehaviourDependencies()) {
-						g.vertices().add(b);
-						g.edges().add(b, v);
+					for (BehaviourComponent b : c.vertex().getBehaviourDependencies()) {
+						c.graph().vertices().add(b);
+						c.graph().edges().add(b, c.vertex());
 					}
 				}).directed().acyclic().readOnly().edgeFactory(Object::new).create();
 

@@ -13,25 +13,25 @@ import uk.co.strangeskies.utilities.Copyable;
 import uk.co.strangeskies.utilities.EqualityComparator;
 
 public class SceneBufferImpl implements SceneBuffer {
-	private final TreeSet<DoubleBuffer<?, ?>> buffers;
+	private final TreeSet<DoubleBuffer<?, ?, ?>> buffers;
 
 	public SceneBufferImpl() {
 		buffers = new TreeSet<>(EqualityComparator.identityComparator());
 	}
 
 	@Override
-	public void registerBuffer(DoubleBuffer<?, ?> buffer) {
+	public void registerBuffer(DoubleBuffer<?, ?, ?> buffer) {
 		buffers.add(buffer);
 	}
 
 	@Override
-	public void unregisterBuffer(DoubleBuffer<?, ?> buffer) {
+	public void unregisterBuffer(DoubleBuffer<?, ?, ?> buffer) {
 		buffers.remove(buffer);
 	}
 
 	@Override
-	public <T extends Copyable<? extends T>> DoubleBuffer<T, T> buffer(T item) {
-		DoubleBuffer<T, T> buffer = new FunctionBuffer<>(item, i -> i.copy());
+	public <T extends Copyable<? extends T>> DoubleBuffer<?, T, T> buffer(T item) {
+		DoubleBuffer<?, T, T> buffer = new FunctionBuffer<>(item, i -> i.copy());
 
 		registerBuffer(buffer);
 
@@ -40,8 +40,8 @@ public class SceneBufferImpl implements SceneBuffer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Cloneable> DoubleBuffer<T, T> buffer(T item) {
-		DoubleBuffer<T, T> buffer;
+	public <T extends Cloneable> DoubleBuffer<?, T, T> buffer(T item) {
+		DoubleBuffer<?, T, T> buffer;
 		buffer = new FunctionBuffer<>(item, c -> {
 			try {
 				return (T) Object.class.getMethod("clone").invoke(c);
@@ -66,8 +66,8 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public <T> ExpressionBuffer<Expression<? extends T>, T> bufferResult(Expression<? extends T> expression) {
-		ExpressionBuffer<Expression<? extends T>, T> buffer = new ExpressionBuffer<>(expression,
+	public <T> ExpressionBuffer<Expression<?, ? extends T>, T> bufferResult(Expression<?, ? extends T> expression) {
+		ExpressionBuffer<Expression<?, ? extends T>, T> buffer = new ExpressionBuffer<>(expression,
 				e -> e.decoupleValue());
 
 		registerBuffer(buffer);
@@ -76,9 +76,9 @@ public class SceneBufferImpl implements SceneBuffer {
 	}
 
 	@Override
-	public <F, T> ExpressionBuffer<Expression<? extends F>, T> bufferResult(Expression<? extends F> expression,
+	public <F, T> ExpressionBuffer<Expression<?, ? extends F>, T> bufferResult(Expression<?, ? extends F> expression,
 			Function<? super F, T> function) {
-		ExpressionBuffer<Expression<? extends F>, T> buffer = new ExpressionBuffer<>(expression,
+		ExpressionBuffer<Expression<?, ? extends F>, T> buffer = new ExpressionBuffer<>(expression,
 				e -> function.apply(e.decoupleValue()));
 
 		registerBuffer(buffer);
@@ -88,7 +88,7 @@ public class SceneBufferImpl implements SceneBuffer {
 
 	@Override
 	public void push() {
-		for (DoubleBuffer<?, ?> bufferedExpression : buffers) {
+		for (DoubleBuffer<?, ?, ?> bufferedExpression : buffers) {
 			bufferedExpression.push();
 		}
 	}

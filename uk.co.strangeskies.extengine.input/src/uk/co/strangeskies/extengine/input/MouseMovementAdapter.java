@@ -1,6 +1,5 @@
 package uk.co.strangeskies.extengine.input;
 
-import uk.co.strangeskies.mathematics.expression.buffer.DoubleBuffer;
 import uk.co.strangeskies.mathematics.expression.buffer.ExpressionBuffer;
 import uk.co.strangeskies.mathematics.geometry.Bounds2;
 import uk.co.strangeskies.mathematics.geometry.matrix.building.MatrixBuilder;
@@ -16,8 +15,8 @@ public class MouseMovementAdapter {
 	private final MouseInputController mouseInputController;
 	private final WindowManagerInputController windowManagerInputController;
 
-	private final DoubleBuffer<Vector2<IntValue>, Vector2<IntValue>> mousePosition;
-	private final DoubleBuffer<Vector2<IntValue>, Vector2<IntValue>> position;
+	private final ExpressionBuffer<Vector2<IntValue>, Vector2<IntValue>> mousePosition;
+	private final ExpressionBuffer<Vector2<IntValue>, Vector2<IntValue>> position;
 
 	private MovementType movementType;
 
@@ -40,7 +39,7 @@ public class MouseMovementAdapter {
 		setMovementType(MovementType.Absolute);
 	}
 
-	public DoubleBuffer<Vector2<IntValue>, Vector2<IntValue>> getPosition() {
+	public ExpressionBuffer<Vector2<IntValue>, Vector2<IntValue>> getPosition() {
 		return position;
 	}
 

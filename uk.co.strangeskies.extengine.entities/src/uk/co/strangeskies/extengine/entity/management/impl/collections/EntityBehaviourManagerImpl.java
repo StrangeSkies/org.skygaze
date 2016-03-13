@@ -8,8 +8,8 @@ import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.management.EntityBehaviourManager;
 import uk.co.strangeskies.extengine.entity.scheduling.Scheduler;
-import uk.co.strangeskies.utilities.collection.multimap.MultiHashMap;
-import uk.co.strangeskies.utilities.collection.multimap.MultiMap;
+import uk.co.strangeskies.utilities.collection.MultiHashMap;
+import uk.co.strangeskies.utilities.collection.MultiMap;
 
 public class EntityBehaviourManagerImpl implements EntityBehaviourManager {
 	private final MultiMap<BehaviourComponent, Entity, ? extends Set<Entity>> entityBehaviours;
@@ -41,14 +41,12 @@ public class EntityBehaviourManagerImpl implements EntityBehaviourManager {
 	}
 
 	@Override
-	public boolean hasExplicitly(Entity entity,
-			BehaviourComponent behaviourComponent) {
+	public boolean hasExplicitly(Entity entity, BehaviourComponent behaviourComponent) {
 		return entityBehaviours.contains(behaviourComponent, entity);
 	}
 
 	@Override
-	public Set<Entity> getEntitiesExplicitlyWith(
-			BehaviourComponent behaviourComponent) {
+	public Set<Entity> getEntitiesExplicitlyWith(BehaviourComponent behaviourComponent) {
 		return entityBehaviours.get(behaviourComponent);
 	}
 
@@ -88,15 +86,13 @@ public class EntityBehaviourManagerImpl implements EntityBehaviourManager {
 	}
 
 	@Override
-	public void setBehaviourScheduler(Scheduler scheduler,
-			BehaviourComponent behaviourComponent) {
+	public void setBehaviourScheduler(Scheduler scheduler, BehaviourComponent behaviourComponent) {
 		setBehaviourSchedulerToDefault(behaviourComponent);
 		processorBehaviourAssociations.add(scheduler, behaviourComponent);
 	}
 
 	@Override
-	public void setBehaviourSchedulerToDefault(
-			BehaviourComponent behaviourComponent) {
+	public void setBehaviourSchedulerToDefault(BehaviourComponent behaviourComponent) {
 		processorBehaviourAssociations.removeFromAll(behaviourComponent);
 	}
 
@@ -116,8 +112,7 @@ public class EntityBehaviourManagerImpl implements EntityBehaviourManager {
 
 	@Override
 	public Set<Scheduler> getAllSchedulers() {
-		Set<Scheduler> processors = new HashSet<>(
-				processorBehaviourAssociations.keySet());
+		Set<Scheduler> processors = new HashSet<>(processorBehaviourAssociations.keySet());
 		if (defaultBehaviourProcessor != null) {
 			processors.add(defaultBehaviourProcessor);
 		}

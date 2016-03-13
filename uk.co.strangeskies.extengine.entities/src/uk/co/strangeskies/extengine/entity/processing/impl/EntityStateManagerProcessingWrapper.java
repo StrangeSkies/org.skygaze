@@ -6,18 +6,20 @@ import java.util.Set;
 import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.management.EntityStateManager;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
-import uk.co.strangeskies.utilities.Decorator;
 import uk.co.strangeskies.utilities.flowcontrol.StripedReadWriteLockRelease;
 
-public class EntityStateManagerProcessingWrapper extends
-		Decorator<EntityStateManager> implements EntityStateManager {
+public class EntityStateManagerProcessingWrapper implements EntityStateManager {
+	private final EntityStateManager component;
 	private final StripedReadWriteLockRelease<StateComponent<?, ?>> locks;
 
-	public EntityStateManagerProcessingWrapper(
-			EntityStateManager entityStateManager,
+	public EntityStateManagerProcessingWrapper(EntityStateManager entityStateManager,
 			StripedReadWriteLockRelease<StateComponent<?, ?>> locks) {
-		super(entityStateManager);
+		component = entityStateManager;
 		this.locks = locks;
+	}
+
+	protected EntityStateManager getComponent() {
+		return component;
 	}
 
 	@Override
@@ -26,8 +28,7 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
-	public Set<Entity> getEntitiesWith(
-			Collection<? extends StateComponent<?, ?>> stateComponents) {
+	public Set<Entity> getEntitiesWith(Collection<? extends StateComponent<?, ?>> stateComponents) {
 		return getComponent().getEntitiesWith(stateComponents);
 	}
 
@@ -44,17 +45,16 @@ public class EntityStateManagerProcessingWrapper extends
 	@Override
 	public <D> D getData(Entity entity, StateComponent<D, ?> stateComponent) {
 		if (!locks.isWriteLockHeldByCurrentThread(stateComponent))
-			throw new IllegalStateException("Attempting to write to state '"
-					+ stateComponent.getName() + "' without lock.");
+			throw new IllegalStateException(
+					"Attempting to write to state '" + stateComponent.getName() + "' without lock.");
 		return getComponent().getData(entity, stateComponent);
 	}
 
 	@Override
-	public <D> /* @ReadOnly */D getReadOnlyData(Entity entity,
-			StateComponent<?, D> stateComponent) {
+	public <D> /* @ReadOnly */D getReadOnlyData(Entity entity, StateComponent<?, D> stateComponent) {
 		if (!locks.isLockHeldByCurrentThread(stateComponent))
-			throw new IllegalStateException("Attempting to read from state '"
-					+ stateComponent.getName() + "' without lock.");
+			throw new IllegalStateException(
+					"Attempting to read from state '" + stateComponent.getName() + "' without lock.");
 		return getComponent().getReadOnlyData(entity, stateComponent);
 	}
 
@@ -85,8 +85,7 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
-	public void attachAndResetAll(Entity entity,
-			Collection<? extends StateComponent<?, ?>> stateComponents) {
+	public void attachAndResetAll(Entity entity, Collection<? extends StateComponent<?, ?>> stateComponents) {
 		for (StateComponent<?, ?> stateComponent : stateComponents)
 			if (!locks.isWriteLockHeldByCurrentThread(stateComponent))
 				throw new IllegalStateException();
@@ -94,8 +93,7 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
-	public void attachAndResetAll(Entity entity,
-			StateComponent<?, ?>... stateComponents) {
+	public void attachAndResetAll(Entity entity, StateComponent<?, ?>... stateComponents) {
 		getComponent().attachAndResetAll(entity, stateComponents);
 	}
 
@@ -107,8 +105,7 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
-	public void attachAll(Entity entity,
-			Collection<? extends StateComponent<?, ?>> stateComponents) {
+	public void attachAll(Entity entity, Collection<? extends StateComponent<?, ?>> stateComponents) {
 		for (StateComponent<?, ?> stateComponent : stateComponents)
 			if (!locks.isWriteLockHeldByCurrentThread(stateComponent))
 				throw new IllegalStateException();
@@ -128,8 +125,7 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
-	public boolean detachAll(Entity entity,
-			Collection<? extends StateComponent<?, ?>> stateComponents) {
+	public boolean detachAll(Entity entity, Collection<? extends StateComponent<?, ?>> stateComponents) {
 		for (StateComponent<?, ?> stateComponent : stateComponents)
 			if (!locks.isWriteLockHeldByCurrentThread(stateComponent))
 				throw new IllegalStateException();
@@ -137,8 +133,7 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
-	public boolean detachAll(Entity entity,
-			StateComponent<?, ?>... stateComponents) {
+	public boolean detachAll(Entity entity, StateComponent<?, ?>... stateComponents) {
 		return getComponent().detachAll(entity, stateComponents);
 	}
 
@@ -148,8 +143,7 @@ public class EntityStateManagerProcessingWrapper extends
 	}
 
 	@Override
-	public boolean hasAll(Entity entity,
-			Collection<? extends StateComponent<?, ?>> stateComponents) {
+	public boolean hasAll(Entity entity, Collection<? extends StateComponent<?, ?>> stateComponents) {
 		return getComponent().hasAll(entity, stateComponents);
 	}
 

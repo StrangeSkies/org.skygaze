@@ -18,3 +18,4 @@ Bundle-Name: Extengine Rendering 2D
 	uk.co.strangeskies.extengine.rendering;  \
 		version = latest
 Bundle-Version: 0.2.0.${tstamp}
+Private-Package: uk.co.strangeskies.extengine.rendering.rendering2d.impl

@@ -29,10 +29,8 @@ import uk.co.strangeskies.mathematics.geometry.matrix.building.MatrixBuilder;
 import uk.co.strangeskies.mathematics.geometry.matrix.vector.Vector2;
 import uk.co.strangeskies.mathematics.values.IntValue;
 
-@Component(service = { MouseInputController.class,
-		KeyboardInputController.class, WindowManagerInputController.class })
-public class SwingInputController implements BasicInputController,
-		MouseListener, WindowListener, KeyListener {
+@Component(service = { MouseInputController.class, KeyboardInputController.class, WindowManagerInputController.class })
+public class SwingInputController implements BasicInputController, MouseListener, WindowListener, KeyListener {
 	private final FunctionBuffer<HashSet<Integer>, HashSet<Integer>> keysDown;
 	private final FunctionBuffer<ArrayList<Integer>, ArrayList<Integer>> keysPressed;
 
@@ -41,15 +39,15 @@ public class SwingInputController implements BasicInputController,
 
 	private JFrame frame;
 
-	private final DoubleBuffer<Boolean, Boolean> windowClosing;
-	private final DoubleBuffer<Boolean, Boolean> windowMinimising;
-	private final DoubleBuffer<Boolean, Boolean> windowRestoring;
-	private final DoubleBuffer<Boolean, Boolean> windowMinimised;
+	private final DoubleBuffer<?, Boolean, Boolean> windowClosing;
+	private final DoubleBuffer<?, Boolean, Boolean> windowMinimising;
+	private final DoubleBuffer<?, Boolean, Boolean> windowRestoring;
+	private final DoubleBuffer<?, Boolean, Boolean> windowMinimised;
 
 	private Vector2<IntValue> mousePosition;
-	private final DoubleBuffer<Boolean, Boolean> mouseInside;
-	private final DoubleBuffer<Boolean, Boolean> mouseEntering;
-	private final DoubleBuffer<Boolean, Boolean> mouseExiting;
+	private final DoubleBuffer<?, Boolean, Boolean> mouseInside;
+	private final DoubleBuffer<?, Boolean, Boolean> mouseEntering;
+	private final DoubleBuffer<?, Boolean, Boolean> mouseExiting;
 
 	private final KeyRepeatSuppressor keyRepeatSuppressor;
 
@@ -59,15 +57,11 @@ public class SwingInputController implements BasicInputController,
 
 	@SuppressWarnings("unchecked")
 	public SwingInputController() {
-		keysDown = new FunctionBuffer<>(new HashSet<Integer>(),
-				c -> (HashSet<Integer>) c.clone());
-		keysPressed = new FunctionBuffer<>(new ArrayList<Integer>(),
-				c -> (ArrayList<Integer>) c.clone());
+		keysDown = new FunctionBuffer<>(new HashSet<Integer>(), c -> (HashSet<Integer>) c.clone());
+		keysPressed = new FunctionBuffer<>(new ArrayList<Integer>(), c -> (ArrayList<Integer>) c.clone());
 
-		buttonsDown = new FunctionBuffer<>(new HashSet<Integer>(),
-				c -> (HashSet<Integer>) c.clone());
-		buttonsPressed = new FunctionBuffer<>(new ArrayList<Integer>(),
-				c -> (ArrayList<Integer>) c.clone());
+		buttonsDown = new FunctionBuffer<>(new HashSet<Integer>(), c -> (HashSet<Integer>) c.clone());
+		buttonsPressed = new FunctionBuffer<>(new ArrayList<Integer>(), c -> (ArrayList<Integer>) c.clone());
 
 		windowClosing = new FunctionBuffer<>(false, Function.identity());
 		windowMinimising = new FunctionBuffer<>(false, Function.identity());
@@ -302,17 +296,14 @@ public class SwingInputController implements BasicInputController,
 		this.mousePosition.set(mousePosition);
 
 		mousePosition = mousePosition.getAdded(getWindowPosition());
-		robot.mouseMove(mousePosition.getX().intValue(), mousePosition.getY()
-				.intValue());
+		robot.mouseMove(mousePosition.getX().intValue(), mousePosition.getY().intValue());
 	}
 
 	@Override
 	public void moveMousePosition(Vector2<IntValue> mousePositionDelta) {
 		Vector2<IntValue> mousePosition = getActualMousePosition();
-		mousePosition = mousePosition.add(mousePositionDelta).add(
-				getWindowPosition());
-		robot.mouseMove(mousePosition.getX().intValue(), mousePosition.getY()
-				.intValue());
+		mousePosition = mousePosition.add(mousePositionDelta).add(getWindowPosition());
+		robot.mouseMove(mousePosition.getX().intValue(), mousePosition.getY().intValue());
 	}
 
 	@Override
@@ -332,16 +323,11 @@ public class SwingInputController implements BasicInputController,
 
 	@Override
 	public Vector2<IntValue> getWindowSize() {
-		return matrices
-				.ints()
-				.vector2()
-				.setData(frame.getContentPane().getWidth(),
-						frame.getContentPane().getHeight());
+		return matrices.ints().vector2().setData(frame.getContentPane().getWidth(), frame.getContentPane().getHeight());
 	}
 
 	@Override
 	public Vector2<IntValue> getWindowPosition() {
-		return matrices.ints().vector2()
-				.setData(frame.getContentPane().getLocationOnScreen());
+		return matrices.ints().vector2().setData(frame.getContentPane().getLocationOnScreen());
 	}
 }

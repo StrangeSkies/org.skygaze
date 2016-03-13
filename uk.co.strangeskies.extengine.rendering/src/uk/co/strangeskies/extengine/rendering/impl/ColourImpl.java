@@ -8,7 +8,7 @@ import uk.co.strangeskies.mathematics.expression.DependentExpression;
 import uk.co.strangeskies.mathematics.values.DoubleValue;
 import uk.co.strangeskies.mathematics.values.Value;
 
-public class ColourImpl extends DependentExpression<Colour> implements Colour {
+public class ColourImpl extends DependentExpression<Colour, Colour> implements Colour {
 	private final DoubleValue red;
 	private final DoubleValue green;
 	private final DoubleValue blue;
@@ -50,13 +50,12 @@ public class ColourImpl extends DependentExpression<Colour> implements Colour {
 	}
 
 	public ColourImpl(ColourImpl colour) {
-		this(colour.getRed().doubleValue(), colour.getGreen().doubleValue(), colour
-				.getBlue().doubleValue(), colour.getAlpha().doubleValue());
+		this(colour.getRed().doubleValue(), colour.getGreen().doubleValue(), colour.getBlue().doubleValue(),
+				colour.getAlpha().doubleValue());
 	}
 
 	public ColourImpl(Color colour) {
-		this(colour.getRed(), colour.getGreen(), colour.getBlue(), colour
-				.getAlpha());
+		this(colour.getRed(), colour.getGreen(), colour.getBlue(), colour.getAlpha());
 	}
 
 	@Override
@@ -81,8 +80,7 @@ public class ColourImpl extends DependentExpression<Colour> implements Colour {
 
 	@Override
 	public Color getColor() {
-		return new Color(red.floatValue(), green.floatValue(), blue.floatValue(),
-				alpha.floatValue());
+		return new Color(red.floatValue(), green.floatValue(), blue.floatValue(), alpha.floatValue());
 	}
 
 	@Override

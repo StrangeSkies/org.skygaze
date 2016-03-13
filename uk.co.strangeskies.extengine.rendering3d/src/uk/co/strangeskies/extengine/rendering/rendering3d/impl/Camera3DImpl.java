@@ -10,8 +10,8 @@ import uk.co.strangeskies.mathematics.geometry.matrix.MatrixH3;
 public class Camera3DImpl implements Camera3D {
 	private Scene<Data3D> scene;
 
-	private Expression<? extends MatrixH3<?>> transformation;
-	private Expression<? extends Matrix4<?>> projection;
+	private Expression<?, ? extends MatrixH3<?>> transformation;
+	private Expression<?, ? extends Matrix4<?>> projection;
 
 	@Override
 	public Scene<Data3D> getScene() {
@@ -24,23 +24,22 @@ public class Camera3DImpl implements Camera3D {
 	}
 
 	@Override
-	public Expression<? extends MatrixH3<?>> getTransformation() {
+	public Expression<?, ? extends MatrixH3<?>> getTransformation() {
 		return transformation;
 	}
 
 	@Override
-	public void setTransformation(
-			Expression<? extends MatrixH3<?>> transformation) {
+	public void setTransformation(Expression<?, ? extends MatrixH3<?>> transformation) {
 		this.transformation = transformation;
 	}
 
 	@Override
-	public Expression<? extends Matrix4<?>> getProjection() {
+	public Expression<?, ? extends Matrix4<?>> getProjection() {
 		return projection;
 	}
 
 	@Override
-	public void setProjection(Expression<? extends Matrix4<?>> projection) {
+	public void setProjection(Expression<?, ? extends Matrix4<?>> projection) {
 		this.projection = projection;
 	}
 }

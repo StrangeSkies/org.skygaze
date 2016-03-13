@@ -4,16 +4,11 @@ Bundle-Name: Extengine Entities Input
 -runee: JavaSE-1.8
 -runfw: org.eclipse.osgi;version='[3.10.1.v20140909-1633,3.10.1.v20140909-1633]'
 -buildpath:  \
-	osgi.enroute.base.api,\
-	osgi.enroute.junit.wrapper,\
-	osgi.enroute.hamcrest.wrapper,\
-	org.hamcrest__java-hamcrest,\
 	${ss;utilities},\
 	${ss;mathematics},\
 	${ss;mathematics.geometry},\
 	uk.co.strangeskies.extengine.entities; \
-		version = latest, \
+		version = snapshot, \
 	uk.co.strangeskies.extengine.input; \
-		version = latest
-Bundle-Version: 0.2.0.${tstamp}
+		version = snapshot
 Export-Package: uk.co.strangeskies.extengine.entity.components.input

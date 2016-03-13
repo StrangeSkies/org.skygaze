@@ -30,23 +30,24 @@ public class AssemblyContextImpl implements AssemblyContext {
 		this(assemblage, null, entities);
 	}
 
-	protected AssemblyContextImpl(AssemblageView assemblage,
-			AssemblyContext parent, final EntityManager entities) {
+	protected AssemblyContextImpl(AssemblageView assemblage, AssemblyContext parent, final EntityManager entities) {
 		this.assemblage = assemblage;
 		collapsedView = new CollapsedCompositionAssemblageView(assemblage);
 		this.parent = parent;
 		this.entities = entities;
 		entity = entities.create();
 
-		stateData = new FutureMap<>(state -> prepareStateData(state),
-				key -> entities.state().getData(entity, key));
+		stateData = new FutureMap<>(state -> {
+			prepareStateData(state);
+			return entities.state().getData(entity, state);
+		});
 
-		// TODO yet another dumb JDK bug, can't use :: syntax for no good reason.
+		// TODO yet another dumb JDK bug, can't use :: syntax for no good
+		// reason.
 		variableValues = new FutureMap<>(v -> v.create());
 
 		subcontexts = new FutureMap<>((AssemblageView k) -> {
-			AssemblyContextImpl assemblyContext = new AssemblyContextImpl(k,
-					AssemblyContextImpl.this, entities);
+			AssemblyContextImpl assemblyContext = new AssemblyContextImpl(k, AssemblyContextImpl.this, entities);
 			assemblyContext.startAssembly();
 			return assemblyContext;
 		});
@@ -54,8 +55,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 
 	protected <D> void prepareStateData(StateComponent<D, ?> state) {
 		for (StateInitialiser<D> initialiser : collapsedView.getInitialisers(state)) {
-			initialiser.initialise(entities.state().getData(entity, state),
-					AssemblyContextImpl.this);
+			initialiser.initialise(entities.state().getData(entity, state), AssemblyContextImpl.this);
 		}
 	}
 
@@ -65,8 +65,7 @@ public class AssemblyContextImpl implements AssemblyContext {
 	}
 
 	@Override
-	public Set<AssemblyContext> getSubcontexts(
-			AssemblageView... subassemblageMatchPattern) {
+	public Set<AssemblyContext> getSubcontexts(AssemblageView... subassemblageMatchPattern) {
 		Set<AssemblyContextImpl> subcontexts = new HashSet<>();
 
 		if (subassemblageMatchPattern.length == 0) {
@@ -89,12 +88,11 @@ public class AssemblyContextImpl implements AssemblyContext {
 			}
 		}
 
-		return Collections.<AssemblyContext> unmodifiableSet(subcontexts);
+		return Collections.<AssemblyContext>unmodifiableSet(subcontexts);
 	}
 
 	@Override
-	public AssemblyContext getSubcontext(
-			AssemblageView... subassemblageMatchPattern) {
+	public AssemblyContext getSubcontext(AssemblageView... subassemblageMatchPattern) {
 		Set<AssemblyContext> subcontexts = getSubcontexts(subassemblageMatchPattern);
 
 		if (subcontexts.size() != 1) {

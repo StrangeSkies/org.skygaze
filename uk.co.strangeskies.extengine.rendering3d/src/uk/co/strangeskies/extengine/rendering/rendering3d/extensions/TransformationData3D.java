@@ -6,7 +6,5 @@ import uk.co.strangeskies.mathematics.geometry.matrix.MatrixH3;
 import uk.co.strangeskies.utilities.Property;
 
 public interface TransformationData3D
-		extends
-		Property<Expression<? extends MatrixH3<?>>, Expression<? extends MatrixH3<?>>>,
-		Data3D {
+		extends Property<Expression<?, ? extends MatrixH3<?>>, Expression<?, ? extends MatrixH3<?>>>, Data3D {
 }

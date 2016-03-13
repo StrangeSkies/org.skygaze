@@ -12,11 +12,10 @@ import uk.co.strangeskies.mathematics.operation.InterpolationFunction;
 import uk.co.strangeskies.mathematics.values.DoubleValue;
 import uk.co.strangeskies.utilities.EqualityComparator;
 
-public class SceneInterpolatorImpl extends SceneBufferImpl implements
-		SceneInterpolator {
+public class SceneInterpolatorImpl extends SceneBufferImpl implements SceneInterpolator {
 	private final DoubleValue delta;
 
-	private final TreeMap<DoubleBuffer<?, ?>, List<DoubleBuffer<?, ?>>> interpolations;
+	private final TreeMap<DoubleBuffer<?, ?, ?>, List<DoubleBuffer<?, ?, ?>>> interpolations;
 
 	public SceneInterpolatorImpl() {
 		interpolations = new TreeMap<>(EqualityComparator.identityComparator());
@@ -29,33 +28,30 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 		return delta;
 	}
 
-	protected void registerInterpolation(DoubleBuffer<?, ?> interpolation,
-			DoubleBuffer<?, ?>... buffers) {
+	protected void registerInterpolation(DoubleBuffer<?, ?, ?> interpolation, DoubleBuffer<?, ?, ?>... buffers) {
 		interpolations.put(interpolation, Arrays.asList(buffers));
 
-		for (DoubleBuffer<?, ?> buffer : buffers) {
+		for (DoubleBuffer<?, ?, ?> buffer : buffers) {
 			registerBuffer(buffer);
 		}
 	}
 
-	protected void unregisterInterpolation(DoubleBuffer<?, ?> interpolation) {
-		List<DoubleBuffer<?, ?>> buffers = interpolations.remove(interpolation);
+	protected void unregisterInterpolation(DoubleBuffer<?, ?, ?> interpolation) {
+		List<DoubleBuffer<?, ?, ?>> buffers = interpolations.remove(interpolation);
 
-		for (DoubleBuffer<?, ?> buffer : buffers) {
+		for (DoubleBuffer<?, ?, ?> buffer : buffers) {
 			unregisterBuffer(buffer);
 		}
 	}
 
 	@Override
-	public <T, I> Interpolation<T, I> bufferInterpolation(
-			DoubleBuffer<? extends T, ? extends T> interpolation,
+	public <T, I> Interpolation<T, I> bufferInterpolation(DoubleBuffer<?, ? extends T, ? extends T> interpolation,
 			InterpolationFunction<? super T, ? extends I> operation) {
-		DoubleBuffer<?, T> from = bufferResult(interpolation);
+		DoubleBuffer<?, ?, T> from = bufferResult(interpolation);
 
-		DoubleBuffer<?, T> to = bufferResult(interpolation.getBackExpression());
+		DoubleBuffer<?, ?, T> to = bufferResult(interpolation.getBackExpression());
 
-		Interpolation<T, I> interpolate = new Interpolation<>(from, to, getDelta(),
-				operation);
+		Interpolation<T, I> interpolate = new Interpolation<>(from, to, getDelta(), operation);
 
 		registerInterpolation(interpolation, to, from);
 
@@ -63,17 +59,13 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	}
 
 	@Override
-	public <F, T, I> Interpolation<T, I> bufferInterpolation(
-			DoubleBuffer<? extends F, ? extends F> interpolation,
-			InterpolationFunction<? super T, ? extends I> operation,
-			Function<? super F, ? extends T> function) {
-		DoubleBuffer<?, ? extends T> from = bufferResult(interpolation, function);
+	public <F, T, I> Interpolation<T, I> bufferInterpolation(DoubleBuffer<?, ? extends F, ? extends F> interpolation,
+			InterpolationFunction<? super T, ? extends I> operation, Function<? super F, ? extends T> function) {
+		DoubleBuffer<?, ?, ? extends T> from = bufferResult(interpolation, function);
 
-		DoubleBuffer<?, ? extends T> to = bufferResult(
-				interpolation.getBackExpression(), function);
+		DoubleBuffer<?, ?, ? extends T> to = bufferResult(interpolation.getBackExpression(), function);
 
-		Interpolation<T, I> interpolate = new Interpolation<>(from, to, getDelta(),
-				operation);
+		Interpolation<T, I> interpolate = new Interpolation<>(from, to, getDelta(), operation);
 
 		registerInterpolation(interpolation, to, from);
 
@@ -84,7 +76,7 @@ public class SceneInterpolatorImpl extends SceneBufferImpl implements
 	public void push() {
 		super.push();
 
-		for (DoubleBuffer<?, ?> interpolation : interpolations.keySet()) {
+		for (DoubleBuffer<?, ?, ?> interpolation : interpolations.keySet()) {
 			interpolation.push();
 		}
 	}

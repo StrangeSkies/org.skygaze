@@ -1,5 +1,8 @@
-package uk.co.strangeskies.extengine.entity;
+package uk.co.strangeskies.extengine.entities.test;
 
+import org.junit.Test;
+
+import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponentBuilder;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponentConfigurator;
@@ -61,39 +64,31 @@ public class Test2 {
 		return matrixBuilder;
 	}
 
+	@Test
 	public void run() {
-		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler(
-				new GraphBuilderImpl()));
+		PeriodicScheduler scheduler = new PeriodicScheduler(new LinearScheduler(new GraphBuilderImpl()));
 		scheduler.setPeriodFrequency(5);
 		behaviour().setDefaultScheduler(scheduler);
 
 		StateComponent<Vector2<DoubleValue>, Vector2<DoubleValue>> position = stateBuilder()
-				.data(() -> matrices().doubles().vector2()).name("Position")
-				.description("Position of entity").create();
+				.data(() -> matrices().doubles().vector2()).name("Position").description("Position of entity").create();
 
 		StateComponent<Vector2<DoubleValue>, Vector2<DoubleValue>> velocity = stateBuilder()
-				.data(() -> matrices().doubles().vector2()).name("Velocity")
-				.description("Velocity of entity").create();
+				.data(() -> matrices().doubles().vector2()).name("Velocity").description("Velocity of entity").create();
 
-		BehaviourComponent movement = behaviourBuilder()
-				.process(
-						context -> {
-							for (Entity entity : context.participatingEntities())
-								context.state().getData(entity, position)
-										.add(context.state().getReadOnlyData(entity, velocity));
-						}).name("Movement").description("Basic movement of entity")
-				.readDependencies(velocity).writeDependencies(position).create();
+		BehaviourComponent movement = behaviourBuilder().process(context -> {
+			for (Entity entity : context.participatingEntities())
+				context.state().getData(entity, position).add(context.state().getReadOnlyData(entity, velocity));
+		}).name("Movement").description("Basic movement of entity").readDependencies(velocity)
+				.writeDependencies(position).create();
 		behaviour().addUniversal(movement);
 
-		BehaviourComponent reportPosition = behaviourBuilder()
-				.process(
-						context -> {
-							for (Entity entity : context.participatingEntities())
-								System.out.println(context.state()
-										.getReadOnlyData(entity, position).toString());
-							System.out.println();
-						}).name("Position Report").description("Report position of entity")
-				.readDependencies(position).behaviourDependencies(movement).create();
+		BehaviourComponent reportPosition = behaviourBuilder().process(context -> {
+			for (Entity entity : context.participatingEntities())
+				System.out.println(context.state().getReadOnlyData(entity, position).toString());
+			System.out.println();
+		}).name("Position Report").description("Report position of entity").readDependencies(position)
+				.behaviourDependencies(movement).create();
 		behaviour().addUniversal(reportPosition);
 
 		Entity entity1 = entity().create();

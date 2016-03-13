@@ -1,9 +1,10 @@
-package uk.co.strangeskies.extengine.entity;
+package uk.co.strangeskies.extengine.entities.test;
 
 import java.util.Random;
 
 import org.junit.Test;
 
+import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.assembly.Assemblage;
 import uk.co.strangeskies.extengine.entity.assembly.Assembler;
 import uk.co.strangeskies.extengine.entity.assembly.Variable;

@@ -9,20 +9,15 @@ Export-Package: \
 	uk.co.strangeskies.extengine.entity.scheduling.terminating,\
 	uk.co.strangeskies.extengine.entity.scheduling.terminating.schedulers,\
 	uk.co.strangeskies.extengine.entity.state
+
 Bundle-Name: Extengine Entities
--dsannotations: \
-	*
 -runee: JavaSE-1.8
 -runfw: org.eclipse.osgi;version='[3.10.1.v20140909-1633,3.10.1.v20140909-1633]'
 -buildpath: \
-	osgi.enroute.base.api,\
-	osgi.enroute.junit.wrapper,\
-	osgi.enroute.hamcrest.wrapper,\
-	org.hamcrest__java-hamcrest,\
 	${ss;utilities},\
-	${ss;mathematics}
+	${ss;mathematics},\
+	${ss;mathematics.geometry}
 
-Bundle-Version: 0.2.0.${tstamp}
 Private-Package: \
 	uk.co.strangeskies.extengine.entity.assembly.impl,\
 	uk.co.strangeskies.extengine.entity.behaviour.impl,\

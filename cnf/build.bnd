@@ -9,81 +9,69 @@ javac.target: 1.8
 ## Bnd Options
 -sources: true
 
--dsannotations: \
-	*
-
 bnd-release = https://bndtools.ci.cloudbees.com/job/bnd.master/lastSuccessfulBuild/artifact/dist/bundles
 
 copyright.year = ${tstamp;yyyy}
 copyright = Copyright (c) Strange Skies (2014, ${copyright.year}). All Rights Reserved.
 
-groupid: uk.co.strangeskies
+groupid: uk.co.strangeskies.extengine
 
-Bundle-Vendor: Skies http://strangeskies.co.uk/
+extengine-version: 0.0.1
+extengine-version-ceiling: 1.0.0
+
+Bundle-Vendor: Strange Skies http://strangeskies.co.uk/
 Bundle-Copyright: ${copyright}
 Bundle-License: LGPL <http://www.gnu.org/licenses/>
+Bundle-Version: ${extengine-version}.${tstamp}
 
-## Properties from ext/*.bnd can be referenced in order to extend them. For
-## example, to add one additional plugin to the list defined in
-## ext/repositories.bnd:
-# -plugin: ${ext.repositories.-plugin}, org.example.MyPlugin
+-dsannotations: *
 
 ## To enable baselining, uncomment the following lines:
 # -baseline: *
 -releaserepo: Release
 
--pluginpath:\
-	${build}/cache/biz.aQute.repository.aether.jar; \
-		url = ${bnd-release}/biz.aQute.repository.aether/biz.aQute.repository.aether-latest.jar
+-pluginpath.base:\
+	${pluginpath.aether}
 
-ss: ${def;strangeSkiesDependency;uk.co.strangeskies:uk.co.strangeskies.${1}\\;version=latest}
-mdb: ${def;modabiDependency;uk.co.strangeskies.modabi:uk.co.strangeskies.modabi.${1}\\;version=latest}
+-plugin.7.StrangeSkies:\
+	${plugin.strangeskies}
 
--plugin.7.StrangeSkies: \
-\
-		aQute.bnd.deployer.repository.aether.AetherRepository; \
-			name				=		StrangeSkies; \
-			url					=		http://oss.jfrog.org/libs-snapshot/
+-plugin.8.Eclipse:\
+	${plugin.eclipse.sdk},\
+	${plugin.eclipse.wtp},\
+	${plugin.eclipse.fx}
 
-# For users with a copy of the uk.co.strangeskies project checked out
-# from git locally, they can redirect dependencies on bundles in that
-# project to local releases from the snapshots on OJO.
-#
-# The following can be added to a local.bnd file in cnf/ext/, which is
-# excluded from git via .gitignore. The path specified by "local = ..."
-# should point to the cnf/release/ repository for the local
-# uk.co.strangeskies project.
-#
-#strangeSkiesDependency: uk.co.strangeskies.${1}\;version=latest
-#
-#-plugin.8.StrangeSkies: \
-#\
-#		aQute.bnd.deployer.repository.LocalIndexedRepo;\
-#			name                =       StrangeSkies;\
-#			pretty              =       true;\
-#			local               =       ${user.home}[/workspaces]/uk.co.strangeskies/cnf/release
+#modabi-bnd-plugin: ${build}/release/uk.co.strangeskies.modabi.bnd.${1}/uk.co.strangeskies.modabi.bnd.${1}-${modabi-version}.jar
+
+#pluginpath.modabi: \
+#	${modabi-bnd-plugin;xml}
 
 ## If you use git, you might want to uncomment the following lines:
 Git-Descriptor: ${system-allow-fail;git describe --dirty --always}
 Git-SHA: ${system-allow-fail;git rev-list -1 HEAD}
 -diffignore: Git-Descriptor,Git-SHA
 
-# Run requirement groups:
-runreq.base=\
-	osgi.identity;filter:='(osgi.identity=osgi.enroute.logger.simple.provider)'
+## Run requirement groups:
+runreq.base:\
+	${req;osgi.enroute.logger.simple.provider}
 
-runreq.felix.shell=\
-	osgi.identity;filter:='(osgi.identity=org.apache.felix.gogo.command)',\
-	osgi.identity;filter:='(osgi.identity=org.apache.felix.gogo.shell)'
+## Build path groups:
+-buildpath.base=\
+	osgi.enroute.base.api;version=latest
 
-runreq.felix.web=\
-	osgi.identity;filter:='(osgi.identity=org.apache.felix.http.whiteboard)',\
-	osgi.identity;filter:='(osgi.identity=aQute.xray.plugin)',\
-	osgi.identity;filter:='(osgi.identity=org.apache.felix.webconsole.plugins.event)',\
-	osgi.identity;filter:='(osgi.identity=org.apache.felix.webconsole.plugins.memoryusage)',\
-	osgi.identity;filter:='(osgi.identity=org.apache.felix.webconsole.plugins.scriptconsole)',\
-	osgi.identity;filter:='(osgi.identity=org.apache.felix.webconsole.plugins.useradmin)'
+-testpath.base=\
+	osgi.enroute.junit.wrapper,\
+	osgi.enroute.hamcrest.wrapper,\
+	org.hamcrest__java-hamcrest
 
-runreq.eclipselink.jpa=\,\
-	osgi.identity;filter:='(osgi.identity=org.apache.aries.jpa.eclipselink.adapter)'
-	osgi.identity;filter:='(osgi.identity=javax.persistence)'
+## General configuration
+extengine-description: \
+	Modabi is a modular data binding library for Java. It is format \
+	agnostic, and schema can bind to interface over implementation. \
+	Complex binding rules are supported, including e.g. support for \
+	the builder pattern, so it's easy to plug into existing business \
+	objects and API without modification. \
+\
+	Type safety is provided beyond the current best in class - to the \
+	level of full generic input/output method invocation type \
+	inference.
