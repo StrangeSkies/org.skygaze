@@ -23,14 +23,11 @@ public class Sprite {
 		Image image = null;
 		try {
 			image = ImageIO.read(url);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 
-		GraphicsConfiguration gc = GraphicsEnvironment
-				.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 				.getDefaultConfiguration();
-		this.image = gc.createCompatibleImage(image.getWidth(null),
-				image.getHeight(null), Transparency.TRANSLUCENT);
+		this.image = gc.createCompatibleImage(image.getWidth(null), image.getHeight(null), Transparency.TRANSLUCENT);
 		this.image.getGraphics().drawImage(image, 0, 0, null);
 	}
 
