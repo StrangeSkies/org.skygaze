@@ -1,4 +1,4 @@
-package uk.co.strangeskies.gears.engine.sections.impl;
+package uk.co.strangeskies.extengine.sections.impl;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -7,9 +7,9 @@ import java.util.Queue;
 
 import org.osgi.service.component.annotations.Component;
 
-import uk.co.strangeskies.gears.engine.sections.Section;
-import uk.co.strangeskies.gears.engine.sections.SectionProcessingContext;
-import uk.co.strangeskies.gears.engine.sections.SectionProcessor;
+import uk.co.strangeskies.extengine.sections.Section;
+import uk.co.strangeskies.extengine.sections.SectionProcessingContext;
+import uk.co.strangeskies.extengine.sections.SectionProcessor;
 
 @Component(service = SectionProcessor.class)
 public class SectionProcessorImpl implements SectionProcessor {

@@ -2,10 +2,16 @@ package uk.co.strangeskies.extengine.entity.behaviour;
 
 import java.util.Set;
 
+import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
 import uk.co.strangeskies.utilities.Described;
 import uk.co.strangeskies.utilities.Named;
 
+/**
+ * A behaviour over a set of {@link Entity entities}.
+ * 
+ * @author Elias N Vasylenko
+ */
 public interface BehaviourComponent extends Named, Described {
 	public BehaviourProcess getProcess();
 

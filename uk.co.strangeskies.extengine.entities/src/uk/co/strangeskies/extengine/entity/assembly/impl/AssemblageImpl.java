@@ -9,20 +9,23 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.assembly.Assemblage;
 import uk.co.strangeskies.extengine.entity.assembly.AssemblageView;
 import uk.co.strangeskies.extengine.entity.assembly.CollapsedAssemblageView;
 import uk.co.strangeskies.extengine.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.extengine.entity.assembly.Variable;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
+import uk.co.strangeskies.extengine.entity.management.EntityManager;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
-import uk.co.strangeskies.utilities.collection.FilteredListDecorator;
 import uk.co.strangeskies.utilities.collection.FilteredSetDecorator;
 import uk.co.strangeskies.utilities.collection.MultiHashMap;
 import uk.co.strangeskies.utilities.collection.MultiMap;
 
 public class AssemblageImpl implements Assemblage {
-	private final List<Assemblage> composition;
+	private final String name;
+
+	private final Set<Assemblage> composition;
 
 	private final Set<Assemblage> subassemblages;
 	private final Map<Assemblage, Assemblage> overriddenSubassemblages;
@@ -34,15 +37,17 @@ public class AssemblageImpl implements Assemblage {
 
 	private final Set<Variable<?>> variables;
 
-	protected AssemblageImpl() {
-		composition = new FilteredListDecorator<Assemblage>(assemblage -> {
+	public AssemblageImpl(String name) {
+		this.name = name;
+
+		composition = new FilteredSetDecorator<>(assemblage -> {
 			if (assemblage.getCollapsedCompositionView().getComposition().contains(AssemblageImpl.this)) {
 				throw new IllegalArgumentException("Composition assemblage graph cycle detected");
 			}
 			return true;
 		});
 
-		subassemblages = new FilteredSetDecorator<Assemblage>(assemblage -> {
+		subassemblages = new FilteredSetDecorator<>(assemblage -> {
 			Queue<Assemblage> subassemblages = new ArrayDeque<>();
 			subassemblages.add(assemblage);
 
@@ -69,6 +74,11 @@ public class AssemblageImpl implements Assemblage {
 	}
 
 	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
 	public Set<Assemblage> getSubassemblages() {
 		return subassemblages;
 	}
@@ -90,19 +100,19 @@ public class AssemblageImpl implements Assemblage {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <D> List<StateInitialiser<D>> getInitialisers(final StateComponent<D, ?> state) {
-		return (List<StateInitialiser<D>>) statePreparators.getCollection(state);
+	public <D> Set<StateInitialiser<D>> getInitialisers(final StateComponent<D, ?> state) {
+		return (Set<StateInitialiser<D>>) statePreparators.getCollection(state);
 	}
 
 	@Override
-	public List<Assemblage> getComposition() {
+	public Set<Assemblage> getComposition() {
 		return composition;
 	}
 
 	@Override
 	public AssemblageView overrideSubassemblage(AssemblageView subassemblageMatch) {
 		Assemblage overriddenAssemblage = getSubassemblage(subassemblageMatch);
-		Assemblage overridingAssemblage = new AssemblageImpl();
+		Assemblage overridingAssemblage = new AssemblageImpl(overriddenAssemblage.getName());
 		overridingAssemblage.getComposition().add(overriddenAssemblage);
 
 		overriddenSubassemblages.put(overriddenAssemblage, overridingAssemblage);
@@ -116,7 +126,7 @@ public class AssemblageImpl implements Assemblage {
 
 		Set<Assemblage> subassemblages = getSubassemblages(subassemblageMatch);
 		for (Assemblage overriddenAssemblage : subassemblages) {
-			Assemblage overridingAssemblage = new AssemblageImpl();
+			Assemblage overridingAssemblage = new AssemblageImpl(overriddenAssemblage.getName());
 			overridingAssemblage.getComposition().add(overriddenAssemblage);
 
 			overriddenSubassemblages.put(overriddenAssemblage, overridingAssemblage);
@@ -180,5 +190,10 @@ public class AssemblageImpl implements Assemblage {
 	@Override
 	public CollapsedAssemblageView getCollapsedCompositionView() {
 		return new CollapsedCompositionAssemblageView(this);
+	}
+
+	@Override
+	public Entity assemble(EntityManager entityManager) {
+		return new AssemblyContextImpl(this, entityManager).assemble();
 	}
 }

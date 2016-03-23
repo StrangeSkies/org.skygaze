@@ -1,12 +1,12 @@
-package uk.co.strangeskies.gears.engine.impl;
+package uk.co.strangeskies.extengine.impl;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import uk.co.strangeskies.gears.engine.Engine;
-import uk.co.strangeskies.gears.engine.Game;
-import uk.co.strangeskies.gears.engine.sections.SectionProcessor;
+import uk.co.strangeskies.extengine.Engine;
+import uk.co.strangeskies.extengine.Game;
+import uk.co.strangeskies.extengine.sections.SectionProcessor;
 
 @Component(immediate = true)
 public class EngineImpl implements Engine {

@@ -1,6 +1,6 @@
-package uk.co.strangeskies.gears.engine;
+package uk.co.strangeskies.extengine;
 
-import uk.co.strangeskies.gears.engine.sections.SectionProcessor;
+import uk.co.strangeskies.extengine.sections.SectionProcessor;
 
 public interface Engine {
 	public void launch();

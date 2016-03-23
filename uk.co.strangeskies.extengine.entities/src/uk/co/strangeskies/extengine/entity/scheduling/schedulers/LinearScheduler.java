@@ -1,8 +1,8 @@
-package uk.co.strangeskies.extengine.entity.scheduling.terminating.schedulers;
+package uk.co.strangeskies.extengine.entity.scheduling.schedulers;
 
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.scheduling.ScheduleProcessingContext;
-import uk.co.strangeskies.extengine.entity.scheduling.terminating.TerminatingScheduler;
+import uk.co.strangeskies.extengine.entity.scheduling.TerminatingScheduler;
 import uk.co.strangeskies.mathematics.graph.Graph;
 import uk.co.strangeskies.mathematics.graph.GraphListeners;
 import uk.co.strangeskies.mathematics.graph.building.GraphBuilder;

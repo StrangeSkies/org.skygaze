@@ -9,11 +9,20 @@
 		uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponentConfigurator,
 		uk.co.strangeskies.extengine.entity.behaviour.BehaviourProcess,
 		uk.co.strangeskies.extengine.entity.assembly.Assemblage,
+		uk.co.strangeskies.extengine.entity.assembly.AssemblageFactory,
 		uk.co.strangeskies.extengine.entity.state.StateComponent,
 		uk.co.strangeskies.extengine.entity.state.StateComponentConfigurator,
+		uk.co.strangeskies.extengine.entity.assembly.StateInitialiser,
 		java.util.Set,
-		uk.co.strangeskies.modabi.Schema,
-		uk.co.strangeskies.utilities.factory.Factory
+		uk.co.strangeskies.extengine.entity.assembly.Scene,
+		uk.co.strangeskies.extengine.entity.assembly.Catalogue,
+		uk.co.strangeskies.utilities.factory.Factory,
+		uk.co.strangeskies.extengine.entity.scheduling.Scheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.TerminatingScheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.schedulers.CyclicScheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.schedulers.PeriodicScheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.schedulers.LinearScheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.schedulers.CriticalPathScheduler
 	</imports>
 
 	<dependencies>
@@ -25,7 +34,7 @@
 		<type
 			name="stateReference"
 			baseType="reference"
-			dataType="StateComponent&lt;?\, ?&gt;">
+			dataType="StateComponent{?\, ?}">
 			<data
 				name="targetModel"
 				value="stateComponent" />
@@ -62,7 +71,7 @@
 	<models>
 		<model
 			name="stateDependencies"
-			dataType="@Infer Set&lt;?&gt;">
+			dataType="@Infer Set{?}">
 
 			<simple
 				name="dependency"
@@ -70,13 +79,13 @@
 				inMethod="add"
 				outMethod="this"
 				outMethodIterable="true"
-				occurences="1.." />
+				occurrences="1.." />
 		</model>
 
 		<model
 			name="stateComponent"
-			dataType="StateComponent&lt;?\, ?&gt;"
-			bindingType="StateComponentConfigurator&lt;?\, ?&gt;">
+			dataType="StateComponent{?\, ?}"
+			bindingType="StateComponentConfigurator{?\, ?}">
 
 			<simple
 				name="name"
@@ -92,34 +101,29 @@
 				baseModel="stateDependencies"
 				outMethod="getReadDependencies"
 				inMethod="readDependencies"
-				occurences="0..1" />
+				occurrences="0..1" />
 
 			<complex
 				name="writeDependencies"
 				baseModel="stateDependencies"
 				outMethod="getWriteDependencies"
 				inMethod="writeDependencies"
-				occurences="0..1" />
+				occurrences="0..1" />
 
-			<!-- complex name="data">
-				<simple type="type" />
-				<complex
-					name="factory"
-					dataType="Factory"
-					baseModel="userDefined" />
-			</complex -->
+			<!-- complex name="data"> <simple type="type" /> <complex name="factory" 
+				dataType="Factory" baseModel="userDefined" /> </complex -->
 		</model>
 
 		<model
 			name="behaviourDependencies"
-			dataType="@Infer Set&lt;?&gt;">
+			dataType="@Infer Set{?}">
 			<simple
 				name="dependency"
 				type="behaviourReference"
 				inMethod="add"
 				outMethod="this"
 				outMethodIterable="true"
-				occurences="1.." />
+				occurrences="1.." />
 		</model>
 
 		<model
@@ -136,117 +140,136 @@
 			<complex
 				name="readDependencies"
 				baseModel="stateDependencies"
-				occurences="0..1" />
+				occurrences="0..1" />
 			<complex
 				name="writeDependencies"
 				baseModel="stateDependencies"
-				occurences="0..1" />
+				occurrences="0..1" />
 
 			<complex
 				name="process"
-				baseModel="script"
+				baseModel="scriptObject"
 				dataType="BehaviourProcess" />
 		</model>
 
 		<model
 			name="assemblage"
-			dataType="Assemblage">
-			<data
-				format="PROPERTY"
+			dataType="Assemblage"
+			bindingType="AssemblageFactory">
+
+			<property
 				name="name"
-				type="string" />
+				type="string"
+				inMethod="create"
+				inMethodChained="true" />
 
 			<complex
 				name="composition"
-				dataType="@Infer Set&lt;?&gt;">
-				<data
-					format="SIMPLE"
+				dataType="@Infer Set{?}"
+				bindingStrategy="TARGET_ADAPTOR"
+				inMethod="null">
+
+				<inputSequence
+					name="getComposition"
+					inMethodChained="true" />
+
+				<simple
 					name="component"
 					type="assemblageReference"
 					inMethod="add"
-					isIterableOut="true"
 					outMethod="this"
-					occurences="1.." />
+					outMethodIterable="true"
+					occurrences="1.." />
 			</complex>
 
 			<complex
-				name="subAssemblages"
-				dataType="@Infer Set&lt;?&gt;">
-				<data
-					format="SIMPLE"
+				name="subassemblages"
+				dataType="@Infer Set{?}"
+				bindingStrategy="TARGET_ADAPTOR"
+				inMethod="null">
+
+				<inputSequence
+					name="getSubassemblages"
+					inMethodChained="true" />
+
+				<simple
 					name="component"
 					type="assemblageReference"
 					inMethod="add"
-					isIterableOut="true"
 					outMethod="this"
-					occurences="1.." />
+					outMethodIterable="true"
+					occurrences="1.." />
 			</complex>
 
 			<complex
 				name="variables"
-				dataType="@Infer Set&lt;?&gt;">
+				dataType="@Infer Set{?}"
+				bindingStrategy="TARGET_ADAPTOR"
+				inMethod="null">
+
+				<inputSequence
+					name="getVariables"
+					inMethodChained="true" />
 			</complex>
+
+			<simple
+				name="behaviour"
+				dataType="@Infer Set{?}"
+				bindingStrategy="TARGET_ADAPTOR"
+				inMethod="null"
+				outMethod="getBehaviours">
+
+				<inputSequence
+					name="getBehaviours"
+					inMethodChained="true" />
+
+				<data
+					name="component"
+					type="behaviourReference"
+					inMethod="add"
+					isIterableOut="true"
+					outMethod="this"
+					outMethodIterable="true"
+					occurrences="1.." />
+			</simple>
 
 			<complex
 				name="state"
-				dataType="@Infer Set&lt;?&gt;">
-				<data
-					format="SIMPLE"
-					name="component"
-					type="stateReference"
-					inMethod="add"
-					isIterableOut="true"
-					outMethod="this"
-					occurences="1.." />
-			</complex>
+				dataType="Assemblage"
+				bindingStrategy="TARGET_ADAPTOR"
+				inMethod="null"
+				outMethod="this">
 
-			<complex
-				name="behaviour"
-				bindingType="Set">
-				<data
-					format="SIMPLE"
-					name="component"
-					type="stateReference"
-					inMethod="add"
-					isIterableOut="true"
-					outMethod="this"
-					occurences="1.." />
-			</complex>
-
-			<complex
-				name="initialisation"
-				bindingType="Set">
 				<complex
-					name="initialiser"
-					isIterableOut="true"
-					outMethod="this"
-					occurences="1..">
-					<data
-						name="state"
-						format="PROPERTY"
-						type="string" />
+					name="component"
+					dataType="StateComponent{?\, ?}"
+					inMethod="null"
+					bindingStrategy="TARGET_ADAPTOR"
+					outMethod="getStates"
+					outMethodIterable="true"
+					occurrences="1..">
 
-					<complex
-						name="implementation"
-						baseModel="script" />
+					<property
+						name="name"
+						type="stateReference"
+						inMethod="getInitialisers"
+						outMethod="this"
+						inMethodChained="true" />
+
+					<!-- TODO initialiser -->
 				</complex>
 			</complex>
 		</model>
 
-		<model name="assemblages">
-			<data
-				format="PROPERTY"
-				name="name"
-				type="string" />
-
-			<data
-				format="SIMPLE"
+		<model
+			name="assemblages"
+			dataType="@Infer Set{?}">
+			<simple
 				name="assemblage"
 				type="assemblageReference"
 				inMethod="add"
-				isIterableOut="true"
 				outMethod="this"
-				occurences="1.." />
+				occurrences="1.." />
 		</model>
 
 		<!-- Schedulers -->
@@ -254,58 +277,73 @@
 			name="scheduler"
 			abstract="true"
 			extensible="true"
-			dataType="uk.co.strangeskies.gears.entity.scheduling.Scheduler" />
+			dataType="Scheduler" />
 
 		<model
 			name="terminatingScheduler"
 			abstract="true"
+			dataType="TerminatingScheduler" />
+
+		<model
+			name="cyclic"
 			baseModel="scheduler"
-			dataType="uk.co.strangeskies.gears.entity.scheduling.terminating.TerminatingScheduler" />
+			dataType="CyclicScheduler"
+			bindingStrategy="CONSTRUCTOR">
+			<complex
+				name="cycle"
+				baseModel="terminatingScheduler"
+				extensible="true" />
+		</model>
+
+		<model
+			name="periodic"
+			baseModel="cyclic"
+			dataType="PeriodicScheduler" />
 
 		<model
 			name="linearScheduler"
 			abstract="true"
 			baseModel="terminatingScheduler"
-			dataType="uk.co.strangeskies.gears.entity.scheduling.terminating.schedulers.LinearScheduler" />
+			dataType="LinearScheduler" />
 
 		<model
 			name="criticalPathScheduler"
 			abstract="true"
 			baseModel="terminatingScheduler"
-			dataType="uk.co.strangeskies.gears.entity.scheduling.terminating.schedulers.CriticalPathScheduler" />
+			dataType="CriticalPathScheduler" />
 
+		<!-- Catalogue -->
 		<model
-			name="cyclic"
-			baseModel="scheduler"
-			dataType="uk.co.strangeskies.gears.entity.scheduling.schedulers.CyclicScheduler">
-			<complex model="terminatingScheduler" />
-		</model>
+			name="Catalogue"
+			dataType="Catalogue">
 
-		<model
-			name="periodic"
-			baseModel="scheduler"
-			dataType="uk.co.strangeskies.gears.entity.scheduling.schedulers.PeriodicScheduler">
-			<complex model="terminatingScheduler" />
-		</model>
-
-		<!-- Scene -->
-		<model
-			name="scene"
-			dataType="uk.co.strangeskies.gears.entity.management.EntityManager">
-			<data
-				format="PROPERTY"
+			<property
 				name="name"
 				type="string" />
 
+			<property
+				name="package"
+				type="package" />
+
+		</model>
+
+		<!-- Arrangement -->
+		<model
+			name="arrangement"
+			dataType="Arrangement">
+
 			<complex
 				name="dependencies"
-				occurances="0..1"
-				dataType="@Infer Set&lt;?&gt;">
+				occurrences="0..1"
+				dataType="@Infer Set{?}">
+
 				<simple
 					name="dependency"
 					type="import"
+					occurrences="0.."
 					outMethod="this"
-					dataType="Schema">
+					dataType="Scene">
+
 					<data name="import">
 						<data
 							name="targetModel"
@@ -330,21 +368,75 @@
 				<complex
 					baseModel="scheduler"
 					abstract="true"
-					occurences="1.." />
+					occurrences="1.." />
 			</complex>
 
 			<complex name="globalBehaviours">
-				<data
-					format="SIMPLE"
+				<simple
 					name="behaviour"
 					type="behaviourReference"
 					inMethod="add"
 					isIterableOut="true"
 					outMethod="this"
-					occurences="1.." />
+					occurrences="1.." />
 			</complex>
 
-			<complex type="assemblages" />
+			<complex baseModel="assemblages" />
+
+			<complex
+				name="root"
+				optional="true"
+				baseModel="assemblage" />
 		</model>
 	</models>
+
+	<assemblages>
+		<assemblage name="poop">
+			<behaviour>
+				<component name="runAround" />
+				<component name="sleepWalk" />
+				<component name="waddle">
+
+					function process(context) {
+					// summat
+					}
+
+				</component>
+				<component name="move">
+
+					function process(c) {
+					for (e in
+					c.getEntitiesWith(states.position, states.velocity) {
+					pos =
+					c.getData(e, states.position);
+					vel = c.getReadOnlyData(e,
+					states.velocity);
+					pos.add(vel);
+					}
+					}
+
+				</component>
+			</behaviour>
+
+			<state>
+				<component id="position">
+					<vector2>2, 3</vector2>
+				</component>
+
+				<component id="velocity">
+					<scriptObject>
+
+						function initialise(data, context) {
+						data.setValue(10, 10);
+						}
+
+					</scriptObject>
+				</component>
+
+				<component
+					id="size"
+					ref="position" />
+			</state>
+		</assemblage>
+	</assemblages>
 </schema>

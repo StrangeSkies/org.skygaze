@@ -1,12 +1,12 @@
-package uk.co.strangeskies.gears.core.sections.test;
+package uk.co.strangeskies.extengine.sections.test;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import uk.co.strangeskies.gears.engine.sections.Section;
-import uk.co.strangeskies.gears.engine.sections.SectionProcessingContext;
-import uk.co.strangeskies.gears.engine.sections.SectionProcessor;
-import uk.co.strangeskies.gears.engine.sections.impl.SectionProcessorImpl;
+import uk.co.strangeskies.extengine.sections.Section;
+import uk.co.strangeskies.extengine.sections.SectionProcessingContext;
+import uk.co.strangeskies.extengine.sections.SectionProcessor;
+import uk.co.strangeskies.extengine.sections.impl.SectionProcessorImpl;
 
 public class SectionTest {
 	@Test

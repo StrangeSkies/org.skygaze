@@ -1,7 +1,7 @@
 package uk.co.strangeskies.extengine.entity.scheduling.schedulers;
 
 import uk.co.strangeskies.extengine.entity.scheduling.ScheduleProcessingContext;
-import uk.co.strangeskies.extengine.entity.scheduling.terminating.TerminatingScheduler;
+import uk.co.strangeskies.extengine.entity.scheduling.TerminatingScheduler;
 
 public class PeriodicScheduler extends CyclicScheduler {
 	private long cycleDurationNanoseconds;

@@ -8,14 +8,15 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.assembly.Assemblage;
 import uk.co.strangeskies.extengine.entity.assembly.AssemblageView;
 import uk.co.strangeskies.extengine.entity.assembly.CollapsedAssemblageView;
 import uk.co.strangeskies.extengine.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.extengine.entity.assembly.Variable;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
+import uk.co.strangeskies.extengine.entity.management.EntityManager;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
-import uk.co.strangeskies.utilities.collection.ListDecorator;
 import uk.co.strangeskies.utilities.collection.SetDecorator;
 
 public class CollapsedCompositionAssemblageView implements/* @ReadOnly */CollapsedAssemblageView {
@@ -29,13 +30,17 @@ public class CollapsedCompositionAssemblageView implements/* @ReadOnly */Collaps
 		return component;
 	}
 
+	@Override
+	public String getName() {
+		return component.getName();
+	}
+
 	protected <T> List<T> collapseIntoList(
 			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction) {
 		return collapseIntoCollection(new ArrayList<>(), collectionFunction, (l, i) -> l.add(0, i));
 	}
 
-	protected <T> Set<T> collapseIntoSet(
-			Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction) {
+	protected <T> Set<T> collapseIntoSet(Function<AssemblageView, ? extends Collection<? extends T>> collectionFunction) {
 		return new LinkedHashSet<>(collapseIntoList(collectionFunction));
 	}
 
@@ -57,8 +62,8 @@ public class CollapsedCompositionAssemblageView implements/* @ReadOnly */Collaps
 	}
 
 	@Override
-	public List<Assemblage> getComposition() {
-		return ListDecorator.over(collapseIntoList(AssemblageView::getComposition));
+	public Set<Assemblage> getComposition() {
+		return SetDecorator.over(collapseIntoSet(AssemblageView::getComposition));
 	}
 
 	@Override
@@ -96,7 +101,12 @@ public class CollapsedCompositionAssemblageView implements/* @ReadOnly */Collaps
 	}
 
 	@Override
-	public <D> List<StateInitialiser<D>> getInitialisers(final StateComponent<D, ?> state) {
-		return ListDecorator.over(collapseIntoList(input -> input.getInitialisers(state)));
+	public <D> Set<StateInitialiser<D>> getInitialisers(final StateComponent<D, ?> state) {
+		return SetDecorator.over(collapseIntoSet(input -> input.getInitialisers(state)));
+	}
+
+	@Override
+	public Entity assemble(EntityManager entityManager) {
+		return component.assemble(entityManager);
 	}
 }

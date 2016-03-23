@@ -2,7 +2,7 @@ package uk.co.strangeskies.extengine.entity.scheduling.schedulers;
 
 import uk.co.strangeskies.extengine.entity.scheduling.ScheduleProcessingContext;
 import uk.co.strangeskies.extengine.entity.scheduling.Scheduler;
-import uk.co.strangeskies.extengine.entity.scheduling.terminating.TerminatingScheduler;
+import uk.co.strangeskies.extengine.entity.scheduling.TerminatingScheduler;
 
 public class CyclicScheduler implements Scheduler {
 	private boolean stopped;
@@ -43,5 +43,9 @@ public class CyclicScheduler implements Scheduler {
 
 	protected void processCycle(ScheduleProcessingContext processingContext) {
 		scheduler.process(processingContext);
+	}
+
+	public TerminatingScheduler getCycle() {
+		return scheduler;
 	}
 }

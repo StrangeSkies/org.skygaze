@@ -16,6 +16,7 @@ Bundle-Name: Extengine Entities
 -buildpath: \
 	${ss;utilities},\
 	${ss;mathematics},\
+	${mdb;core.api},\
 	${mdb;scripting},\
 	${ss;mathematics.geometry}
 

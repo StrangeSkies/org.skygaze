@@ -1,7 +1,7 @@
 Export-Package: \
-	uk.co.strangeskies.gears.core.sections.test,\
-	uk.co.strangeskies.gears.engine,\
-	uk.co.strangeskies.gears.engine.sections
+	uk.co.strangeskies.extengine.sections.test,\
+	uk.co.strangeskies.extengine,\
+	uk.co.strangeskies.extengine.sections
 Bundle-Name: Extengine Engine
 -dsannotations: \
 	*
@@ -12,5 +12,5 @@ Bundle-Name: Extengine Engine
 	${ss;mathematics},\
 	${ss;expressions}
 Private-Package: \
-	uk.co.strangeskies.gears.engine.impl,\
-	uk.co.strangeskies.gears.engine.sections.impl
+	uk.co.strangeskies.extengine.impl,\
+	uk.co.strangeskies.extengine.sections.impl

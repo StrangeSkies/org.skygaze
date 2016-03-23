@@ -6,9 +6,8 @@ import org.junit.Test;
 
 import uk.co.strangeskies.extengine.entity.Entity;
 import uk.co.strangeskies.extengine.entity.assembly.Assemblage;
-import uk.co.strangeskies.extengine.entity.assembly.Assembler;
 import uk.co.strangeskies.extengine.entity.assembly.Variable;
-import uk.co.strangeskies.extengine.entity.assembly.impl.AssemblerImpl;
+import uk.co.strangeskies.extengine.entity.assembly.impl.AssemblageImpl;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponentBuilder;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponentConfigurator;
@@ -17,8 +16,8 @@ import uk.co.strangeskies.extengine.entity.management.EntityManager;
 import uk.co.strangeskies.extengine.entity.management.impl.collections.EntityManagerImpl;
 import uk.co.strangeskies.extengine.entity.processing.Processor;
 import uk.co.strangeskies.extengine.entity.processing.impl.ProcessorImpl;
+import uk.co.strangeskies.extengine.entity.scheduling.schedulers.LinearScheduler;
 import uk.co.strangeskies.extengine.entity.scheduling.schedulers.PeriodicScheduler;
-import uk.co.strangeskies.extengine.entity.scheduling.terminating.schedulers.LinearScheduler;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
 import uk.co.strangeskies.extengine.entity.state.StateComponentBuilder;
 import uk.co.strangeskies.extengine.entity.state.StateComponentConfigurator;
@@ -36,7 +35,6 @@ public class Test1 {
 	private final EntityManager entityManager;
 	private final BehaviourComponentBuilder behaviourComponentBuilderFactory;
 	private final StateComponentBuilder stateComponentBuilder;
-	private final Assembler assembler;
 	private final MatrixBuilder matrixBuilder;
 
 	public Test1() {
@@ -46,16 +44,10 @@ public class Test1 {
 		stateComponentBuilder = new StateComponentBuilderImpl();
 
 		matrixBuilder = new MatrixBuilderImpl();
-
-		assembler = new AssemblerImpl();
 	}
 
 	public EntityManager entities() {
 		return entityManager;
-	}
-
-	public Assembler assembler() {
-		return assembler;
 	}
 
 	public StateComponentConfigurator<Object, Object> stateBuilder() {
@@ -87,7 +79,7 @@ public class Test1 {
 
 		StateComponent<Property<String, String>, Property<String, String>> parrot = stateBuilder().name("Parrot")
 				.description("A parrot which knows a word")
-				.<Property<String, String>, Property<String, String>> data(() -> new IdentityExpression<>("Squawk")).create();
+				.<Property<String, String>, Property<String, String>>data(() -> new IdentityExpression<>("Squawk")).create();
 
 		/*
 		 * Behaviour Components
@@ -112,8 +104,8 @@ public class Test1 {
 		/*
 		 * Assemblages
 		 */
-		Assemblage assemblage1 = assembler().create();
-		Variable<IntValue> numberVariable = () -> new IntValue(new Random().nextInt());
+		Assemblage assemblage1 = new AssemblageImpl("assemblage one");
+		Variable<IntValue> numberVariable = new Variable<>("number", new IntValue(new Random().nextInt()));
 		assemblage1.getVariables().add(numberVariable);
 		assemblage1.getStates().add(position);
 		assemblage1.getStates().add(parrot);
@@ -121,7 +113,7 @@ public class Test1 {
 		assemblage1.getInitialisers(velocity).add((data, context) -> data.setData(0.5, 0.5));
 		assemblage1.getInitialisers(position).add((data, context) -> data.setData(5, 5));
 
-		Assemblage assemblage2 = assembler().create();
+		Assemblage assemblage2 = new AssemblageImpl("assemblage two");
 		assemblage2.getComposition().add(assemblage1);
 		assemblage2.getStates().add(velocity);
 		assemblage2.getInitialisers(position).add((data, context) -> data.setData(12, 12));
@@ -139,14 +131,14 @@ public class Test1 {
 			}
 		});
 
-		Assemblage assemblage3 = assembler().create();
+		Assemblage assemblage3 = new AssemblageImpl("assemblage three");
 		assemblage3.getVariables().add(numberVariable);
 		assemblage3.getStates().add(position);
 		assemblage3.getInitialisers(position).add((data, context) -> data
 				.set(context.getSubcontext(assemblage2, assemblage1).getData(position).getMultiplied(3)));
 		assemblage3.getSubassemblages().add(assemblage2);
 
-		assembler().assemble(assemblage3, entities());
+		assemblage3.assemble(entities());
 
 		/*
 		 * Process

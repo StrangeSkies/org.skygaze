@@ -11,6 +11,7 @@ import uk.co.strangeskies.extengine.entity.assembly.StateInitialiser;
 import uk.co.strangeskies.extengine.entity.assembly.Variable;
 import uk.co.strangeskies.extengine.entity.management.EntityManager;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
+import uk.co.strangeskies.utilities.Isomorphism;
 import uk.co.strangeskies.utilities.collection.computingmap.FutureMap;
 
 public class AssemblyContextImpl implements AssemblyContext {
@@ -42,11 +43,10 @@ public class AssemblyContextImpl implements AssemblyContext {
 			return entities.state().getData(entity, state);
 		});
 
-		// TODO yet another dumb JDK bug, can't use :: syntax for no good
-		// reason.
-		variableValues = new FutureMap<>(v -> v.create());
+		Isomorphism isomorphism = new Isomorphism();
+		variableValues = new FutureMap<>(v -> v.getValue(isomorphism));
 
-		subcontexts = new FutureMap<>((AssemblageView k) -> {
+		subcontexts = new FutureMap<>(k -> {
 			AssemblyContextImpl assemblyContext = new AssemblyContextImpl(k, AssemblyContextImpl.this, entities);
 			assemblyContext.startAssembly();
 			return assemblyContext;
@@ -144,9 +144,11 @@ public class AssemblyContextImpl implements AssemblyContext {
 		}
 	}
 
-	public void assemble() {
+	public Entity assemble() {
 		startAssembly();
 		waitForAssembly();
+
+		return entity;
 	}
 
 	private void waitForAssembly() {

@@ -1,8 +1,8 @@
-package uk.co.strangeskies.extengine.entity.scheduling.terminating.schedulers;
+package uk.co.strangeskies.extengine.entity.scheduling.schedulers;
 
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.scheduling.ScheduleProcessingContext;
-import uk.co.strangeskies.extengine.entity.scheduling.terminating.TerminatingScheduler;
+import uk.co.strangeskies.extengine.entity.scheduling.TerminatingScheduler;
 
 public class CriticalPathScheduler implements TerminatingScheduler {
 	@Override
