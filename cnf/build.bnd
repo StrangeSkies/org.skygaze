@@ -27,6 +27,7 @@ Bundle-License: LGPL <http://www.gnu.org/licenses/>
 Bundle-Version: ${extengine-version}.${tstamp}
 
 -dsannotations: *
+-dsannotations-options: inherit
 
 ## To enable baselining, uncomment the following lines:
 # -baseline: *

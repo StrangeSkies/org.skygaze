@@ -4,27 +4,25 @@
 	name="EntitiesSchema">
 
 	<imports>
-		java.lang.String,
-		java.util.Set,
-		uk.co.strangeskies.extengine.entity.assembly.Catalogue,
-		uk.co.strangeskies.extengine.entity.assembly.CatalogueBuilder,
-		uk.co.strangeskies.extengine.entity.assembly.Ensemble,
-		uk.co.strangeskies.extengine.entity.assembly.Pattern,
-		uk.co.strangeskies.extengine.entity.assembly.PatternFactory,
-		uk.co.strangeskies.extengine.entity.assembly.StateInitialiser,
+		uk.co.strangeskies.reflection.TypeToken.Infer,
 		uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent,
 		uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponentConfigurator,
 		uk.co.strangeskies.extengine.entity.behaviour.BehaviourProcess,
-		uk.co.strangeskies.extengine.entity.scheduling.Scheduler,
-		uk.co.strangeskies.extengine.entity.scheduling.schedulers.CriticalPathScheduler,
-		uk.co.strangeskies.extengine.entity.scheduling.schedulers.CyclicScheduler,
-		uk.co.strangeskies.extengine.entity.scheduling.schedulers.LinearScheduler,
-		uk.co.strangeskies.extengine.entity.scheduling.schedulers.PeriodicScheduler,
-		uk.co.strangeskies.extengine.entity.scheduling.TerminatingScheduler,
+		uk.co.strangeskies.extengine.entity.assembly.Pattern,
+		uk.co.strangeskies.extengine.entity.assembly.PatternFactory,
 		uk.co.strangeskies.extengine.entity.state.StateComponent,
 		uk.co.strangeskies.extengine.entity.state.StateComponentConfigurator,
-		uk.co.strangeskies.reflection.TypeToken.Infer,
-		uk.co.strangeskies.utilities.factory.Factory
+		uk.co.strangeskies.extengine.entity.assembly.StateInitialiser,
+		java.util.Set,
+		uk.co.strangeskies.extengine.entity.assembly.Ensemble,
+		uk.co.strangeskies.extengine.entity.assembly.Catalogue,
+		uk.co.strangeskies.utilities.factory.Factory,
+		uk.co.strangeskies.extengine.entity.scheduling.Scheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.TerminatingScheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.schedulers.CyclicScheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.schedulers.PeriodicScheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.schedulers.LinearScheduler,
+		uk.co.strangeskies.extengine.entity.scheduling.schedulers.CriticalPathScheduler
 	</imports>
 
 	<dependencies>
@@ -37,36 +35,42 @@
 			name="stateReference"
 			baseType="reference"
 			dataType="StateComponent{?\, ?}">
-
-			<data name="targetModel">stateComponent</data>
-
-			<data name="targetId">name</data>
+			<data
+				name="targetModel"
+				value="stateComponent" />
+			<data
+				name="targetId"
+				value="name" />
 		</type>
 
 		<type
 			name="behaviourReference"
 			baseType="reference"
 			dataType="BehaviourComponent">
-
-			<data name="targetModel">behaviourComponent</data>
-
-			<data name="targetId">name</data>
+			<data
+				name="targetModel"
+				value="behaviourComponent" />
+			<data
+				name="targetId"
+				value="name" />
 		</type>
 
 		<type
 			name="patternReference"
 			baseType="reference"
 			dataType="Pattern">
-
-			<data name="targetModel">pattern</data>
-
-			<data name="targetId">name</data>
+			<data
+				name="targetModel"
+				value="pattern" />
+			<data
+				name="targetId"
+				value="name" />
 		</type>
 	</types>
 
 	<models>
 		<model
-			name="stateReferences"
+			name="stateDependencies"
 			dataType="@Infer Set{?}">
 
 			<simple
@@ -94,14 +98,14 @@
 
 			<complex
 				name="readDependencies"
-				baseModel="stateReferences"
+				baseModel="stateDependencies"
 				outMethod="getReadDependencies"
 				inMethod="readDependencies"
 				occurrences="0..1" />
 
 			<complex
 				name="writeDependencies"
-				baseModel="stateReferences"
+				baseModel="stateDependencies"
 				outMethod="getWriteDependencies"
 				inMethod="writeDependencies"
 				occurrences="0..1" />
@@ -111,7 +115,7 @@
 		</model>
 
 		<model
-			name="behaviourReferences"
+			name="behaviourDependencies"
 			dataType="@Infer Set{?}">
 			<simple
 				name="dependency"
@@ -135,11 +139,11 @@
 
 			<complex
 				name="readDependencies"
-				baseModel="stateReferences"
+				baseModel="stateDependencies"
 				occurrences="0..1" />
 			<complex
 				name="writeDependencies"
-				baseModel="stateReferences"
+				baseModel="stateDependencies"
 				occurrences="0..1" />
 
 			<complex
@@ -257,81 +261,43 @@
 			</complex>
 		</model>
 
+		<model
+			name="patterns"
+			dataType="@Infer Set{?}">
+			<simple
+				name="pattern"
+				type="patternReference"
+				inMethod="add"
+				outMethod="this"
+				occurrences="1.." />
+		</model>
+
 		<!-- Schedulers -->
 		<model
 			name="scheduler"
 			abstract="true"
-			dataType="Scheduler">
-
-			<property
-				name="name"
-				abstract="true"
-				type="string" />
-		</model>
+			extensible="true"
+			dataType="Scheduler" />
 
 		<model
 			name="terminatingScheduler"
 			abstract="true"
-			dataType="TerminatingScheduler"
-			baseModel="scheduler" />
+			dataType="TerminatingScheduler" />
 
 		<model
-			name="repeatingScheduler"
-			abstract="true"
+			name="cyclic"
 			baseModel="scheduler"
-			dataType="CyclicScheduler">
-
-			<data
-				name="name"
-				abstract="true" />
-
+			dataType="CyclicScheduler"
+			bindingStrategy="CONSTRUCTOR">
 			<complex
 				name="cycle"
-				abstract="true"
 				baseModel="terminatingScheduler"
 				extensible="true" />
 		</model>
 
 		<model
-			name="cyclicScheduler"
-			baseModel="repeatingScheduler"
-			bindingStrategy="CONSTRUCTOR">
-
-			<property
-				name="name"
-				inMethod="null" />
-
-			<complex
-				name="cycle"
-				extensible="true"
-				inMethod="null" />
-
-			<inputSequence name="constructor">
-				<data
-					name="name"
-					outMethod="null"
-					type="reference"
-					dataType="String"
-					valueResolution="REGISTRATION_TIME">
-
-					name
-				</data>
-
-				<data
-					name="cycle"
-					outMethod="null"
-					type="reference"
-					dataType="TerminatingScheduler"
-					valueResolution="REGISTRATION_TIME">
-
-					cycle
-				</data>
-			</inputSequence>
-		</model>
-
-		<model
-			name="periodicScheduler"
-			baseModel="cyclicScheduler"
+			name="periodic"
+			baseModel="cyclic"
 			dataType="PeriodicScheduler" />
 
 		<model
@@ -349,97 +315,16 @@
 		<!-- Catalogue -->
 		<model
 			name="catalogue"
-			dataType="Catalogue"
-			bindingType="CatalogueBuilder">
-
-			<sequence
-				name="nameSequence"
-				occurrences="0..1">
-
-				<property
-					name="name"
-					type="string" />
-
-				<property
-					name="namespace"
-					type="package" />
-			</sequence>
+			dataType="Catalogue">
 
 			<property
-				name="qualifiedName"
-				type="string"
-				inMethod="null" />
+				name="name"
+				type="string" />
 
-			<complex
-				name="dependencies"
-				occurrences="0..1"
-				dataType="@Infer Set{?}">
+			<property
+				name="package"
+				type="package" />
 
-				<simple
-					name="dependency"
-					type="import"
-					occurrences="0.."
-					outMethod="this"
-					dataType="Catalogue">
-
-					<data name="import">
-						<data name="targetModel">catalogue</data>
-
-						<data name="targetId">qualifiedName</data>
-					</data>
-				</simple>
-			</complex>
-
-			<complex
-				name="behaviours"
-				dataType="@Infer Set{?}">
-
-				<complex
-					name="behaviour"
-					baseModel="behaviourComponent"
-					inMethod="add"
-					outMethod="this"
-					occurrences="1.." />
-			</complex>
-
-			<complex
-				name="states"
-				dataType="@Infer Set{?}">
-
-				<complex
-					name="state"
-					baseModel="stateComponent"
-					inMethod="add"
-					outMethod="this"
-					occurrences="1.." />
-			</complex>
-
-			<complex
-				name="schedulers"
-				dataType="@Infer Set{?}">
-
-				<complex
-					name="scheduler"
-					baseModel="scheduler"
-					extensible="true"
-					inMethod="add"
-					outMethod="this"
-					occurrences="1.." />
-			</complex>
-
-			<complex
-				name="patterns"
-				dataType="@Infer Set{?}">
-
-				<complex
-					name="pattern"
-					baseModel="pattern"
-					inMethod="add"
-					outMethod="this"
-					occurrences="1.." />
-			</complex>
-
-			<inputSequence name="create" />
 		</model>
 
 		<!-- Arrangement -->
@@ -460,18 +345,21 @@
 					dataType="Ensemble">
 
 					<data name="import">
-						<data name="targetModel">patterns</data>
-
-						<data name="targetId">qualifiedName</data>
+						<data
+							name="targetModel"
+							value="patterns" />
+						<data
+							name="targetId"
+							value="qualifiedName" />
 					</data>
-
 					<data
 						name="patterns"
 						type="include"
 						outMethod="this"
 						outMethodIterable="true">
-
-						<data name="targetModel">pattern</data>
+						<data
+							name="targetModel"
+							value="pattern" />
 					</data>
 				</simple>
 			</complex>
@@ -502,13 +390,53 @@
 		</model>
 	</models>
 
-	<!-- patterns> <pattern name="poop"> <behaviour> <component name="runAround" 
-		/> <component name="sleepWalk" /> <component name="waddle"> function process(context) 
-		{ // summat } </component> <component name="move"> function process(c) { 
-		for (e in c.getEntitiesWith(states.position, states.velocity) { pos = c.getData(e, 
-		states.position); vel = c.getReadOnlyData(e, states.velocity); pos.add(vel); 
-		} } </component> </behaviour> <state> <component id="position"> <vector2>2, 
-		3</vector2> </component> <component id="velocity"> <scriptObject> function 
-		initialise(data, context) { data.setValue(10, 10); } </scriptObject> </component> 
-		<component id="size" ref="position" /> </state> </pattern> </patterns -->
+	<patterns>
+		<pattern name="poop">
+			<behaviour>
+				<component name="runAround" />
+				<component name="sleepWalk" />
+				<component name="waddle">
+
+					function process(context) {
+					// summat
+					}
+
+				</component>
+				<component name="move">
+
+					function process(c) {
+					for (e in
+					c.getEntitiesWith(states.position, states.velocity) {
+					pos =
+					c.getData(e, states.position);
+					vel = c.getReadOnlyData(e,
+					states.velocity);
+					pos.add(vel);
+					}
+					}
+
+				</component>
+			</behaviour>
+
+			<state>
+				<component id="position">
+					<vector2>2, 3</vector2>
+				</component>
+
+				<component id="velocity">
+					<scriptObject>
+
+						function initialise(data, context) {
+						data.setValue(10, 10);
+						}
+
+					</scriptObject>
+				</component>
+
+				<component
+					id="size"
+					ref="position" />
+			</state>
+		</pattern>
+	</patterns>
 </schema>

@@ -11,15 +11,15 @@ public class Variable<T> {
 	private final Function<Isomorphism, ? extends T> function;
 
 	public Variable(String name, Copyable<? extends T> model) {
-		this(name, i -> i.getCopy(model));
+		this(name, i -> i.byIdentity().getCopy(model));
 	}
 
 	public Variable(String name, T constant) {
-		this(name, i -> i.getCopy(constant, Function.identity()));
+		this(name, i -> i.byIdentity().getMapping(constant, Function.identity()));
 	}
 
 	public Variable(String name, Supplier<? extends T> supplier) {
-		this(name, i -> i.getCopy(supplier, Supplier::get));
+		this(name, i -> i.byIdentity().getMapping(supplier, Supplier::get));
 	}
 
 	public Variable(String name, Function<Isomorphism, ? extends T> function) {

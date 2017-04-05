@@ -1,0 +1,20 @@
+Bundle-Name: Extengine :: Entities :: Provider
+
+-runee: JavaSE-1.8
+-runfw: org.eclipse.osgi;version='[3.10.1.v20140909-1633,3.10.1.v20140909-1633]'
+
+-buildpath: \
+	${ss;utilities},\
+	${ss;mathematics},\
+	${mdb;core.api},\
+	${mdb;scripting},\
+	${ss;mathematics.geometry},\
+	uk.co.strangeskies.extengine.entities;version=snapshot
+
+Private-Package: \
+	uk.co.strangeskies.extengine.entity.assembly.impl,\
+	uk.co.strangeskies.extengine.entity.behaviour.impl,\
+	uk.co.strangeskies.extengine.entity.impl,\
+	uk.co.strangeskies.extengine.entity.impl.collections,\
+	uk.co.strangeskies.extengine.entity.processing.impl,\
+	uk.co.strangeskies.extengine.entity.state.impl

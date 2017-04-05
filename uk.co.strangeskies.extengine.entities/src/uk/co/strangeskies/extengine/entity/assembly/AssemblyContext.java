@@ -9,14 +9,14 @@ public interface AssemblyContext {
 	public AssemblyContext getSupercontext();
 
 	public/* @ReadOnly */Set<AssemblyContext> getSubcontexts(
-			AssemblageView... subassemblageMatchPattern);
+			PatternView... childMatchPattern);
 
 	public/* @ReadOnly */AssemblyContext getSubcontext(
-			AssemblageView... subassemblageMatchPattern);
+			PatternView... childMatchPattern);
 
 	public/* @ReadOnly */Entity getEntity();
 
-	public/* @ReadOnly */AssemblageView getAssemblage();
+	public/* @ReadOnly */PatternView getPattern();
 
 	public <D> /* @ReadOnly */D getData(StateComponent<D, ?> state);
 

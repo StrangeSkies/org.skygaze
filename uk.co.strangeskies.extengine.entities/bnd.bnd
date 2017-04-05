@@ -1,32 +1,24 @@
+Bundle-Name: Extengine :: Entities
+-runee: JavaSE-1.8
+-runfw: org.eclipse.osgi;version='[3.10.1.v20140909-1633,3.10.1.v20140909-1633]'
+
+-buildpath: \
+	${ss;utilities},\
+	${ss;mathematics},\
+	${ss;mathematics.geometry},\
+	${ss;reflection},\
+	${mdb;osgi},\
+	${mdb;core.api},\
+	${mdb;scripting},\
+	uk.co.strangeskies.extengine.engine;version=snapshot
+
 Export-Package: \
 	uk.co.strangeskies.extengine.entity,\
 	uk.co.strangeskies.extengine.entity.assembly,\
 	uk.co.strangeskies.extengine.entity.behaviour,\
-	uk.co.strangeskies.extengine.entity.management,\
-	uk.co.strangeskies.extengine.entity.processing,\
 	uk.co.strangeskies.extengine.entity.scheduling,\
 	uk.co.strangeskies.extengine.entity.scheduling.schedulers,\
-	uk.co.strangeskies.extengine.entity.scheduling.terminating,\
-	uk.co.strangeskies.extengine.entity.scheduling.terminating.schedulers,\
 	uk.co.strangeskies.extengine.entity.state
-
-Bundle-Name: Extengine Entities
--runee: JavaSE-1.8
--runfw: org.eclipse.osgi;version='[3.10.1.v20140909-1633,3.10.1.v20140909-1633]'
--buildpath: \
-	${ss;utilities},\
-	${ss;mathematics},\
-	${mdb;core.api},\
-	${mdb;scripting},\
-	${ss;mathematics.geometry}
-
-Private-Package: \
-	uk.co.strangeskies.extengine.entity.assembly.impl,\
-	uk.co.strangeskies.extengine.entity.behaviour.impl,\
-	uk.co.strangeskies.extengine.entity.management.impl,\
-	uk.co.strangeskies.extengine.entity.management.impl.collections,\
-	uk.co.strangeskies.extengine.entity.processing.impl,\
-	uk.co.strangeskies.extengine.entity.state.impl
 
 -pluginpath: \
 	${pluginpath.modabi;xml}

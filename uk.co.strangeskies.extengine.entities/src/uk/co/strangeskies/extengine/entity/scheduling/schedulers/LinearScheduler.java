@@ -10,10 +10,17 @@ import uk.co.strangeskies.mathematics.graph.building.GraphConfigurator;
 import uk.co.strangeskies.mathematics.graph.processing.GraphProcessor;
 
 public class LinearScheduler implements TerminatingScheduler {
+	private final String name;
 	private GraphBuilder graphBuilder;
 
-	public LinearScheduler(GraphBuilder graphBuilder) {
+	public LinearScheduler(String name, GraphBuilder graphBuilder) {
+		this.name = name;
 		setGraphBuilder(graphBuilder);
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	public void setGraphBuilder(GraphBuilder builder) {

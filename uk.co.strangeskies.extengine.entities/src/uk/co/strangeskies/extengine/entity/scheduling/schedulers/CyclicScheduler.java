@@ -5,13 +5,21 @@ import uk.co.strangeskies.extengine.entity.scheduling.Scheduler;
 import uk.co.strangeskies.extengine.entity.scheduling.TerminatingScheduler;
 
 public class CyclicScheduler implements Scheduler {
+	private final String name;
+
 	private boolean stopped;
 
 	private final TerminatingScheduler scheduler;
 
-	public CyclicScheduler(TerminatingScheduler scheduler) {
+	public CyclicScheduler(String name, TerminatingScheduler scheduler) {
+		this.name = name;
 		this.scheduler = scheduler;
 		stopped = true;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	@Override

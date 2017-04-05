@@ -1,87 +1,58 @@
 package uk.co.strangeskies.extengine.entity.assembly;
 
+import java.util.Optional;
 import java.util.Set;
 
+import uk.co.strangeskies.extengine.Engine;
 import uk.co.strangeskies.extengine.entity.behaviour.BehaviourComponent;
 import uk.co.strangeskies.extengine.entity.scheduling.Scheduler;
 import uk.co.strangeskies.extengine.entity.state.StateComponent;
+import uk.co.strangeskies.modabi.QualifiedName;
 
-/**
- * A catalogue of {@link BehaviourComponent behaviour components},
- * {@link StateComponent state components}, {@link StateInitialiser state
- * initialisers}, {@link Assemblage assemblages}, and {@link Scheduler
- * schedulers} which can be referenced to build a scene.
- * 
- * @author Elias N Vasylenko
- */
-public class Catalogue {
-	private String name;
+public interface Catalogue {
+	static final QualifiedName SCHEMA_NAME = new QualifiedName(Catalogue.class.getSimpleName(), Engine.NAMESPACE);
 
-	private Package packageLocation;
+	String getName();
 
-	private Set<Catalogue> dependencies;
+	Package getNamespace();
 
-	private Set<BehaviourComponent> behaviours;
-
-	private Set<StateComponent<?, ?>> states;
-
-	private Set<Scheduler> schedulers;
-
-	private Set<Assemblage> assemblages;
-
-	public String getName() {
-		return name;
+	default String getQualifiedName() {
+		return getNamespace().getName() + "." + getName();
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	Set<Catalogue> getDependencies();
+
+	Set<Catalogue> lookUpDependencies(Package namespace);
+
+	default Optional<Catalogue> lookUpDependency(Package namespace, String name) {
+		return lookUpDependencies(namespace).stream().filter(d -> d.getName().equals(name)).findAny();
 	}
 
-	public Package getPackage() {
-		return packageLocation;
+	Set<BehaviourComponent> getBehaviours();
+
+	default Optional<BehaviourComponent> lookUpBehaviour(Package namespace, String name) {
+		return lookUpDependencies(namespace).stream().flatMap(d -> d.getBehaviours().stream())
+				.filter(b -> b.getName().equals(name)).findAny();
 	}
 
-	public void setPackage(Package packageLocation) {
-		this.packageLocation = packageLocation;
+	Set<StateComponent<?, ?>> getStates();
+
+	default Optional<StateComponent<?, ?>> lookUpState(Package namespace, String name) {
+		return lookUpDependencies(namespace).stream().flatMap(d -> d.getStates().stream())
+				.filter(b -> b.getName().equals(name)).findAny();
 	}
 
-	public Set<Catalogue> getDependencies() {
-		return dependencies;
+	Set<Scheduler> getSchedulers();
+
+	default Optional<Scheduler> lookUpScheduler(Package namespace, String name) {
+		return lookUpDependencies(namespace).stream().flatMap(d -> d.getSchedulers().stream())
+				.filter(b -> b.getName().equals(name)).findAny();
 	}
 
-	public void setDependencies(Set<Catalogue> dependencies) {
-		this.dependencies = dependencies;
-	}
+	Set<Pattern> getPatterns();
 
-	public Set<BehaviourComponent> getBehaviours() {
-		return behaviours;
-	}
-
-	public void setBehaviours(Set<BehaviourComponent> behaviours) {
-		this.behaviours = behaviours;
-	}
-
-	public Set<StateComponent<?, ?>> getStates() {
-		return states;
-	}
-
-	public void setStates(Set<StateComponent<?, ?>> states) {
-		this.states = states;
-	}
-
-	public Set<Scheduler> getSchedulers() {
-		return schedulers;
-	}
-
-	public void setSchedulers(Set<Scheduler> schedulers) {
-		this.schedulers = schedulers;
-	}
-
-	public Set<Assemblage> getAssemblages() {
-		return assemblages;
-	}
-
-	public void setAssemblages(Set<Assemblage> assemblages) {
-		this.assemblages = assemblages;
+	default Optional<Pattern> lookUpPattern(Package namespace, String name) {
+		return lookUpDependencies(namespace).stream().flatMap(d -> d.getPatterns().stream())
+				.filter(b -> b.getName().equals(name)).findAny();
 	}
 }

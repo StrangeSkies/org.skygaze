@@ -7,8 +7,8 @@ public class PeriodicScheduler extends CyclicScheduler {
 	private long cycleDurationNanoseconds;
 	private long processingStartTimeNanoseconds;
 
-	public PeriodicScheduler(TerminatingScheduler scheduler) {
-		super(scheduler);
+	public PeriodicScheduler(String name, TerminatingScheduler scheduler) {
+		super(name, scheduler);
 	}
 
 	public void setPeriodFrequency(double frequency) {
@@ -28,8 +28,7 @@ public class PeriodicScheduler extends CyclicScheduler {
 		super.processCycle(processingContext);
 
 		if (!isStopped()) {
-			long processingDurationNanoseconds = System.nanoTime()
-					- processingStartTimeNanoseconds;
+			long processingDurationNanoseconds = System.nanoTime() - processingStartTimeNanoseconds;
 
 			if (processingDurationNanoseconds < cycleDurationNanoseconds) {
 				processingStartTimeNanoseconds += cycleDurationNanoseconds;
@@ -45,8 +44,7 @@ public class PeriodicScheduler extends CyclicScheduler {
 		while (delay > 0) {
 			try {
 				Thread.sleep(delay / 1000000);
-			} catch (InterruptedException e) {
-			}
+			} catch (InterruptedException e) {}
 			delay = nanoTime - System.nanoTime();
 		}
 	}

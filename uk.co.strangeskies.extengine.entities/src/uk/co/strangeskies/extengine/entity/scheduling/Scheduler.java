@@ -1,6 +1,8 @@
 package uk.co.strangeskies.extengine.entity.scheduling;
 
-public interface Scheduler {
+import uk.co.strangeskies.utilities.Named;
+
+public interface Scheduler extends Named {
 	/**
 	 * Run the Scheduler within the given context, unless the Scheduler is already
 	 * running. Blocks until the Scheduler is complete.

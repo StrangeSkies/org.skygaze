@@ -10,7 +10,8 @@ Bundle-Name: Extengine Engine
 -buildpath: \
 	${ss;utilities},\
 	${ss;mathematics},\
-	${ss;expressions}
+	${ss;expressions},\
+	${mdb;core.api}
 Private-Package: \
 	uk.co.strangeskies.extengine.impl,\
 	uk.co.strangeskies.extengine.sections.impl

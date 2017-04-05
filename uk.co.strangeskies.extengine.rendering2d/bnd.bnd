@@ -15,7 +15,6 @@ Bundle-Name: Extengine Rendering 2D
 	${ss;mathematics},\
 	${ss;mathematics.geometry},\
 	${ss;expressions},\
-	uk.co.strangeskies.extengine.rendering;  \
-		version = latest
+	uk.co.strangeskies.extengine.rendering;version=snapshot
 Bundle-Version: 0.2.0.${tstamp}
 Private-Package: uk.co.strangeskies.extengine.rendering.rendering2d.impl
